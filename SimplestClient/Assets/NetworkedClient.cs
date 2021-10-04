@@ -27,7 +27,7 @@ public class NetworkedClient : MonoBehaviour
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.S))
-            SendMessageToHost("Hello from client");
+            SendMessageToHost("Hello from client gg");
 
         UpdateNetworkConnection();
     }
@@ -53,7 +53,7 @@ public class NetworkedClient : MonoBehaviour
                 case NetworkEventType.DataEvent:
                     string msg = Encoding.Unicode.GetString(recBuffer, 0, dataSize);
                     ProcessRecievedMsg(msg, recConnectionID);
-                    //Debug.Log("got msg = " + msg);
+                    Debug.Log("got msg = " + msg);
                     break;
                 case NetworkEventType.DisconnectEvent:
                     isConnected = false;
@@ -79,7 +79,7 @@ public class NetworkedClient : MonoBehaviour
             hostID = NetworkTransport.AddHost(topology, 0);
             Debug.Log("Socket open.  Host ID = " + hostID);
 
-            connectionID = NetworkTransport.Connect(hostID, "10.0.0.137", socketPort, 0, out error); // server is local on network
+            connectionID = NetworkTransport.Connect(hostID, "99.253.32.185", socketPort, 0, out error); // server is local on network
 
             if (error == 0)
             {
