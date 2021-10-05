@@ -126,11 +126,13 @@ public class ServerToClientSignifiers
 
     public const int LoginComplete = 1;
 
-    public const int LoginFailed = 2;
+    public const int LoginFailedAccount = 2;
 
-    public const int CreateAcountComplete = 3;
+    public const int LoginFailedPassword = 3;
 
-    public const int CreateAcountFailed = 3;
+    public const int CreateAcountComplete = 4;
+
+    public const int CreateAcountFailed = 5;
 
 
 }

@@ -7,7 +7,7 @@ public class GameSytemManager : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    GameObject submitButton, userNameInput, passwordInput, createToggle, loginToggle;
+    GameObject submitButton, userNameInput, passwordInput, createToggle, loginToggle, StatusText;
     GameObject networkClient;
     void Start()
     {
@@ -26,6 +26,8 @@ public class GameSytemManager : MonoBehaviour
                 createToggle = go; 
             else if (go.name == "Network")
                  networkClient = go;
+            else if (go.name == "Status_Description")
+                StatusText = go;
  
         }
 
@@ -68,7 +70,7 @@ public class GameSytemManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+       
     }
 
 }
