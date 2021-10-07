@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
-
+using System;
 public class NetworkedClient : MonoBehaviour
 {
+    private Action<int> m_OnMessageReceivedFromServer = null;
 
     int connectionID;
     int maxConnections = 1000;
@@ -105,14 +106,104 @@ public class NetworkedClient : MonoBehaviour
     private void ProcessRecievedMsg(string msg, int id)
     {
         Debug.Log("msg recieved = " + msg + ".  connection id = " + id);
+
+        string[] csv = msg.Split(',');
+
+       // int signifier = int.Parse(csv[0]);
+
+         Msg(csv);
+
+        //if (signifier == ServerToClientSignifiers.CreateAcountComplete )
+        //{
+        //    Debug.LogWarning("You have CreateAccount. Try Login");
+        //}
+        //else if (signifier == ServerToClientSignifiers.CreateAcountFailed) 
+        //{
+        //    Debug.LogWarning("We have Account with that user name.");
+        //}
+        //if (signifier == ServerToClientSignifiers.LoginComplete ) 
+        //{
+        //    Debug.LogWarning("You are now Log-in");
+        //}
+        //else if(signifier == ServerToClientSignifiers.LoginFailedAccount) 
+        //{
+        //    Debug.LogWarning("check if you have Account Or you miss spell your user name");
+        //}
+        //else if(signifier == ServerToClientSignifiers.LoginFailedPassword) 
+        //{
+        //    Debug.LogWarning("Your password is wrong ");
+        //}
+    }
+
+
+    public event Action<int> OnMessageReceivedFromServer
+    {
+        add
+        {
+            m_OnMessageReceivedFromServer -= value;
+            m_OnMessageReceivedFromServer += value;
+        }
+        remove
+        {
+            m_OnMessageReceivedFromServer -= value;
+        }
+    }
+
+    public void  Msg (string[] csv ) 
+    {
+        int signifier = int.Parse(csv[0]);
+
+        if (signifier == ServerToClientSignifiers.CreateAcountComplete)
+        {
+            //Debug.LogWarning("You have CreateAccount. Try Login");
+
+            if (m_OnMessageReceivedFromServer != null)
+            {
+                m_OnMessageReceivedFromServer(4);
+            }
+        }
+        else if (signifier == ServerToClientSignifiers.CreateAcountFailed)
+        {
+            //Debug.LogWarning("We have Account with that user name.");
+            if (m_OnMessageReceivedFromServer != null)
+            {
+                m_OnMessageReceivedFromServer(5);
+            }
+        }
+        if (signifier == ServerToClientSignifiers.LoginComplete)
+        {
+            
+            if (m_OnMessageReceivedFromServer != null)
+            {
+                m_OnMessageReceivedFromServer(1);
+                Debug.LogWarning("You are now Log-in");
+            }
+        }
+        else if (signifier == ServerToClientSignifiers.LoginFailedAccount)
+        {
+            
+            if (m_OnMessageReceivedFromServer != null)
+            {
+                m_OnMessageReceivedFromServer(2);
+                Debug.LogWarning("check if you have Account Or you miss spell your user name");
+            }
+        }
+        else if (signifier == ServerToClientSignifiers.LoginFailedPassword)
+        {
+           
+            if (m_OnMessageReceivedFromServer != null)
+            {
+                m_OnMessageReceivedFromServer(3);
+                Debug.LogWarning("Your password is wrong ");
+            }
+        }
+        //Debug.Log("Msg function was called");
     }
 
     public bool IsConnected()
     {
         return isConnected;
-    }
-
-
+    }  
 }
 
 public class ClientToServerSignifiers

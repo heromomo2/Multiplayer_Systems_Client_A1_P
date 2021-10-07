@@ -3,11 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
 public class GameSytemManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private NetworkedClient m_MessageReceiverFromServer = null;
 
-    GameObject submitButton, userNameInput, passwordInput, createToggle, loginToggle, StatusText;
+
+    //private void Awake()
+    //{
+    //    if (m_MessageReceiverFromServer != null)
+    //    {
+    //        m_MessageReceiverFromServer.OnMessageReceivedFromServer+= LoginStates;
+    //    }
+    //}
+
+        // Start is called before the first frame update
+
+        GameObject submitButton, userNameInput, passwordInput, createToggle, loginToggle, StatusText;
     GameObject networkClient;
     void Start()
     {
@@ -34,8 +46,16 @@ public class GameSytemManager : MonoBehaviour
         submitButton.GetComponent<Button>().onClick.AddListener(SubmitButtonOnPressed);
         loginToggle.GetComponent<Toggle>().onValueChanged.AddListener(LoginToggleChanged);
         createToggle.GetComponent<Toggle>().onValueChanged.AddListener(CreateToggleChanged);
+        
+
+         m_MessageReceiverFromServer = networkClient.GetComponent<NetworkedClient>();
+        if (m_MessageReceiverFromServer != null)
+        {
+           m_MessageReceiverFromServer.OnMessageReceivedFromServer+= LoginStates;
+        }
+
     }
-   
+
 
 
 
@@ -56,6 +76,9 @@ public class GameSytemManager : MonoBehaviour
         }
         networkClient.GetComponent<NetworkedClient>().SendMessageToHost(msg);
         Debug.Log("msg: -> " + msg);
+
+        //networkClient.GetComponent<NetworkedClient>().Msg();
+
     }
     
     public void LoginToggleChanged (bool newValue)
@@ -65,6 +88,39 @@ public class GameSytemManager : MonoBehaviour
     public void CreateToggleChanged(bool newValue) 
     {
         loginToggle.GetComponent<Toggle>().SetIsOnWithoutNotify(!newValue);
+    }
+
+
+    private void OnDestroy()
+    {
+        if (m_MessageReceiverFromServer != null)
+        {
+            m_MessageReceiverFromServer.OnMessageReceivedFromServer -= LoginStates;
+        }
+    }
+
+    private void LoginStates(int i) 
+    {
+        switch (i) 
+        {
+            case 1:
+                StatusText.GetComponent<Text>().text = "Status: You are now Log-in";
+                break;
+            case 2:
+                StatusText.GetComponent<Text>().text = "Status: Your User name is wrong";
+                break;
+            case 3:
+                StatusText.GetComponent<Text>().text = "Status: Your password is wrong";
+                break;
+            case 4:
+                StatusText.GetComponent<Text>().text = "Status: You have Created Account. Try Login";
+                break;
+            case 5:
+                StatusText.GetComponent<Text>().text = "Status: We have Account with that user name.";
+                break;
+        }
+
+        Debug.LogWarning("LoginStates");
     }
 
     // Update is called once per frame
