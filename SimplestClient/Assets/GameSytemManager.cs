@@ -8,18 +8,9 @@ public class GameSytemManager : MonoBehaviour
 {
     private NetworkedClient m_MessageReceiverFromServer = null;
 
-
-    //private void Awake()
-    //{
-    //    if (m_MessageReceiverFromServer != null)
-    //    {
-    //        m_MessageReceiverFromServer.OnMessageReceivedFromServer+= LoginStates;
-    //    }
-    //}
-
         // Start is called before the first frame update
 
-        GameObject submitButton, userNameInput, passwordInput, createToggle, loginToggle, StatusText;
+    GameObject submitButton, userNameInput, passwordInput, createToggle, loginToggle, StatusText;
     GameObject networkClient;
     void Start()
     {

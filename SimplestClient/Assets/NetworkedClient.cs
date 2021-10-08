@@ -209,7 +209,10 @@ public class NetworkedClient : MonoBehaviour
 public class ClientToServerSignifiers
 {
     public const int CreateAcount = 1;
-    public const int Login = 2; 
+
+    public const int Login = 2;
+
+    public const int SendChatMsg = 3;
 }
 
 public class ServerToClientSignifiers
@@ -222,9 +225,10 @@ public class ServerToClientSignifiers
     public const int LoginFailedPassword = 3;
 
     public const int CreateAcountComplete = 4;
-
+    
     public const int CreateAcountFailed = 5;
 
+    public const int ChatView = 6;
 
 }
 
