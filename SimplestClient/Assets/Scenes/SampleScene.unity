@@ -239,9 +239,9 @@ RectTransform:
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 20}
+  m_SizeDelta: {x: -17, y: 20}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &169600395
 MonoBehaviour:
@@ -381,7 +381,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 7614645689826883821, guid: b2246296775c0da4186949736c0637af, type: 3}
-  numberToCreate: 3
+  numberToCreate: 8
 --- !u!114 &268107781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -414,7 +414,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 0.5
+  m_Spacing: 5
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -2343,6 +2343,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9b57d091716f324ea98c5f660a9757d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  prefab: {fileID: 7614645689826883821, guid: b2246296775c0da4186949736c0637af, type: 3}
 --- !u!1 &1319018273
 GameObject:
   m_ObjectHideFlags: 0
@@ -3136,7 +3137,7 @@ MonoBehaviour:
   m_HorizontalScrollbar: {fileID: 169600395}
   m_VerticalScrollbar: {fileID: 1547171609}
   m_HorizontalScrollbarVisibility: 2
-  m_VerticalScrollbarVisibility: 2
+  m_VerticalScrollbarVisibility: 0
   m_HorizontalScrollbarSpacing: -3
   m_VerticalScrollbarSpacing: -3
   m_OnValueChanged:

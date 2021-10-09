@@ -7,7 +7,7 @@ public class ChatBox : MonoBehaviour
 {
     private NetworkedClient m_MessageReceiverFromServerS = null;
 
-    GameObject postButton, usermessageInput, userscrollView, networkObject;
+    GameObject postButton, usermessageInput, userscrollView, networkObject,Content;
     public GameObject prefab = null;
     void Start()
     {
@@ -22,6 +22,8 @@ public class ChatBox : MonoBehaviour
                 userscrollView = go;
             else if (go.name == "Network")
                 networkObject = go;
+            else if (go.name == "Content")
+                Content = go;
         }
         postButton.GetComponent<Button>().onClick.AddListener(PostButtonOnPressed);
 
@@ -54,7 +56,19 @@ public class ChatBox : MonoBehaviour
     public void AddMessageToChat(string s)
     {
         GameObject newObj;
-        newObj = (GameObject)Instantiate(prefab, userscrollView.GetComponentInChildren<>);
+
+        //foreach (Transform eachChild in transform)
+        //{
+        //    Debug.Log("Child name " + eachChild.name);
+        //    if (eachChild.name == "Content") 
+        //    {
+        //        Content = eachChild.gameObject;
+        //        Debug.Log("Content " + eachChild.name);
+        //    }
+        //}
+
+        newObj = (GameObject)Instantiate(prefab, Content.transform);
+        newObj.GetComponent<Text>().text = s;
     }
 
 
