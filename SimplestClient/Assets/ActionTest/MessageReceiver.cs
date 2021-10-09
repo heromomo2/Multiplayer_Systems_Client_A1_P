@@ -9,6 +9,7 @@ public class MessageReceiver : MonoBehaviour
 
     private Action<string> m_OnMessageReceived = null;
 
+
     private double m_Timer = 0;
 
     public event Action<string> OnMessageReceived

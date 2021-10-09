@@ -7,6 +7,7 @@ using System;
 public class NetworkedClient : MonoBehaviour
 {
     private Action<int> m_OnMessageReceivedFromServer = null;
+    private Action<string> m_OnMessageReceivedFromServerS = null;
 
     int connectionID;
     int maxConnections = 1000;
@@ -113,26 +114,7 @@ public class NetworkedClient : MonoBehaviour
 
          Msg(csv);
 
-        //if (signifier == ServerToClientSignifiers.CreateAcountComplete )
-        //{
-        //    Debug.LogWarning("You have CreateAccount. Try Login");
-        //}
-        //else if (signifier == ServerToClientSignifiers.CreateAcountFailed) 
-        //{
-        //    Debug.LogWarning("We have Account with that user name.");
-        //}
-        //if (signifier == ServerToClientSignifiers.LoginComplete ) 
-        //{
-        //    Debug.LogWarning("You are now Log-in");
-        //}
-        //else if(signifier == ServerToClientSignifiers.LoginFailedAccount) 
-        //{
-        //    Debug.LogWarning("check if you have Account Or you miss spell your user name");
-        //}
-        //else if(signifier == ServerToClientSignifiers.LoginFailedPassword) 
-        //{
-        //    Debug.LogWarning("Your password is wrong ");
-        //}
+        
     }
 
 
@@ -143,11 +125,29 @@ public class NetworkedClient : MonoBehaviour
             m_OnMessageReceivedFromServer -= value;
             m_OnMessageReceivedFromServer += value;
         }
+        
+
         remove
         {
             m_OnMessageReceivedFromServer -= value;
         }
     }
+
+    public event Action<string> OnMessageReceivedFromServerS
+    {
+        add
+        {
+            m_OnMessageReceivedFromServerS -= value;
+            m_OnMessageReceivedFromServerS += value;
+        }
+
+
+        remove
+        {
+            m_OnMessageReceivedFromServerS -= value;
+        }
+    }
+
 
     public void  Msg (string[] csv ) 
     {
@@ -195,6 +195,18 @@ public class NetworkedClient : MonoBehaviour
             {
                 m_OnMessageReceivedFromServer(3);
                 Debug.LogWarning("Your password is wrong ");
+            }
+        }
+        else if (signifier == ServerToClientSignifiers.ChatView)
+        {
+           // Debug.LogWarning("ServerToClientSignifiers got call");
+
+            if (m_OnMessageReceivedFromServerS != null)
+            {
+                //m_OnMessageReceivedFromServerS(6);
+                string t = csv[1].ToString();
+                // Debug.LogWarning("Server : " +  t);
+                m_OnMessageReceivedFromServerS(t);
             }
         }
         //Debug.Log("Msg function was called");
