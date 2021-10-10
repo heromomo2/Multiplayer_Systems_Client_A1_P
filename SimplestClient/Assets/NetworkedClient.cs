@@ -1,13 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
-using System;
 public class NetworkedClient : MonoBehaviour
 {
     private Action<int> m_OnMessageReceivedFromServer = null;
     private Action<string> m_OnMessageReceivedFromServerS = null;
+    private string userName = "NoAccount";  // property
+    public string GetUserName  // property
+    {
+        get { return userName; }
+    }
+    public string SetUserName  // property
+    {
+        set {  userName = value; }
+    }
+
 
     int connectionID;
     int maxConnections = 1000;
@@ -88,7 +96,6 @@ public class NetworkedClient : MonoBehaviour
                 isConnected = true;
 
                 Debug.Log("Connected, id = " + connectionID);
-
             }
         }
     }
@@ -113,7 +120,6 @@ public class NetworkedClient : MonoBehaviour
        // int signifier = int.Parse(csv[0]);
 
          Msg(csv);
-
         
     }
 
@@ -176,6 +182,7 @@ public class NetworkedClient : MonoBehaviour
             if (m_OnMessageReceivedFromServer != null)
             {
                 m_OnMessageReceivedFromServer(1);
+                SetUserName = csv[1].ToString();
                 Debug.LogWarning("You are now Log-in");
             }
         }
@@ -203,10 +210,9 @@ public class NetworkedClient : MonoBehaviour
 
             if (m_OnMessageReceivedFromServerS != null)
             {
-                //m_OnMessageReceivedFromServerS(6);
-                string t = csv[1].ToString();
+                string MsgForServer = csv[1].ToString();
                 // Debug.LogWarning("Server : " +  t);
-                m_OnMessageReceivedFromServerS(t);
+                m_OnMessageReceivedFromServerS(MsgForServer);
             }
         }
         //Debug.Log("Msg function was called");

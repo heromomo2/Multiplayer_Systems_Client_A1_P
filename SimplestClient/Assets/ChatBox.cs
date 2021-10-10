@@ -46,9 +46,11 @@ public class ChatBox : MonoBehaviour
 
     public void PostButtonOnPressed() 
     {
+        string n = networkObject.GetComponent<NetworkedClient>().GetUserName;
         string ourChatText = usermessageInput.GetComponent<InputField>().text;
 
-        string ourMsg = ClientToServerSignifiers.SendChatMsg + "," + ourChatText;
+
+        string ourMsg = ClientToServerSignifiers.SendChatMsg + "," + n +" :"+ ourChatText;
 
         networkObject.GetComponent<NetworkedClient>().SendMessageToHost(ourMsg);
     }
@@ -56,17 +58,6 @@ public class ChatBox : MonoBehaviour
     public void AddMessageToChat(string s)
     {
         GameObject newObj;
-
-        //foreach (Transform eachChild in transform)
-        //{
-        //    Debug.Log("Child name " + eachChild.name);
-        //    if (eachChild.name == "Content") 
-        //    {
-        //        Content = eachChild.gameObject;
-        //        Debug.Log("Content " + eachChild.name);
-        //    }
-        //}
-
         newObj = (GameObject)Instantiate(prefab, Content.transform);
         newObj.GetComponent<Text>().text = s;
     }
