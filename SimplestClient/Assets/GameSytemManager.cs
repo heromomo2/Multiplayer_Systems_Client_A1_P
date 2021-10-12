@@ -95,19 +95,19 @@ public class GameSytemManager : MonoBehaviour
         switch (i) 
         {
             case 1:
-                StatusText.GetComponent<Text>().text = "Status: You are now Log-in";
+                StatusText.GetComponent<Text>().text = "Status: Login Success";
                 break;
             case 2:
-                StatusText.GetComponent<Text>().text = "Status: Your User name is wrong";
+                StatusText.GetComponent<Text>().text = "Status: User name Invalid";
                 break;
             case 3:
-                StatusText.GetComponent<Text>().text = "Status: Your password is wrong";
+                StatusText.GetComponent<Text>().text = "Status: Password Invalid";
                 break;
             case 4:
-                StatusText.GetComponent<Text>().text = "Status: You have Created Account. Try Login";
+                StatusText.GetComponent<Text>().text = "Status: Account Creation Complete";
                 break;
             case 5:
-                StatusText.GetComponent<Text>().text = "Status: We have Account with that user name.";
+                StatusText.GetComponent<Text>().text = "Status: UserName In used";
                 break;
         }
 
