@@ -5,7 +5,11 @@ using UnityEngine.Networking;
 public class NetworkedClient : MonoBehaviour
 {
     private Action<int> m_OnMessageReceivedFromServer = null;
-    private Action<string> m_OnMessageReceivedFromServerS = null;
+    private Action<string> m_OnMessageReceivedChatRoomMsg = null;
+    private Action<string> m_OnMessageReceivedChatUsersList= null;
+    private Action<int> m_OnMessageReceivedClearChatUsersList = null;
+
+
     private string userName = "NoAccount";  // property
     public string GetUserName  // property
     {
@@ -13,7 +17,7 @@ public class NetworkedClient : MonoBehaviour
     }
     public string SetUserName  // property
     {
-        set {  userName = value; }
+        set { userName = value; }
     }
 
 
@@ -139,20 +143,48 @@ public class NetworkedClient : MonoBehaviour
         }
     }
 
-    public event Action<string> OnMessageReceivedFromServerS
+    public event Action<string> OnMessageReceivedChatRoomMsg
     {
         add
         {
-            m_OnMessageReceivedFromServerS -= value;
-            m_OnMessageReceivedFromServerS += value;
+            m_OnMessageReceivedChatRoomMsg -= value;
+            m_OnMessageReceivedChatRoomMsg += value;
         }
 
 
         remove
         {
-            m_OnMessageReceivedFromServerS -= value;
+            m_OnMessageReceivedChatRoomMsg -= value;
         }
     }
+    public event Action<string> OnMessageReceivedChatUsers
+    {
+        add
+        {
+            m_OnMessageReceivedChatUsersList -= value;
+            m_OnMessageReceivedChatUsersList += value;
+        }
+
+        remove
+        {
+            m_OnMessageReceivedChatUsersList -= value;
+        }
+    }
+
+    public event Action<int> OnMessageReceivedClearChatUsersList
+    {
+        add
+        {
+            m_OnMessageReceivedClearChatUsersList -= value;
+            m_OnMessageReceivedClearChatUsersList += value;
+        }
+
+        remove
+        {
+            m_OnMessageReceivedClearChatUsersList -= value;
+        }
+    }
+
 
 
     public void  Msg (string[] csv ) 
@@ -182,7 +214,7 @@ public class NetworkedClient : MonoBehaviour
             if (m_OnMessageReceivedFromServer != null)
             {
                 m_OnMessageReceivedFromServer(1);
-                SetUserName = csv[1].ToString();
+                 SetUserName = csv[1].ToString();
                 Debug.LogWarning("You are now Log-in");
             }
         }
@@ -208,11 +240,31 @@ public class NetworkedClient : MonoBehaviour
         {
            // Debug.LogWarning("ServerToClientSignifiers got call");
 
-            if (m_OnMessageReceivedFromServerS != null)
+            if (m_OnMessageReceivedChatRoomMsg != null)
             {
                 string MsgForServer = csv[1].ToString();
                 // Debug.LogWarning("Server : " +  t);
-                m_OnMessageReceivedFromServerS(MsgForServer);
+                m_OnMessageReceivedChatRoomMsg(MsgForServer);
+            }
+        }
+        else if (signifier == ServerToClientSignifiers.ReceiveListOFPlayerInChat)
+        {
+            Debug.LogWarning("ReceiveListOFPlayerInChat  was received");
+
+            if (m_OnMessageReceivedChatUsersList != null)
+            {
+                string OtherUserName = csv[1].ToString();
+                // Debug.LogWarning("Server : " +  t);
+                m_OnMessageReceivedChatUsersList(OtherUserName);
+            }
+        }
+        else if (signifier == ServerToClientSignifiers.ReceiveClearListOFPlayerInChat)
+        {
+            Debug.LogWarning("ReceiveListOFPlayerInChat  was received");
+
+            if (m_OnMessageReceivedClearChatUsersList != null)
+            {
+                m_OnMessageReceivedClearChatUsersList(9);
             }
         }
         //Debug.Log("Msg function was called");
@@ -230,7 +282,9 @@ public class ClientToServerSignifiers
 
     public const int Login = 2;
 
-    public const int SendChatMsg = 3;
+    public const int SendChatMsg = 3; // send a globle chat message
+
+    public const int SendChatPrivateMsg = 4;// send a chat private msg
 }
 
 public class ServerToClientSignifiers
@@ -243,10 +297,16 @@ public class ServerToClientSignifiers
     public const int LoginFailedPassword = 3;
 
     public const int CreateAcountComplete = 4;
-    
+
     public const int CreateAcountFailed = 5;
 
-    public const int ChatView = 6;
+    public const int ChatView = 6; // all the receive globe chatmessage.
+
+    public const int ReceivePrivateChatMsg = 7;//  receive a private chat message.
+
+    public const int ReceiveListOFPlayerInChat = 8;// all the list of players in the chat
+
+    public const int ReceiveClearListOFPlayerInChat = 9;// all the list of players 
 
 }
 

@@ -7,8 +7,14 @@ using UnityEngine.UI;
 public class GameSytemManager : MonoBehaviour
 {
     private NetworkedClient m_MessageReceiverFromServer = null;
+    //private bool IsLogin = false;  // property
+    //public bool GetIsLogin // property
+    //{
+    //    get { return IsLogin; }
+    //}
+    
 
-        // Start is called before the first frame update
+    // Start is called before the first frame update
 
     GameObject submitButton, userNameInput, passwordInput, createToggle, loginToggle, StatusText;
     GameObject networkClient;
