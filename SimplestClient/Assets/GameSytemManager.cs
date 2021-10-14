@@ -7,16 +7,31 @@ using UnityEngine.UI;
 public class GameSytemManager : MonoBehaviour
 {
     private NetworkedClient m_MessageReceiverFromServer = null;
+
+
+    private NetworkedClient m_On = null;
+
     //private bool IsLogin = false;  // property
     //public bool GetIsLogin // property
     //{
     //    get { return IsLogin; }
     //}
-    
+
+
+
+    //private string userName = "NoAccount";  // property
+    //public string GetUserName  // property
+    //{
+    //    get { return userName; }
+    //}
+    //public string SetUserName  // property
+    //{
+    //    set { userName = value; }
+    //}
 
     // Start is called before the first frame update
 
-    GameObject submitButton, userNameInput, passwordInput, createToggle, loginToggle, StatusText;
+    GameObject submitButton, userNameInput, passwordInput, createToggle, loginToggle, StatusText,SystemManager ;
     GameObject networkClient;
     void Start()
     {
@@ -37,20 +52,27 @@ public class GameSytemManager : MonoBehaviour
                  networkClient = go;
             else if (go.name == "Status_Description")
                 StatusText = go;
- 
+            else if (go.name == "SystemManagerObject")
+                SystemManager = go;
         }
 
         submitButton.GetComponent<Button>().onClick.AddListener(SubmitButtonOnPressed);
         loginToggle.GetComponent<Toggle>().onValueChanged.AddListener(LoginToggleChanged);
         createToggle.GetComponent<Toggle>().onValueChanged.AddListener(CreateToggleChanged);
-        
 
-         m_MessageReceiverFromServer = networkClient.GetComponent<NetworkedClient>();
-        if (m_MessageReceiverFromServer != null)
+
+        // m_MessageReceiverFromServer = networkClient.GetComponent<NetworkedClient>();
+        //if (m_MessageReceiverFromServer != null)
+        //{
+        //   m_MessageReceiverFromServer.OnMessageReceivedFromServer+= LoginStates;
+        //}
+
+
+        m_On = networkClient.GetComponent<NetworkedClient>();
+        if (m_On != null)
         {
-           m_MessageReceiverFromServer.OnMessageReceivedFromServer+= LoginStates;
+            m_On.On += LoginStates;
         }
-
     }
 
 
@@ -90,18 +112,25 @@ public class GameSytemManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (m_MessageReceiverFromServer != null)
+        //if (m_MessageReceiverFromServer != null)
+        //{
+        //    m_MessageReceiverFromServer.OnMessageReceivedFromServer -= LoginStates;
+        //}
+
+        if (m_On != null)
         {
-            m_MessageReceiverFromServer.OnMessageReceivedFromServer -= LoginStates;
+            m_On.On -= LoginStates;
         }
+
     }
 
-    private void LoginStates(int i) 
+    private void LoginStates(int signifier, string s) 
     {
-        switch (i) 
+        switch (signifier) 
         {
             case 1:
                 StatusText.GetComponent<Text>().text = "Status: Login Success";
+                SystemManager.GetComponent<SystemManager>().SetUserName = s;
                 break;
             case 2:
                 StatusText.GetComponent<Text>().text = "Status: User name Invalid";

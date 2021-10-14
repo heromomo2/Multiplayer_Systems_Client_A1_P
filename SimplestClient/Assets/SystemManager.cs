@@ -4,8 +4,18 @@ using UnityEngine;
 
 public class SystemManager : MonoBehaviour
 {
+    private string userName = "NoAccount";  // property
+    public string GetUserName  // property
+    {
+        get { return userName; }
+    }
+    public string SetUserName  // property
+    {
+        set { userName = value; }
+    }
 
-    private NetworkedClient m_MessageReceiverFromServer = null;
+    //private NetworkedClient m_MessageReceiverFromServer = null;
+    private NetworkedClient m_On = null;
     GameObject Login, Chat, networkClient;
 
     // Start is called before the first frame update
@@ -21,11 +31,21 @@ public class SystemManager : MonoBehaviour
             else if (go.name == "Network")
                 networkClient = go;
         }
-        m_MessageReceiverFromServer = networkClient.GetComponent<NetworkedClient>();
-        if (m_MessageReceiverFromServer != null)
+
+
+        //m_MessageReceiverFromServer = networkClient.GetComponent<NetworkedClient>();
+        //if (m_MessageReceiverFromServer != null)
+        //{
+        //    m_MessageReceiverFromServer.OnMessageReceivedFromServer += OpenChatRoom;
+        //}
+
+        m_On = networkClient.GetComponent<NetworkedClient>();
+
+        if (m_On != null)
         {
-            m_MessageReceiverFromServer.OnMessageReceivedFromServer += OpenChatRoom;
+            m_On.On += OpenChatRoom;
         }
+
         Login.SetActive(true);
         Chat.SetActive(false);
     }
@@ -33,19 +53,26 @@ public class SystemManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (m_MessageReceiverFromServer != null)
+        //if (m_MessageReceiverFromServer != null)
+        //{
+        //    m_MessageReceiverFromServer.OnMessageReceivedFromServer -= OpenChatRoom;
+        //}
+
+        if (m_On != null)
         {
-            m_MessageReceiverFromServer.OnMessageReceivedFromServer -= OpenChatRoom;
+            m_On.On -= OpenChatRoom;
         }
+
+
     }
 
 
 
 
 
-    public void OpenChatRoom(int i) 
+    public void OpenChatRoom(int signifier, string s) 
     {
-        switch (i)
+        switch ( signifier)
         {
             case 1:
                 Login.SetActive(false);
@@ -54,7 +81,7 @@ public class SystemManager : MonoBehaviour
         }
     }
         // Update is called once per frame
-        void Update()
+    void Update()
     {
         
     }

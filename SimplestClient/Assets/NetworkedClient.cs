@@ -9,16 +9,18 @@ public class NetworkedClient : MonoBehaviour
     private Action<string> m_OnMessageReceivedChatUsersList= null;
     private Action<int> m_OnMessageReceivedClearChatUsersList = null;
 
+    private Action<int,string> m_On = null;
 
-    private string userName = "NoAccount";  // property
-    public string GetUserName  // property
-    {
-        get { return userName; }
-    }
-    public string SetUserName  // property
-    {
-        set { userName = value; }
-    }
+
+    //private string userName = "NoAccount";  // property
+    //public string GetUserName  // property
+    //{
+    //    get { return userName; }
+    //}
+    //public string SetUserName  // property
+    //{
+    //    set { userName = value; }
+    //}
 
 
     int connectionID;
@@ -185,88 +187,117 @@ public class NetworkedClient : MonoBehaviour
         }
     }
 
+    public event Action<int,string> On
+    {
+        add
+        {
+            m_On -= value;
+            m_On += value;
+        }
+
+        remove
+        {
+            m_On -= value;
+        }
+    }
+
 
 
     public void  Msg (string[] csv ) 
     {
         int signifier = int.Parse(csv[0]);
+        string FirstElement = csv[1].ToString();
 
-        if (signifier == ServerToClientSignifiers.CreateAcountComplete)
+        if (csv[1] == ""|| csv[1] == null)
         {
-            //Debug.LogWarning("You have CreateAccount. Try Login");
+            Debug.Log("CSV[1] : ->" + csv[1]);
+        }
+        else
+        {
+            //FirstElement = "99";
+        }
 
-            if (m_OnMessageReceivedFromServer != null)
-            {
-                m_OnMessageReceivedFromServer(4);
-            }
-        }
-        else if (signifier == ServerToClientSignifiers.CreateAcountFailed)
+        if( m_On != null)
         {
-            //Debug.LogWarning("We have Account with that user name.");
-            if (m_OnMessageReceivedFromServer != null)
-            {
-                m_OnMessageReceivedFromServer(5);
-            }
+           m_On(signifier, FirstElement);
         }
-        if (signifier == ServerToClientSignifiers.LoginComplete)
-        {
+
+        //if (signifier == ServerToClientSignifiers.CreateAcountComplete)
+        //{
+        //    //Debug.LogWarning("You have CreateAccount. Try Login");
+
+        //    if (m_OnMessageReceivedFromServer != null)
+        //    {
+        //        m_OnMessageReceivedFromServer(4);
+        //    }
+        //}
+        //else if (signifier == ServerToClientSignifiers.CreateAcountFailed)
+        //{
+        //    //Debug.LogWarning("We have Account with that user name.");
+        //    if (m_OnMessageReceivedFromServer != null)
+        //    {
+        //        m_OnMessageReceivedFromServer(5);
+        //    }
+        //}
+        //if (signifier == ServerToClientSignifiers.LoginComplete)
+        //{
             
-            if (m_OnMessageReceivedFromServer != null)
-            {
-                m_OnMessageReceivedFromServer(1);
-                 SetUserName = csv[1].ToString();
-                Debug.LogWarning("You are now Log-in");
-            }
-        }
-        else if (signifier == ServerToClientSignifiers.LoginFailedAccount)
-        {
+        //    if (m_OnMessageReceivedFromServer != null)
+        //    {
+        //        m_OnMessageReceivedFromServer(1);
+        //         SetUserName = csv[1].ToString();
+        //        Debug.LogWarning("You are now Log-in");
+        //    }
+        //}
+        //else if (signifier == ServerToClientSignifiers.LoginFailedAccount)
+        //{
             
-            if (m_OnMessageReceivedFromServer != null)
-            {
-                m_OnMessageReceivedFromServer(2);
-                Debug.LogWarning("check if you have Account Or you miss spell your user name");
-            }
-        }
-        else if (signifier == ServerToClientSignifiers.LoginFailedPassword)
-        {
+        //    if (m_OnMessageReceivedFromServer != null)
+        //    {
+        //        m_OnMessageReceivedFromServer(2);
+        //        Debug.LogWarning("check if you have Account Or you miss spell your user name");
+        //    }
+        //}
+        //else if (signifier == ServerToClientSignifiers.LoginFailedPassword)
+        //{
            
-            if (m_OnMessageReceivedFromServer != null)
-            {
-                m_OnMessageReceivedFromServer(3);
-                Debug.LogWarning("Your password is wrong ");
-            }
-        }
-        else if (signifier == ServerToClientSignifiers.ChatView)
-        {
-           // Debug.LogWarning("ServerToClientSignifiers got call");
+        //    if (m_OnMessageReceivedFromServer != null)
+        //    {
+        //        m_OnMessageReceivedFromServer(3);
+        //        Debug.LogWarning("Your password is wrong ");
+        //    }
+        //}
+        //else if (signifier == ServerToClientSignifiers.ChatView)
+        //{
+        //   // Debug.LogWarning("ServerToClientSignifiers got call");
 
-            if (m_OnMessageReceivedChatRoomMsg != null)
-            {
-                string MsgForServer = csv[1].ToString();
-                // Debug.LogWarning("Server : " +  t);
-                m_OnMessageReceivedChatRoomMsg(MsgForServer);
-            }
-        }
-        else if (signifier == ServerToClientSignifiers.ReceiveListOFPlayerInChat)
-        {
-            Debug.LogWarning("ReceiveListOFPlayerInChat  was received");
+        //    if (m_OnMessageReceivedChatRoomMsg != null)
+        //    {
+        //        string MsgForServer = csv[1].ToString();
+        //        // Debug.LogWarning("Server : " +  t);
+        //        m_OnMessageReceivedChatRoomMsg(MsgForServer);
+        //    }
+        //}
+        //else if (signifier == ServerToClientSignifiers.ReceiveListOFPlayerInChat)
+        //{
+        //    Debug.LogWarning("ReceiveListOFPlayerInChat  was received");
 
-            if (m_OnMessageReceivedChatUsersList != null)
-            {
-                string OtherUserName = csv[1].ToString();
-                // Debug.LogWarning("Server : " +  t);
-                m_OnMessageReceivedChatUsersList(OtherUserName);
-            }
-        }
-        else if (signifier == ServerToClientSignifiers.ReceiveClearListOFPlayerInChat)
-        {
-            Debug.LogWarning("ReceiveListOFPlayerInChat  was received");
+        //    if (m_OnMessageReceivedChatUsersList != null)
+        //    {
+        //        string OtherUserName = csv[1].ToString();
+        //        // Debug.LogWarning("Server : " +  t);
+        //        m_OnMessageReceivedChatUsersList(OtherUserName);
+        //    }
+        //}
+        //else if (signifier == ServerToClientSignifiers.ReceiveClearListOFPlayerInChat)
+        //{
+        //    Debug.LogWarning("ReceiveListOFPlayerInChat  was received");
 
-            if (m_OnMessageReceivedClearChatUsersList != null)
-            {
-                m_OnMessageReceivedClearChatUsersList(9);
-            }
-        }
+        //    if (m_OnMessageReceivedClearChatUsersList != null)
+        //    {
+        //        m_OnMessageReceivedClearChatUsersList(9);
+        //    }
+        //}
         //Debug.Log("Msg function was called");
     }
 
