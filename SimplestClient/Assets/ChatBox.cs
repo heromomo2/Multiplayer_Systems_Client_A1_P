@@ -19,7 +19,7 @@ public class ChatBox : MonoBehaviour
     GameObject postButton, usermessageInput, CU_Content, networkObject,CM_Content,SystemManager;
     public GameObject prefabTextObject = null,prefebButtonObject;
     public static List<GameObject> ListPrefabButtons = new List<GameObject>();
-   // public static List<string> ListofPlyers = new List<string>();
+    public static List<GameObject> ListPrefabTextObject = new List<GameObject>();
     void Start()
     {
         GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
@@ -62,7 +62,7 @@ public class ChatBox : MonoBehaviour
 
         if (m_On != null)
         {
-            m_On.On += AddGlobalMessageToChat;
+            m_On.On += GlobalMessageToChat;
             m_On.On += AddListOfPlayerToChat;
             m_On.On += ClearListOfPlayerToChat;
         }
@@ -86,7 +86,7 @@ public class ChatBox : MonoBehaviour
 
         if (m_On != null)
         {
-            m_On.On -= AddGlobalMessageToChat;
+            m_On.On -= GlobalMessageToChat;
             m_On.On -= AddListOfPlayerToChat;
             m_On.On -= ClearListOfPlayerToChat;
         }
@@ -106,15 +106,31 @@ public class ChatBox : MonoBehaviour
         networkObject.GetComponent<NetworkedClient>().SendMessageToHost(ourMsg);
     }
 
-    public void AddGlobalMessageToChat(int signifier, string s)
+    public void GlobalMessageToChat(int signifier, string s)
     {
         if (signifier == ServerToClientSignifiers.ChatView)
         {
             GameObject newObj;
             newObj = (GameObject)Instantiate(prefabTextObject, CM_Content.transform);
             newObj.GetComponent<Text>().text = s;
+            ListPrefabTextObject.Add(newObj);
         }
-    } 
+        else if(signifier == ServerToClientSignifiers.LogOutComplete)
+        {
+            if (ListPrefabTextObject != null && ListPrefabTextObject.Count != 0)
+            {
+               
+                foreach (GameObject t in ListPrefabTextObject)
+                {
+                    Destroy(t);
+                }
+
+                Debug.Log("ListPrefabTextObject isn't empty!!");
+            }
+        }
+    
+    }
+    
     public void AddPrivateMessageToChat()
     {
       // at pm message to  the chat
@@ -154,6 +170,27 @@ public class ChatBox : MonoBehaviour
             }
         }
         Debug.Log("ClearListOfPlayerToChat--->Herrre!!");
+    }
+
+    public void DropDownPrefixMsg (int val) 
+    {
+        switch (val) 
+        {
+            case 0:
+                break;
+            case 1:
+                usermessageInput.GetComponent<InputField>().text = " howdy people in the chat";
+                break;
+            case 2:
+                usermessageInput.GetComponent<InputField>().text = "Anyone up a for game of Tic tac Toe ";
+                break;
+            case 3:
+                usermessageInput.GetComponent<InputField>().text = "I'll be Away for my keyboard for a bit ";
+                break;
+            case 4:
+                usermessageInput.GetComponent<InputField>().text = "I'm login out. ";
+                break;
+        }
     }
 
     // Update is called once per frame

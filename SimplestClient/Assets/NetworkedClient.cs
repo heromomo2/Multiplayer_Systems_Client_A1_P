@@ -316,6 +316,11 @@ public class ClientToServerSignifiers
     public const int SendChatMsg = 3; // send a globle chat message
 
     public const int SendChatPrivateMsg = 4;// send a chat private msg
+
+    public const int EnterTheChatRoom = 5; // enter the chat room
+
+    public const int Logout = 6;
+
 }
 
 public class ServerToClientSignifiers
@@ -338,6 +343,8 @@ public class ServerToClientSignifiers
     public const int ReceiveListOFPlayerInChat = 8;// all the list of players in the chat
 
     public const int ReceiveClearListOFPlayerInChat = 9;// all the list of players 
+    
+    public const int LogOutComplete = 10;
 
 }
 
