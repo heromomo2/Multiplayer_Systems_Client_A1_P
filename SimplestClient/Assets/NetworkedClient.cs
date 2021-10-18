@@ -186,8 +186,11 @@ public class ServerToClientSignifiers
     public const int ReceiveListOFPlayerInChat = 8;// all the list of players in the chat
 
     public const int ReceiveClearListOFPlayerInChat = 9;// all the list of players 
-    
+
     public const int LogOutComplete = 10;
 
+    public const int CreateGameRoomComplete = 11;
+
+    public const int JoinGameRoomComplete = 12;
 }
 

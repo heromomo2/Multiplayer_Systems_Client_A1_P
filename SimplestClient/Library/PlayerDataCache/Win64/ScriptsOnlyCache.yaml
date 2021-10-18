@@ -4,6 +4,7 @@ ScriptsOnlyBuild:
     - ChatBox
     - LogInScript
     - NetworkedClient
+    - PMButton
     - PopulateGrid
     - SystemManager
     Unity.2D.Animation.Editor.dll:
@@ -33,6 +34,7 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.Button
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.ContentSizeFitter
+    - UnityEngine.UI.Dropdown
     - UnityEngine.UI.GraphicRaycaster
     - UnityEngine.UI.Image
     - UnityEngine.UI.InputField
@@ -93,11 +95,15 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 3736}
     - Class: 114
+      Script: {instanceID: 4150}
+    - Class: 114
       Script: {instanceID: 4356}
     - Class: 114
       Script: {instanceID: 4552}
     - Class: 114
       Script: {instanceID: 4826}
+    - Class: 114
+      Script: {instanceID: 5562}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -669,6 +675,12 @@ ScriptsOnlyBuild:
     className: TouchInputModule
   - hash:
       serializedVersion: 2
+      Hash: c1e8dd04ff0df068a9cdbce3dc6bd13e
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: PMButton
+  - hash:
+      serializedVersion: 2
       Hash: 762a30c8d779b11af16ed9ce1f2d32fa
     assemblyName: Unity.2D.IK.Runtime.dll
     namespaceName: UnityEngine.U2D.IK
@@ -676,4 +688,4 @@ ScriptsOnlyBuild:
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: C:/Users/Owner/Desktop/build/SimplestClient.exe
+  playerPath: C:/Users/Owner/Desktop/build 2/SimplestClient.exe
