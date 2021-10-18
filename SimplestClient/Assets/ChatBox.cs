@@ -5,13 +5,7 @@ using UnityEngine.UI;
 
 public class ChatBox : MonoBehaviour
 {
-    //private NetworkedClient m_OnMessageReceivedChatRoomMsg = null;
-
-    //private NetworkedClient m_OnMessageReceivedChatUsersList = null;
-
-    //private NetworkedClient m_OnMessageReceivedClearChatUsersList = null;
-
-
+    
     private NetworkedClient m_On = null;
 
     private string m_plyersInChat;
@@ -40,23 +34,6 @@ public class ChatBox : MonoBehaviour
         }
         postButton.GetComponent<Button>().onClick.AddListener(PostButtonOnPressed);
 
-        //m_OnMessageReceivedChatRoomMsg = networkObject.GetComponent<NetworkedClient>();
-        //m_OnMessageReceivedChatUsersList = networkObject.GetComponent<NetworkedClient>();
-        //m_OnMessageReceivedClearChatUsersList = networkObject.GetComponent<NetworkedClient>();
-
-        //if (m_OnMessageReceivedChatRoomMsg != null)
-        //{
-        //    m_OnMessageReceivedChatRoomMsg.OnMessageReceivedChatRoomMsg += AddGlobalMessageToChat;
-        //}
-        //if (m_OnMessageReceivedChatUsersList != null) 
-        //{
-        //    m_OnMessageReceivedChatUsersList.OnMessageReceivedChatUsers += AddListOfPlayerToChat;
-        //}
-        //if (m_OnMessageReceivedClearChatUsersList != null) 
-        //{
-        //    m_OnMessageReceivedClearChatUsersList.OnMessageReceivedClearChatUsersList += ClearListOfPlayerToChat;
-        //}
-
 
         m_On = networkObject.GetComponent<NetworkedClient>();
 
@@ -71,18 +48,6 @@ public class ChatBox : MonoBehaviour
 
     private void OnDestroy()
     {
-        //if (m_OnMessageReceivedChatRoomMsg != null)
-        //{
-        //    m_OnMessageReceivedChatRoomMsg.OnMessageReceivedChatRoomMsg -= AddGlobalMessageToChat;
-        //}
-        //if (m_OnMessageReceivedChatUsersList != null) 
-        //{
-        //    m_OnMessageReceivedChatUsersList.OnMessageReceivedChatUsers -= AddListOfPlayerToChat;
-        //}
-        //if (m_OnMessageReceivedClearChatUsersList != null) 
-        //{
-        //    m_OnMessageReceivedClearChatUsersList.OnMessageReceivedClearChatUsersList -= ClearListOfPlayerToChat;
-        //}
 
         if (m_On != null)
         {
@@ -95,13 +60,10 @@ public class ChatBox : MonoBehaviour
 
     public void PostButtonOnPressed() 
     {
-         string n = SystemManager.GetComponent<SystemManager>().GetUserName;
+        string n = SystemManager.GetComponent<SystemManager>().GetUserName;
         string ourChatText = usermessageInput.GetComponent<InputField>().text;
 
-
         string ourMsg = ClientToServerSignifiers.SendChatMsg + "," + n +": "+ ourChatText;
-
-        //string ourMsg = ClientToServerSignifiers.SendChatMsg + "," + " :" + ourChatText;
 
         networkObject.GetComponent<NetworkedClient>().SendMessageToHost(ourMsg);
     }
@@ -138,11 +100,7 @@ public class ChatBox : MonoBehaviour
 
     public void AddListOfPlayerToChat(int signifier, string s)
     {
-        //GameObject newObj;
-        //newObj = (GameObject)Instantiate(prefebButtonObject, CM_Content.transform);
-
-        //ListofPlyers.Add(s);
-        //Debug.Log("Player : " + s);
+       
 
         if (signifier == ServerToClientSignifiers.ReceiveListOFPlayerInChat)
         {
@@ -159,7 +117,6 @@ public class ChatBox : MonoBehaviour
         {
             if (ListPrefabButtons != null || ListPrefabButtons.Count != 0)
             {
-                //ListPrefabButtons.Clear();
 
                 foreach (GameObject g in ListPrefabButtons)
                 {

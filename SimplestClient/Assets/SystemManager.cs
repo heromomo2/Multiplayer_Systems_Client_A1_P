@@ -16,9 +16,8 @@ public class SystemManager : MonoBehaviour
     
 
 
-    //private NetworkedClient m_MessageReceiverFromServer = null;
     private NetworkedClient m_On = null;
-    GameObject Login, Chat, networkClient,Menu;
+    GameObject Login, Chat, networkClient,Menu,Lobby;
 
     // Start is called before the first frame update
     void Start()
@@ -34,14 +33,11 @@ public class SystemManager : MonoBehaviour
                 networkClient = go;
             else if (go.name == "Menu_UI ")
                 Menu = go;
+            else if (go.name == "Lobby_UI")
+                Lobby = go;
         }
 
 
-        //m_MessageReceiverFromServer = networkClient.GetComponent<NetworkedClient>();
-        //if (m_MessageReceiverFromServer != null)
-        //{
-        //    m_MessageReceiverFromServer.OnMessageReceivedFromServer += OpenChatRoom;
-        //}
 
         m_On = networkClient.GetComponent<NetworkedClient>();
 
@@ -54,27 +50,18 @@ public class SystemManager : MonoBehaviour
         Login.SetActive(true);
         Chat.SetActive(false);
         Menu.SetActive(false);
+        Lobby.SetActive(false);
     }
 
 
     private void OnDestroy()
-    {
-        //if (m_MessageReceiverFromServer != null)
-        //{
-        //    m_MessageReceiverFromServer.OnMessageReceivedFromServer -= OpenChatRoom;
-        //}
-
+    { 
         if (m_On != null)
         {
             m_On.On -= OpenMenu;
             m_On.On -= reOpenLogin;
         }
-
-
     }
-
-
-
 
 
     public void OpenChatRoom() 
@@ -83,11 +70,22 @@ public class SystemManager : MonoBehaviour
         Login.SetActive(false);
         Chat.SetActive(true);
         Menu.SetActive(false);
+        Lobby.SetActive(false);
 
         string OurEnterTheChatMsg = ClientToServerSignifiers.EnterTheChatRoom + "," + GetUserName;
         networkClient.GetComponent<NetworkedClient>().SendMessageToHost(OurEnterTheChatMsg);
     }
+    public void OpenLobbyRoom()
+    {
+        // open gameroom Ui and send a msg to server
+        Login.SetActive(false);
+        Chat.SetActive(false);
+        Menu.SetActive(false);
+        Lobby.SetActive(true);
 
+        //string OurEnterTheChatMsg = ClientToServerSignifiers.EnterTheChatRoom + "," + GetUserName;
+        //networkClient.GetComponent<NetworkedClient>().SendMessageToHost(OurEnterTheChatMsg);
+    }
     public void Logout()
     {
         string logoutMsg = ClientToServerSignifiers.Logout+ ",";
@@ -102,13 +100,11 @@ public class SystemManager : MonoBehaviour
                 Login.SetActive(true);
                 Chat.SetActive(false);
                 Menu.SetActive(false);
+                Lobby.SetActive(false);
                 break;
         }
     }
-    public void OpenGameRooms()
-    {
-       
-    }
+    
     public void OpenMenu(int signifier, string s) 
     {
         switch ( signifier)

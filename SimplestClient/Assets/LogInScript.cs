@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,24 +9,7 @@ public class LogInScript : MonoBehaviour
 
     private NetworkedClient m_On = null;
 
-    //private bool IsLogin = false;  // property
-    //public bool GetIsLogin // property
-    //{
-    //    get { return IsLogin; }
-    //}
-
-
-
-    //private string userName = "NoAccount";  // property
-    //public string GetUserName  // property
-    //{
-    //    get { return userName; }
-    //}
-    //public string SetUserName  // property
-    //{
-    //    set { userName = value; }
-    //}
-
+  
     // Start is called before the first frame update
 
     GameObject submitButton, userNameInput, passwordInput, createToggle, loginToggle, StatusText,SystemManager ;
@@ -60,12 +41,6 @@ public class LogInScript : MonoBehaviour
         loginToggle.GetComponent<Toggle>().onValueChanged.AddListener(LoginToggleChanged);
         createToggle.GetComponent<Toggle>().onValueChanged.AddListener(CreateToggleChanged);
 
-
-        // m_MessageReceiverFromServer = networkClient.GetComponent<NetworkedClient>();
-        //if (m_MessageReceiverFromServer != null)
-        //{
-        //   m_MessageReceiverFromServer.OnMessageReceivedFromServer+= LoginStates;
-        //}
 
 
         m_On = networkClient.GetComponent<NetworkedClient>();
@@ -112,11 +87,6 @@ public class LogInScript : MonoBehaviour
 
     private void OnDestroy()
     {
-        //if (m_MessageReceiverFromServer != null)
-        //{
-        //    m_MessageReceiverFromServer.OnMessageReceivedFromServer -= LoginStates;
-        //}
-
         if (m_On != null)
         {
             m_On.On -= LoginStates;

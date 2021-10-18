@@ -4,23 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 public class NetworkedClient : MonoBehaviour
 {
-    private Action<int> m_OnMessageReceivedFromServer = null;
-    private Action<string> m_OnMessageReceivedChatRoomMsg = null;
-    private Action<string> m_OnMessageReceivedChatUsersList= null;
-    private Action<int> m_OnMessageReceivedClearChatUsersList = null;
-
     private Action<int,string> m_On = null;
-
-
-    //private string userName = "NoAccount";  // property
-    //public string GetUserName  // property
-    //{
-    //    get { return userName; }
-    //}
-    //public string SetUserName  // property
-    //{
-    //    set { userName = value; }
-    //}
 
 
     int connectionID;
@@ -123,69 +107,13 @@ public class NetworkedClient : MonoBehaviour
 
         string[] csv = msg.Split(',');
 
-       // int signifier = int.Parse(csv[0]);
 
          Msg(csv);
         
     }
 
 
-    public event Action<int> OnMessageReceivedFromServer
-    {
-        add
-        {
-            m_OnMessageReceivedFromServer -= value;
-            m_OnMessageReceivedFromServer += value;
-        }
-        
-
-        remove
-        {
-            m_OnMessageReceivedFromServer -= value;
-        }
-    }
-
-    public event Action<string> OnMessageReceivedChatRoomMsg
-    {
-        add
-        {
-            m_OnMessageReceivedChatRoomMsg -= value;
-            m_OnMessageReceivedChatRoomMsg += value;
-        }
-
-
-        remove
-        {
-            m_OnMessageReceivedChatRoomMsg -= value;
-        }
-    }
-    public event Action<string> OnMessageReceivedChatUsers
-    {
-        add
-        {
-            m_OnMessageReceivedChatUsersList -= value;
-            m_OnMessageReceivedChatUsersList += value;
-        }
-
-        remove
-        {
-            m_OnMessageReceivedChatUsersList -= value;
-        }
-    }
-
-    public event Action<int> OnMessageReceivedClearChatUsersList
-    {
-        add
-        {
-            m_OnMessageReceivedClearChatUsersList -= value;
-            m_OnMessageReceivedClearChatUsersList += value;
-        }
-
-        remove
-        {
-            m_OnMessageReceivedClearChatUsersList -= value;
-        }
-    }
+  
 
     public event Action<int,string> On
     {
@@ -208,97 +136,12 @@ public class NetworkedClient : MonoBehaviour
         int signifier = int.Parse(csv[0]);
         string FirstElement = csv[1].ToString();
 
-        if (csv[1] == ""|| csv[1] == null)
-        {
-            Debug.Log("CSV[1] : ->" + csv[1]);
-        }
-        else
-        {
-            //FirstElement = "99";
-        }
 
         if( m_On != null)
         {
            m_On(signifier, FirstElement);
         }
-
-        //if (signifier == ServerToClientSignifiers.CreateAcountComplete)
-        //{
-        //    //Debug.LogWarning("You have CreateAccount. Try Login");
-
-        //    if (m_OnMessageReceivedFromServer != null)
-        //    {
-        //        m_OnMessageReceivedFromServer(4);
-        //    }
-        //}
-        //else if (signifier == ServerToClientSignifiers.CreateAcountFailed)
-        //{
-        //    //Debug.LogWarning("We have Account with that user name.");
-        //    if (m_OnMessageReceivedFromServer != null)
-        //    {
-        //        m_OnMessageReceivedFromServer(5);
-        //    }
-        //}
-        //if (signifier == ServerToClientSignifiers.LoginComplete)
-        //{
-            
-        //    if (m_OnMessageReceivedFromServer != null)
-        //    {
-        //        m_OnMessageReceivedFromServer(1);
-        //         SetUserName = csv[1].ToString();
-        //        Debug.LogWarning("You are now Log-in");
-        //    }
-        //}
-        //else if (signifier == ServerToClientSignifiers.LoginFailedAccount)
-        //{
-            
-        //    if (m_OnMessageReceivedFromServer != null)
-        //    {
-        //        m_OnMessageReceivedFromServer(2);
-        //        Debug.LogWarning("check if you have Account Or you miss spell your user name");
-        //    }
-        //}
-        //else if (signifier == ServerToClientSignifiers.LoginFailedPassword)
-        //{
-           
-        //    if (m_OnMessageReceivedFromServer != null)
-        //    {
-        //        m_OnMessageReceivedFromServer(3);
-        //        Debug.LogWarning("Your password is wrong ");
-        //    }
-        //}
-        //else if (signifier == ServerToClientSignifiers.ChatView)
-        //{
-        //   // Debug.LogWarning("ServerToClientSignifiers got call");
-
-        //    if (m_OnMessageReceivedChatRoomMsg != null)
-        //    {
-        //        string MsgForServer = csv[1].ToString();
-        //        // Debug.LogWarning("Server : " +  t);
-        //        m_OnMessageReceivedChatRoomMsg(MsgForServer);
-        //    }
-        //}
-        //else if (signifier == ServerToClientSignifiers.ReceiveListOFPlayerInChat)
-        //{
-        //    Debug.LogWarning("ReceiveListOFPlayerInChat  was received");
-
-        //    if (m_OnMessageReceivedChatUsersList != null)
-        //    {
-        //        string OtherUserName = csv[1].ToString();
-        //        // Debug.LogWarning("Server : " +  t);
-        //        m_OnMessageReceivedChatUsersList(OtherUserName);
-        //    }
-        //}
-        //else if (signifier == ServerToClientSignifiers.ReceiveClearListOFPlayerInChat)
-        //{
-        //    Debug.LogWarning("ReceiveListOFPlayerInChat  was received");
-
-        //    if (m_OnMessageReceivedClearChatUsersList != null)
-        //    {
-        //        m_OnMessageReceivedClearChatUsersList(9);
-        //    }
-        //}
-        //Debug.Log("Msg function was called");
+        
     }
 
     public bool IsConnected()
