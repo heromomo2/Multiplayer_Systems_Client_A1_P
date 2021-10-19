@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class ChatBox : MonoBehaviour
 {
     
-    private NetworkedClient m_On = null;
+    private NetworkedClient m_MessageReceiverFromServer = null;
 
     private string m_plyersInChat;
 
@@ -38,13 +38,13 @@ public class ChatBox : MonoBehaviour
         postButton.GetComponent<Button>().onClick.AddListener(PostButtonOnPressed);
 
 
-        m_On = networkObject.GetComponent<NetworkedClient>();
+        m_MessageReceiverFromServer = networkObject.GetComponent<NetworkedClient>();
 
-        if (m_On != null)
+        if (m_MessageReceiverFromServer != null)
         {
-            m_On.On += GlobalMessageToChat;
-            m_On.On += AddListOfPlayerToChat;
-            m_On.On += ClearListOfPlayerToChat;
+            m_MessageReceiverFromServer.OnMessageReceivedFromSever += GlobalMessageToChat;
+            m_MessageReceiverFromServer.OnMessageReceivedFromSever += AddListOfPlayerToChat;
+            m_MessageReceiverFromServer.OnMessageReceivedFromSever += ClearListOfPlayerToChat;
         }
     }
 
@@ -52,11 +52,11 @@ public class ChatBox : MonoBehaviour
     private void OnDestroy()
     {
 
-        if (m_On != null)
+        if (m_MessageReceiverFromServer != null)
         {
-            m_On.On -= GlobalMessageToChat;
-            m_On.On -= AddListOfPlayerToChat;
-            m_On.On -= ClearListOfPlayerToChat;
+            m_MessageReceiverFromServer.OnMessageReceivedFromSever -= GlobalMessageToChat;
+            m_MessageReceiverFromServer.OnMessageReceivedFromSever -= AddListOfPlayerToChat;
+            m_MessageReceiverFromServer.OnMessageReceivedFromSever -= ClearListOfPlayerToChat;
         }
 
     }

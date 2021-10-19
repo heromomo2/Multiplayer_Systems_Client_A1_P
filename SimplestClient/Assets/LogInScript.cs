@@ -4,10 +4,10 @@ using UnityEngine.UI;
 
 public class LogInScript : MonoBehaviour
 {
+    //private NetworkedClient m_MessageReceiverFromServer = null;
+
+
     private NetworkedClient m_MessageReceiverFromServer = null;
-
-
-    private NetworkedClient m_On = null;
 
   
     // Start is called before the first frame update
@@ -43,10 +43,10 @@ public class LogInScript : MonoBehaviour
 
 
 
-        m_On = networkClient.GetComponent<NetworkedClient>();
-        if (m_On != null)
+        m_MessageReceiverFromServer = networkClient.GetComponent<NetworkedClient>();
+        if (m_MessageReceiverFromServer != null)
         {
-            m_On.On += LoginStates;
+            m_MessageReceiverFromServer.OnMessageReceivedFromSever += LoginStates;
         }
     }
 
@@ -87,9 +87,9 @@ public class LogInScript : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (m_On != null)
+        if (m_MessageReceiverFromServer != null)
         {
-            m_On.On -= LoginStates;
+            m_MessageReceiverFromServer.OnMessageReceivedFromSever -= LoginStates;
         }
 
     }

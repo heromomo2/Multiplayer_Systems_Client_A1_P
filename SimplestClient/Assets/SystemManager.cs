@@ -14,8 +14,8 @@ public class SystemManager : MonoBehaviour
     
 
 
-    private NetworkedClient m_On = null;
-    GameObject Login, Chat, networkClient,Menu,Lobby;
+    private NetworkedClient m_MessageReceiverFromServer = null;
+    GameObject Login, Chat, networkClient,Menu,Lobby, WaitingInQueue, Tic_Tac_Toe;
 
     // Start is called before the first frame update
     void Start()
@@ -33,86 +33,180 @@ public class SystemManager : MonoBehaviour
                 Menu = go;
             else if (go.name == "Lobby_UI")
                 Lobby = go;
+            else if (go.name == "Game_UI")
+                Tic_Tac_Toe = go;
+            else if (go.name == "WaitingInQueue_UI")
+                WaitingInQueue = go;
         }
 
 
+        m_MessageReceiverFromServer = networkClient.GetComponent<NetworkedClient>();
 
-        m_On = networkClient.GetComponent<NetworkedClient>();
-
-        if (m_On != null)
+        if (m_MessageReceiverFromServer != null)
         {
-            m_On.On += OpenMenu;
-            m_On.On += reOpenLogin;
+            //m_MessageReceiverFromServer.OnMessageReceivedFromSever += OpenMenu;
+            //m_MessageReceiverFromServer.OnMessageReceivedFromSever += reOpenLogin;
+            m_MessageReceiverFromServer.OnMessageReceivedFromSever += SystemManagerReceived;
         }
 
-        Login.SetActive(true);
-        Chat.SetActive(false);
-        Menu.SetActive(false);
-        Lobby.SetActive(false);
+        //Login.SetActive(true);
+        //Chat.SetActive(false);
+        //Menu.SetActive(false);
+        //Lobby.SetActive(false);
+        ChangeState(GameStates.LoginMenu);
     }
 
 
     private void OnDestroy()
     { 
-        if (m_On != null)
+        if (m_MessageReceiverFromServer != null)
         {
-            m_On.On -= OpenMenu;
-            m_On.On -= reOpenLogin;
+            //m_MessageReceiverFromServer.OnMessageReceivedFromSever -= OpenMenu;
+            //m_MessageReceiverFromServer.OnMessageReceivedFromSever -= reOpenLogin;
+            m_MessageReceiverFromServer.OnMessageReceivedFromSever -= SystemManagerReceived;
+        }
+    
+    }
+
+
+    //public void OpenChatRoom() 
+    //{
+    //    // open gameroom Ui and send a msg to server
+    //    Login.SetActive(false);
+    //    Chat.SetActive(true);
+    //    Menu.SetActive(false);
+    //    Lobby.SetActive(false);
+
+    //    string OurEnterTheChatMsg = ClientToServerSignifiers.EnterTheChatRoom + "," + GetUserName;
+    //    networkClient.GetComponent<NetworkedClient>().SendMessageToHost(OurEnterTheChatMsg);
+    //}
+    //public void OpenLobbyRoom()
+    //{
+    //    // open gameroom Ui and send a msg to server
+    //    Login.SetActive(false);
+    //    Chat.SetActive(false);
+    //    Menu.SetActive(false);
+    //    Lobby.SetActive(true);
+
+    //    //string OurEnterTheChatMsg = ClientToServerSignifiers.EnterTheChatRoom + "," + GetUserName;
+    //    //networkClient.GetComponent<NetworkedClient>().SendMessageToHost(OurEnterTheChatMsg);
+    //}
+    //public void Logout()
+    //{
+    //    string logoutMsg = ClientToServerSignifiers.Logout+ ",";
+       
+    //    networkClient.GetComponent<NetworkedClient>().SendMessageToHost(logoutMsg);
+    //}
+    //public void reOpenLogin(int signifier, string s)
+    //{
+    //    switch (signifier)
+    //    {
+    //        case ServerToClientSignifiers.LogOutComplete:
+    //            Login.SetActive(true);
+    //            Chat.SetActive(false);
+    //            Menu.SetActive(false);
+    //            Lobby.SetActive(false);
+    //            break;
+    //    }
+    //}
+    
+    //public void OpenMenu(int signifier, string s) 
+    //{
+    //    switch ( signifier)
+    //    {
+    //        case ServerToClientSignifiers.LoginComplete:
+    //            Login.SetActive(false);
+    //            Chat.SetActive(false);
+    //            Menu.SetActive(true);
+    //            break;
+    //    }
+    //}
+    
+    void SystemManagerReceived (int sigifier, string s) 
+    {
+        switch (sigifier)
+        {
+            case ServerToClientSignifiers.LoginComplete:
+                ChangeState(GameStates.MainMenu);
+                break;
+            case ServerToClientSignifiers.OpponentPlayed:
+                Debug.LogWarning("Your Opponet Just played");
+                break;
+            case ServerToClientSignifiers.GameStart:
+                ChangeState(GameStates.TicTacToe);
+                break;
         }
     }
 
+    public void GameRoomButtonIsPreessed()
+    {
 
-    public void OpenChatRoom() 
-    {
-        // open gameroom Ui and send a msg to server
-        Login.SetActive(false);
-        Chat.SetActive(true);
-        Menu.SetActive(false);
-        Lobby.SetActive(false);
+        ChangeState(GameStates.WaitingInQueueforOtherPlayer);
+       // string OurEnterTheChatMsg = ClientToServerSignifiers.EnterTheChatRoom + "," + GetUserName;
+        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.JoinQueueForGameRoom+ "");
+    }
 
-        string OurEnterTheChatMsg = ClientToServerSignifiers.EnterTheChatRoom + "," + GetUserName;
-        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(OurEnterTheChatMsg);
-    }
-    public void OpenLobbyRoom()
-    {
-        // open gameroom Ui and send a msg to server
-        Login.SetActive(false);
-        Chat.SetActive(false);
-        Menu.SetActive(false);
-        Lobby.SetActive(true);
 
-        //string OurEnterTheChatMsg = ClientToServerSignifiers.EnterTheChatRoom + "," + GetUserName;
-        //networkClient.GetComponent<NetworkedClient>().SendMessageToHost(OurEnterTheChatMsg);
-    }
-    public void Logout()
+    public void TicTacToeButtonIsPreessed()
     {
-        string logoutMsg = ClientToServerSignifiers.Logout+ ",";
-       
-        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(logoutMsg);
+
+        //ChangeState(GameStates.TicTacToe);
+       // Debug.Log("You should be pressing tictactoe button right now");
+        // string OurEnterTheChatMsg = ClientToServerSignifiers.EnterTheChatRoom + "," + GetUserName;
+        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.TicTacToesSomethingSomthing + "");
     }
-    public void reOpenLogin(int signifier, string s)
+
+    void ChangeState(int newState) 
     {
-        switch (signifier)
+        switch (newState) 
         {
-            case ServerToClientSignifiers.LogOutComplete:
+            case GameStates.LoginMenu:
                 Login.SetActive(true);
                 Chat.SetActive(false);
                 Menu.SetActive(false);
                 Lobby.SetActive(false);
+                WaitingInQueue.SetActive(false);
+                Tic_Tac_Toe.SetActive(false);
                 break;
-        }
-    }
-    
-    public void OpenMenu(int signifier, string s) 
-    {
-        switch ( signifier)
-        {
-            case ServerToClientSignifiers.LoginComplete:
+            case GameStates.MainMenu:
                 Login.SetActive(false);
                 Chat.SetActive(false);
                 Menu.SetActive(true);
+                WaitingInQueue.SetActive(false);
+                Lobby.SetActive(false);
+                Tic_Tac_Toe.SetActive(false);
+                break;
+            case GameStates.WaitingInQueueforOtherPlayer:
+                Login.SetActive(false);
+                Chat.SetActive(false);
+                Menu.SetActive(false);
+                WaitingInQueue.SetActive(true);
+                Lobby.SetActive(false);
+                Tic_Tac_Toe.SetActive(false);
+                break;
+            case GameStates.TicTacToe:
+                Login.SetActive(false);
+                Chat.SetActive(false);
+                Menu.SetActive(false);
+                WaitingInQueue.SetActive(false);
+                Lobby.SetActive(false);
+                Tic_Tac_Toe.SetActive(true);
                 break;
         }
+    }
+
+
+
+    static public class GameStates
+    {
+        public const int LoginMenu = 1;
+        public const int MainMenu = 2;
+
+        public const int WaitingInQueueforOtherPlayer = 3;
+       
+        public const int TicTacToe = 4;
+
+        public const int chatroom = 5;
     }
         // Update is called once per frame
     void Update()

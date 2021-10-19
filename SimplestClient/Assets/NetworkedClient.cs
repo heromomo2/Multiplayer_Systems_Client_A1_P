@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 public class NetworkedClient : MonoBehaviour
 {
-    private Action<int,string> m_On = null;
+    private Action<int,string> m_MessageReceiverFromServer = null;
 
 
     int connectionID;
@@ -115,17 +115,17 @@ public class NetworkedClient : MonoBehaviour
 
   
 
-    public event Action<int,string> On
+    public event Action<int,string> OnMessageReceivedFromSever
     {
         add
         {
-            m_On -= value;
-            m_On += value;
+            m_MessageReceiverFromServer -= value;
+            m_MessageReceiverFromServer += value;
         }
 
         remove
         {
-            m_On -= value;
+            m_MessageReceiverFromServer -= value;
         }
     }
 
@@ -137,9 +137,9 @@ public class NetworkedClient : MonoBehaviour
         string FirstElement = csv[1].ToString();
 
 
-        if( m_On != null)
+        if( m_MessageReceiverFromServer != null)
         {
-           m_On(signifier, FirstElement);
+           m_MessageReceiverFromServer(signifier, FirstElement);
         }
         
     }
@@ -162,8 +162,11 @@ public class ClientToServerSignifiers
 
     public const int EnterTheChatRoom = 5; // enter the chat room
 
-    public const int Logout = 6;
+    public const int Logout = 6;//
 
+    public const int JoinQueueForGameRoom = 7;
+
+    public const int TicTacToesSomethingSomthing = 8;
 }
 
 public class ServerToClientSignifiers
@@ -189,8 +192,8 @@ public class ServerToClientSignifiers
 
     public const int LogOutComplete = 10;
 
-    public const int CreateGameRoomComplete = 11;
+    public const int OpponentPlayed = 11;
 
-    public const int JoinGameRoomComplete = 12;
+    public const int GameStart = 12;
 }
 
