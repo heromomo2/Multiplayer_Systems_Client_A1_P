@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SystemManager : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class SystemManager : MonoBehaviour
 
 
     private NetworkedClient m_MessageReceiverFromServer = null;
-    GameObject Login, Chat, networkClient,Menu,Lobby, WaitingInQueue, Tic_Tac_Toe;
+    GameObject Login, Chat, networkClient,Menu,Lobby, WaitingInQueue, Tic_Tac_Toe,GameOver;
 
     // Start is called before the first frame update
     void Start()
@@ -37,6 +38,8 @@ public class SystemManager : MonoBehaviour
                 Tic_Tac_Toe = go;
             else if (go.name == "WaitingInQueue_UI")
                 WaitingInQueue = go;
+            else if (go.name == "GameOverScreen_UI ")
+                GameOver = go;
         }
 
 
@@ -135,25 +138,37 @@ public class SystemManager : MonoBehaviour
             case ServerToClientSignifiers.GameStart:
                 ChangeState(GameStates.TicTacToe);
                 break;
+            case ServerToClientSignifiers.ReMatchOfTicTacToeComplete:
+                ChangeState(GameStates.TicTacToe);
+                break;
         }
+    
+    }
+
+
+    
+    public void OpenGameOver()
+    {
+        //if (i ==1) 
+        //GameOver.GetComponentInChildren<Text>().text = "GameOver" + "PlayerOne has Won";
+        //else if (i == 2)
+        //GameOver.GetComponentInChildren<Text>().text = "GameOver" + "PlayerTwo has Won";
+        //else if (i == 3)
+        //GameOver.GetComponentInChildren<Text>().text = "GameOver" + "No One has Won";
+
+        ChangeState(GameStates.GameOver);
+
+        // networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.ReMatchOfTicTacToe + ",");
+
     }
 
     public void GameRoomButtonIsPreessed()
     {
 
-        ChangeState(GameStates.WaitingInQueueforOtherPlayer);
-       // string OurEnterTheChatMsg = ClientToServerSignifiers.EnterTheChatRoom + "," + GetUserName;
-        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.JoinQueueForGameRoom+ "");
-    }
-
-
-    public void TicTacToeButtonIsPreessed()
-    {
-
-        //ChangeState(GameStates.TicTacToe);
-       // Debug.Log("You should be pressing tictactoe button right now");
+         ChangeState(GameStates.WaitingInQueueforOtherPlayer);
+        // Debug.Log("You should be pressing tictactoe button right now");
         // string OurEnterTheChatMsg = ClientToServerSignifiers.EnterTheChatRoom + "," + GetUserName;
-        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.TicTacToesSomethingSomthing + "");
+        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.JoinQueueForGameRoom + "");
     }
 
     void ChangeState(int newState) 
@@ -167,6 +182,7 @@ public class SystemManager : MonoBehaviour
                 Lobby.SetActive(false);
                 WaitingInQueue.SetActive(false);
                 Tic_Tac_Toe.SetActive(false);
+                GameOver.SetActive(false);
                 break;
             case GameStates.MainMenu:
                 Login.SetActive(false);
@@ -175,6 +191,7 @@ public class SystemManager : MonoBehaviour
                 WaitingInQueue.SetActive(false);
                 Lobby.SetActive(false);
                 Tic_Tac_Toe.SetActive(false);
+                GameOver.SetActive(false);
                 break;
             case GameStates.WaitingInQueueforOtherPlayer:
                 Login.SetActive(false);
@@ -183,6 +200,7 @@ public class SystemManager : MonoBehaviour
                 WaitingInQueue.SetActive(true);
                 Lobby.SetActive(false);
                 Tic_Tac_Toe.SetActive(false);
+                GameOver.SetActive(false);
                 break;
             case GameStates.TicTacToe:
                 Login.SetActive(false);
@@ -191,6 +209,16 @@ public class SystemManager : MonoBehaviour
                 WaitingInQueue.SetActive(false);
                 Lobby.SetActive(false);
                 Tic_Tac_Toe.SetActive(true);
+                GameOver.SetActive(false);
+                break;
+            case GameStates.GameOver:
+                Login.SetActive(false);
+                Chat.SetActive(false);
+                Menu.SetActive(false);
+                WaitingInQueue.SetActive(false);
+                Lobby.SetActive(false);
+                Tic_Tac_Toe.SetActive(true);
+                GameOver.SetActive(true);
                 break;
         }
     }
@@ -207,6 +235,8 @@ public class SystemManager : MonoBehaviour
         public const int TicTacToe = 4;
 
         public const int chatroom = 5;
+
+        public const int GameOver = 5;
     }
         // Update is called once per frame
     void Update()

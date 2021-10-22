@@ -5,13 +5,16 @@ using UnityEngine.UI;
 
 public class TicTacToe : MonoBehaviour
 {
+    private NetworkedClient m_MessageReceiverFromServer = null;
+    private GameObject networkClient,SystemMangerObject;
     public  GameObject []ListOFButton = new GameObject[9];
     private int [] mboard = {0,0,0,0,0,0,0,0,0 };
      int Oneplayersymbol = 1;
      int Twoplayersymbol = 2;
      int movecount= 0;
     bool DoWeHaveAWinner = false;
-   private  int CurrentPlayer;
+    bool m_IsWaitTurn = false;
+    private  int CurrentPlayer;
   
 
     public int GetCurrentPlayerSymbol
@@ -24,18 +27,95 @@ public class TicTacToe : MonoBehaviour
 
     private void Start()
     {
-       GiveButtonsPosition();
+        GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
+        foreach (GameObject go in allObjects)
+        {
+            if (go.name == "Network")
+                networkClient = go;
+            else if (go.name == "SystemManagerObject")
+                     SystemMangerObject = go;
+        }
+        m_MessageReceiverFromServer = networkClient.GetComponent<NetworkedClient>();
+
+        if (m_MessageReceiverFromServer != null)
+        {
+            m_MessageReceiverFromServer.OnMessageReceivedFromSever += TicTacToeMessageReceived;
+        }
+
+        GiveButtonsPosition();
         CurrentPlayer = Oneplayersymbol;
     }
 
+    private void OnDestroy()
+    {
+        if (m_MessageReceiverFromServer != null)
+        {
+            m_MessageReceiverFromServer.OnMessageReceivedFromSever -= TicTacToeMessageReceived;
+        }
+
+    }
+
+
+    void TicTacToeMessageReceived(int sigifier, string s)
+    {
+        switch (sigifier)
+        {
+            case ServerToClientSignifiers.GameStart:
+                Debug.Log("you set as  x or o");
+                setCurrentPlayerSymbol(int.Parse(s));
+                break;
+            case ServerToClientSignifiers.OpponentPlayed:
+                
+                OpponentpressAButton(int.Parse(s)); m_IsWaitTurn = true;
+                Debug.LogWarning("Your Opponet Just played. Opponent has pressed-> : " + s);
+                activeButtonUnMarkSpaces(DoWeHaveAWinner);
+                break;
+            case ServerToClientSignifiers.WaitForOppentMoved:
+                Debug.LogWarning(" wait for your OppenMoved");
+                DeactiveButtons();
+                m_IsWaitTurn = false;
+                break;
+            case ServerToClientSignifiers.ReMatchOfTicTacToeComplete:
+               // Debug.LogWarning("resetting board");
+                resetBoard(); setCurrentPlayerSymbol(int.Parse(s));
+                break;
+        }
+    }
+
+
+    void setCurrentPlayerSymbol(int i)
+    {
+        if(i == 1) 
+        {
+           // CurrentPlayer = Oneplayersymbol;
+            Debug.Log("Im player one");
+            m_IsWaitTurn = true;
+        }
+        else 
+        {
+            //CurrentPlayer = Twoplayersymbol;
+            Debug.Log("Im player Two");
+            m_IsWaitTurn = false;
+            DeactiveButtons();
+        }
+    }
+
+
+
+    private void OpponentpressAButton (int ButtonPositon) 
+    {
+        ListOFButton[ButtonPositon].GetComponent<GridSpace>().ButtonOnclick();
+    }
 
     public void MakeAMove(int ButtonPosition)
     {
        // 
         mboard[ButtonPosition] = CurrentPlayer;
         CheckForWin();
+
+
         // change turn
-        if(CurrentPlayer == Oneplayersymbol)
+        if (CurrentPlayer == Oneplayersymbol)
         {
             CurrentPlayer = Twoplayersymbol;
         }
@@ -49,6 +129,12 @@ public class TicTacToe : MonoBehaviour
         if(movecount >= 9 && DoWeHaveAWinner == false)
         {
             Debug.Log("IT's a draw. No winner");
+        }
+
+
+        if (m_IsWaitTurn == true) 
+        {
+            networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.TicTacToesSomethingSomthing + "," + ButtonPosition.ToString() );
         }
     }
 
@@ -82,9 +168,9 @@ public class TicTacToe : MonoBehaviour
                 Debug.Log("you won by row");
                 DoWeHaveAWinner = true;
                 DeactiveButtons();
+                RearchGameOver();
                 break;
             }
-            
         }
         /// check by column
         for (int i = 0; i < 3; i++)
@@ -94,6 +180,7 @@ public class TicTacToe : MonoBehaviour
                 Debug.Log("you won by column");
                 DoWeHaveAWinner = true;
                 DeactiveButtons();
+                RearchGameOver();
                 break;
             }
         }
@@ -104,7 +191,8 @@ public class TicTacToe : MonoBehaviour
             DoWeHaveAWinner = true;
             Debug.Log("you won by Diagonal");
             DeactiveButtons();
-    
+            RearchGameOver();
+
         }
     }
 
@@ -113,6 +201,21 @@ public class TicTacToe : MonoBehaviour
         foreach (GameObject b in ListOFButton) 
         {
             b.GetComponent<Button>().interactable = false;
+        }
+    }
+
+    void activeButtonUnMarkSpaces( bool DoWeHaveAWinner)
+    {
+        if (DoWeHaveAWinner== false)
+        {
+
+            for (int i = 0; i < 9; i++)
+            {
+                if (mboard[i] == 0)
+                {
+                    ListOFButton[i].GetComponent<Button>().interactable = true;
+                }
+            }
         }
     }
 
@@ -129,8 +232,13 @@ public class TicTacToe : MonoBehaviour
         {
             mboard[i] = 0;
         }
-
+        movecount = 0;
+        DoWeHaveAWinner = false;
     }
+   void RearchGameOver()
+   {
+        SystemMangerObject.GetComponent<SystemManager>().OpenGameOver();
+   }
     void Update()
     {
         if (Input.GetKeyDown("space"))
@@ -143,7 +251,6 @@ public class TicTacToe : MonoBehaviour
             resetBoard();
         }
         
-
     }
    
 }

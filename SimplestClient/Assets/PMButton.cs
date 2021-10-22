@@ -28,7 +28,7 @@ public class PMButton : MonoBehaviour
 
     void OnDestroy()
     {
-        Chat_UI.GetComponent<ChatBox>().SetChatToGlobalMessage();
+        //Chat_UI.GetComponent<ChatBox>().SetChatToGlobalMessage();
     }
 
 }

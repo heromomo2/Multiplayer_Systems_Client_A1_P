@@ -167,11 +167,15 @@ public class ClientToServerSignifiers
     public const int JoinQueueForGameRoom = 7;
 
     public const int TicTacToesSomethingSomthing = 8;
+
+    public const int ReMatchOfTicTacToe = 9;
+
+    public const int  ExitTacTacToe = 10;
+
 }
 
 public class ServerToClientSignifiers
 {
-
     public const int LoginComplete = 1;
 
     public const int LoginFailedAccount = 2;
@@ -195,5 +199,11 @@ public class ServerToClientSignifiers
     public const int OpponentPlayed = 11;
 
     public const int GameStart = 12;
+
+    public const int WaitForOppentMoved = 13;
+
+    public const int ReMatchOfTicTacToeComplete = 14;
+
+    public const int ExitTacTacToeComplete = 15;
 }
 
