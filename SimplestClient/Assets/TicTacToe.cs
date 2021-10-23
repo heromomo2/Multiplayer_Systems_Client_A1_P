@@ -14,6 +14,8 @@ public class TicTacToe : MonoBehaviour
      int movecount= 0;
     bool DoWeHaveAWinner = false;
     bool m_IsWaitTurn = false;
+    bool m_IsOnePlayer = false;
+
     private  int CurrentPlayer;
   
 
@@ -21,7 +23,19 @@ public class TicTacToe : MonoBehaviour
     {
         get { return CurrentPlayer; }
     }
-   
+
+    public enum m_WinnerStatus
+    {
+        winner,
+        Loser,
+        draw,
+    }
+
+    public  m_WinnerStatus m_ws;
+    
+  
+
+
 
     //bool playerTu
 
@@ -90,11 +104,13 @@ public class TicTacToe : MonoBehaviour
            // CurrentPlayer = Oneplayersymbol;
             Debug.Log("Im player one");
             m_IsWaitTurn = true;
+            m_IsOnePlayer = true;
         }
         else 
         {
             //CurrentPlayer = Twoplayersymbol;
             Debug.Log("Im player Two");
+            m_IsOnePlayer = false;
             m_IsWaitTurn = false;
             DeactiveButtons();
         }
@@ -129,6 +145,8 @@ public class TicTacToe : MonoBehaviour
         if(movecount >= 9 && DoWeHaveAWinner == false)
         {
             Debug.Log("IT's a draw. No winner");
+            m_ws = m_WinnerStatus.draw;
+            ReachGameOver();
         }
 
 
@@ -168,7 +186,7 @@ public class TicTacToe : MonoBehaviour
                 Debug.Log("you won by row");
                 DoWeHaveAWinner = true;
                 DeactiveButtons();
-                RearchGameOver();
+                ReachGameOver();
                 break;
             }
         }
@@ -180,7 +198,7 @@ public class TicTacToe : MonoBehaviour
                 Debug.Log("you won by column");
                 DoWeHaveAWinner = true;
                 DeactiveButtons();
-                RearchGameOver();
+                ReachGameOver();
                 break;
             }
         }
@@ -191,10 +209,40 @@ public class TicTacToe : MonoBehaviour
             DoWeHaveAWinner = true;
             Debug.Log("you won by Diagonal");
             DeactiveButtons();
-            RearchGameOver();
+            ReachGameOver();
 
+            
         }
     }
+
+     bool CheckIfWeWon(int Playernumber) 
+    {
+        for (int i = 0; i < mboard.Length; i += 3)
+        {
+            if (mboard[i] == Playernumber && mboard[i + 1] == Playernumber && mboard[i + 2] == Playernumber)
+            {
+                return true;
+               
+            }
+        }
+        /// check by column
+        for (int i = 0; i < 3; i++)
+        {
+            if (mboard[i] == Playernumber && mboard[i + 3] == Playernumber && mboard[i + 6] == Playernumber)
+            {
+                return true;
+            }
+        }
+        // check by Diagonal
+        if (mboard[0] == Playernumber && mboard[4] == Playernumber && mboard[8] == Playernumber ||
+            mboard[2] == Playernumber && mboard[4] == Playernumber && mboard[6] == Playernumber)
+        {
+            return true;
+
+        }
+        return false;
+    }
+
 
     void DeactiveButtons() 
     {
@@ -220,7 +268,7 @@ public class TicTacToe : MonoBehaviour
     }
 
 
-    void resetBoard()
+    public void resetBoard()
     {
         foreach (GameObject b in ListOFButton)
         {
@@ -235,10 +283,37 @@ public class TicTacToe : MonoBehaviour
         movecount = 0;
         DoWeHaveAWinner = false;
     }
-   void RearchGameOver()
+   void ReachGameOver()
    {
+        if (m_IsOnePlayer)
+        {
+            if (CheckIfWeWon(1))
+            {
+                m_ws = m_WinnerStatus.winner;
+            }
+            else if (CheckIfWeWon(2))
+            {
+                m_ws = m_WinnerStatus.Loser;
+            }
+        }
+        else
+        {
+            if (CheckIfWeWon(2))
+            {
+                m_ws = m_WinnerStatus.winner;
+            }
+            else if (CheckIfWeWon(1))
+            {
+                m_ws = m_WinnerStatus.Loser;
+            }
+
+        }
+        
         SystemMangerObject.GetComponent<SystemManager>().OpenGameOver();
    }
+
+
+
     void Update()
     {
         if (Input.GetKeyDown("space"))
@@ -252,5 +327,6 @@ public class TicTacToe : MonoBehaviour
         }
         
     }
-   
+  
+    
 }

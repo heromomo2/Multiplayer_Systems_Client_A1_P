@@ -141,6 +141,11 @@ public class SystemManager : MonoBehaviour
             case ServerToClientSignifiers.ReMatchOfTicTacToeComplete:
                 ChangeState(GameStates.TicTacToe);
                 break;
+            case ServerToClientSignifiers.ExitTacTacToeComplete:
+                ChangeState(GameStates.LoginMenu);
+                Login.GetComponentInChildren<LogInScript>().ResetLogic();
+                Tic_Tac_Toe.GetComponent<TicTacToe>().resetBoard();
+                break;
         }
     
     }
@@ -155,7 +160,7 @@ public class SystemManager : MonoBehaviour
         //GameOver.GetComponentInChildren<Text>().text = "GameOver" + "PlayerTwo has Won";
         //else if (i == 3)
         //GameOver.GetComponentInChildren<Text>().text = "GameOver" + "No One has Won";
-
+        GameOver.GetComponent<GameOver>().GamerOverTextChange();
         ChangeState(GameStates.GameOver);
 
         // networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.ReMatchOfTicTacToe + ",");

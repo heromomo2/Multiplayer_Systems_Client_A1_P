@@ -1245,7 +1245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd63f75164232a648a099f9be20c707f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameOverTitle: {fileID: 0}
+  GameOverTitle: {fileID: 1492315809}
 --- !u!1 &318220134
 GameObject:
   m_ObjectHideFlags: 0
@@ -3178,7 +3178,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 100, y: 0}
   m_SizeDelta: {x: -100, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &656933357
@@ -4610,6 +4610,7 @@ MonoBehaviour:
   - {fileID: 1897717212}
   - {fileID: 243740107}
   - {fileID: 1363871672}
+  m_ws: 0
 --- !u!1 &838079729
 GameObject:
   m_ObjectHideFlags: 0
@@ -5286,6 +5287,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 954257687}
     m_Modifications:
+    - target: {fileID: 1168633505758846241, guid: 47641aede042c404495b635b8e1a822e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 289329351}
+    - target: {fileID: 1168633505758846241, guid: 47641aede042c404495b635b8e1a822e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: QuitButtonIsPreessed
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168633505758846241, guid: 47641aede042c404495b635b8e1a822e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameOver, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1168633505758846241, guid: 47641aede042c404495b635b8e1a822e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 1375099235938238235, guid: 47641aede042c404495b635b8e1a822e, type: 3}
       propertyPath: m_Name
       value: GameOverScreen_QuitButton

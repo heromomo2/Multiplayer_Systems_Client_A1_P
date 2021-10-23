@@ -7,7 +7,7 @@ public class GameOver : MonoBehaviour
 {
     public Text GameOverTitle;
     private NetworkedClient m_MessageReceiverFromServer = null;
-    private GameObject NetWorkObject;
+    private GameObject NetWorkObject, Tic_Tac_Toe;
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +16,8 @@ public class GameOver : MonoBehaviour
         {
             if (go.name == "Network")
                 NetWorkObject = go;
+            else if (go.name == "Game_UI")
+                Tic_Tac_Toe = go;
         }
         m_MessageReceiverFromServer = NetWorkObject.GetComponent<NetworkedClient>();
         if (m_MessageReceiverFromServer != null)
@@ -34,7 +36,24 @@ public class GameOver : MonoBehaviour
 
     void GameOverReceived(int signifier, string s)
     {
+        //if(ServerToClientSignifiers)
 
+    }
+
+    public void GamerOverTextChange ()
+    {
+        if (Tic_Tac_Toe.GetComponent<TicTacToe>().m_ws == TicTacToe.m_WinnerStatus.Loser)
+        {
+            GameOverTitle.text = "Game Over \n You lost";
+        }
+        else if (Tic_Tac_Toe.GetComponent<TicTacToe>().m_ws == TicTacToe.m_WinnerStatus.winner)
+        {
+            GameOverTitle.text = "Game Over \n You winner";
+        }
+        else if (Tic_Tac_Toe.GetComponent<TicTacToe>().m_ws == TicTacToe.m_WinnerStatus.draw)
+        {
+            GameOverTitle.text = "Game Over \n No winners";
+        }
     }
 
     public void ReMatchButtonIsPreessed()
@@ -46,6 +65,7 @@ public class GameOver : MonoBehaviour
     {
         NetWorkObject.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.ExitTacTacToe+ ",");
     }
+
 
 
     // Update is called once per frame

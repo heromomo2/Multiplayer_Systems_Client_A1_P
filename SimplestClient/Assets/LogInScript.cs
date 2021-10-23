@@ -124,7 +124,13 @@ public class LogInScript : MonoBehaviour
 
         Debug.LogWarning("LoginStates");
     }
-
+    
+    public void ResetLogic() 
+    {
+        StatusText.GetComponent<Text>().text = "Status:";
+        userNameInput.GetComponent<InputField>().text = "";
+        passwordInput.GetComponent<InputField>().text = "";
+    }
     // Update is called once per frame
     void Update()
     {
