@@ -7,7 +7,7 @@ public class GameOver : MonoBehaviour
 {
     public Text GameOverTitle;
     private NetworkedClient m_MessageReceiverFromServer = null;
-    private GameObject NetWorkObject, Tic_Tac_Toe;
+    private GameObject NetWorkObject, Tic_Tac_Toe, ReMatchButton;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +18,8 @@ public class GameOver : MonoBehaviour
                 NetWorkObject = go;
             else if (go.name == "Game_UI")
                 Tic_Tac_Toe = go;
+            else if (go.name == "GameOverScreen_RematchButton")
+                ReMatchButton = go;
         }
         m_MessageReceiverFromServer = NetWorkObject.GetComponent<NetworkedClient>();
         if (m_MessageReceiverFromServer != null)
@@ -36,8 +38,14 @@ public class GameOver : MonoBehaviour
 
     void GameOverReceived(int signifier, string s)
     {
-        //if(ServerToClientSignifiers)
-
+        if(signifier == ServerToClientSignifiers.PreventRematch) 
+        {
+            ReMatchButton.GetComponent<Button>().interactable = false;
+        }
+        if (signifier == ServerToClientSignifiers.LoginComplete)
+        {
+            ReMatchButton.GetComponent<Button>().interactable = true;
+        }
     }
 
     public void GamerOverTextChange ()

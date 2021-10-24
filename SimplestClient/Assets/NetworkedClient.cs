@@ -205,5 +205,7 @@ public class ServerToClientSignifiers
     public const int ReMatchOfTicTacToeComplete = 14;
 
     public const int ExitTacTacToeComplete = 15;
+
+    public const int PreventRematch = 16;
 }
 

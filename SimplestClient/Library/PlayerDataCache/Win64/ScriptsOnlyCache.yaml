@@ -8,6 +8,7 @@ ScriptsOnlyBuild:
     - NetworkedClient
     - PMButton
     - PopulateGrid
+    - RecordMaker
     - SystemManager
     - TicTacToe
     Unity.2D.Animation.Editor.dll:
@@ -113,6 +114,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 4832}
     - Class: 114
       Script: {instanceID: 5568}
+    - Class: 114
+      Script: {instanceID: 18242}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -712,6 +715,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.2D.IK.Runtime.dll
     namespaceName: UnityEngine.U2D.IK
     className: FabrikSolver2D
+  - hash:
+      serializedVersion: 2
+      Hash: d28bfbcdf3d575f16429de4d7caeda62
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: RecordMaker
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
