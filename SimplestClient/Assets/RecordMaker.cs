@@ -40,7 +40,7 @@ public class RecordMaker : MonoBehaviour
     
     public void CreateReplayReplay()
     {
-        bool isUniqueName = false;
+        bool isUniqueName = true;
         foreach (SaveManagementFile SMF in m_SaveManagementFiles)
         {
             if (SMF.name == m_inputField.text.ToString())
@@ -57,6 +57,12 @@ public class RecordMaker : MonoBehaviour
         }
 
 
+        WriteSaveManagementFile();
+        ReadSaveManagementFile();
+
+        m_CreateButton.interactable = false;
+        m_inputField.interactable = false;
+        //m_inputField.text = "";
     }
 
     static public void WriteSaveManagementFile()

@@ -5,19 +5,21 @@ using UnityEngine.UI;
 
 public class TicTacToe : MonoBehaviour
 {
+  LinkedList <int[]> m_ListOFBoard;
+
     private NetworkedClient m_MessageReceiverFromServer = null;
-    private GameObject networkClient,SystemMangerObject;
-    public  GameObject []ListOFButton = new GameObject[9];
-    private int [] mboard = {0,0,0,0,0,0,0,0,0 };
-     int Oneplayersymbol = 1;
-     int Twoplayersymbol = 2;
-     int movecount= 0;
+    private GameObject networkClient, SystemMangerObject;
+    public GameObject[] ListOFButton = new GameObject[9];
+    private int[] mboard = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    int Oneplayersymbol = 1;
+    int Twoplayersymbol = 2;
+    int movecount = 0;
     bool DoWeHaveAWinner = false;
     bool m_IsWaitTurn = false;
     bool m_IsOnePlayer = false;
 
-    private  int CurrentPlayer;
-  
+    private int CurrentPlayer;
+
 
     public int GetCurrentPlayerSymbol
     {
@@ -31,9 +33,9 @@ public class TicTacToe : MonoBehaviour
         draw,
     }
 
-    public  m_WinnerStatus m_ws;
-    
-  
+    public m_WinnerStatus m_ws;
+
+
 
 
 
@@ -47,7 +49,7 @@ public class TicTacToe : MonoBehaviour
             if (go.name == "Network")
                 networkClient = go;
             else if (go.name == "SystemManagerObject")
-                     SystemMangerObject = go;
+                SystemMangerObject = go;
         }
         m_MessageReceiverFromServer = networkClient.GetComponent<NetworkedClient>();
 
@@ -58,6 +60,7 @@ public class TicTacToe : MonoBehaviour
 
         GiveButtonsPosition();
         CurrentPlayer = Oneplayersymbol;
+        m_ListOFBoard = new <int[]>() ;
     }
 
     private void OnDestroy()
@@ -79,7 +82,7 @@ public class TicTacToe : MonoBehaviour
                 setCurrentPlayerSymbol(int.Parse(s));
                 break;
             case ServerToClientSignifiers.OpponentPlayed:
-                
+
                 OpponentpressAButton(int.Parse(s)); m_IsWaitTurn = true;
                 Debug.LogWarning("Your Opponet Just played. Opponent has pressed-> : " + s);
                 activeButtonUnMarkSpaces(DoWeHaveAWinner);
@@ -90,7 +93,7 @@ public class TicTacToe : MonoBehaviour
                 m_IsWaitTurn = false;
                 break;
             case ServerToClientSignifiers.ReMatchOfTicTacToeComplete:
-               // Debug.LogWarning("resetting board");
+                // Debug.LogWarning("resetting board");
                 resetBoard(); setCurrentPlayerSymbol(int.Parse(s));
                 break;
         }
@@ -99,14 +102,14 @@ public class TicTacToe : MonoBehaviour
 
     void setCurrentPlayerSymbol(int i)
     {
-        if(i == 1) 
+        if (i == 1)
         {
-           // CurrentPlayer = Oneplayersymbol;
+            // CurrentPlayer = Oneplayersymbol;
             Debug.Log("Im player one");
             m_IsWaitTurn = true;
             m_IsOnePlayer = true;
         }
-        else 
+        else
         {
             //CurrentPlayer = Twoplayersymbol;
             Debug.Log("Im player Two");
@@ -118,14 +121,14 @@ public class TicTacToe : MonoBehaviour
 
 
 
-    private void OpponentpressAButton (int ButtonPositon) 
+    private void OpponentpressAButton(int ButtonPositon)
     {
         ListOFButton[ButtonPositon].GetComponent<GridSpace>().ButtonOnclick();
     }
 
     public void MakeAMove(int ButtonPosition)
     {
-       // 
+        // 
         mboard[ButtonPosition] = CurrentPlayer;
         CheckForWin();
 
@@ -142,7 +145,7 @@ public class TicTacToe : MonoBehaviour
 
         // draw check
         movecount++;
-        if(movecount >= 9 && DoWeHaveAWinner == false)
+        if (movecount >= 9 && DoWeHaveAWinner == false)
         {
             Debug.Log("IT's a draw. No winner");
             m_ws = m_WinnerStatus.draw;
@@ -150,19 +153,42 @@ public class TicTacToe : MonoBehaviour
         }
 
 
-        if (m_IsWaitTurn == true) 
+        if (m_IsWaitTurn == true)
         {
-            networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.TicTacToesSomethingSomthing + "," + ButtonPosition.ToString() );
+            networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.TicTacToesSomethingSomthing + "," + ButtonPosition.ToString());
         }
+
+
+
+
+        m_ListOFBoard.AddLast(new int[9]  = m_ListOFBoard[]);
+        
     }
 
 
     void printoutBoard()
     {
-        Debug.Log(mboard[0].ToString()+ " , " + mboard[1].ToString() + " , " + mboard[2].ToString());
+        Debug.Log(mboard[0].ToString() + " , " + mboard[1].ToString() + " , " + mboard[2].ToString());
         Debug.Log(mboard[3].ToString() + " , " + mboard[4].ToString() + " , " + mboard[5].ToString());
         Debug.Log(mboard[6].ToString() + " , " + mboard[7].ToString() + " , " + mboard[8].ToString());
     }
+
+
+    void printoutAllBoards()
+    {
+        foreach(int[] m in m_ListOFBoard) 
+        {
+           Debug.Log(m.ToString());
+        }
+       
+    }
+
+
+
+
+
+
+
 
     void GiveButtonsPosition() 
     {
@@ -325,8 +351,24 @@ public class TicTacToe : MonoBehaviour
         {
             resetBoard();
         }
-        
+        else if (Input.GetKeyDown(KeyCode.M))
+        {
+            printoutAllBoards();
+        }
+
     }
-  
-    
+
+
+    public class board 
+    {
+        public int[] Board;
+       // public int index ;
+
+        board (int []b )
+        {
+            b = Board;
+        }
+
+    }
+
 }

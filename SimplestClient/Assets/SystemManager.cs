@@ -221,7 +221,7 @@ public class SystemManager : MonoBehaviour
                 Chat.SetActive(false);
                 Menu.SetActive(false);
                 WaitingInQueue.SetActive(false);
-                Lobby.SetActive(false);
+                Lobby.SetActive(true);
                 Tic_Tac_Toe.SetActive(true);
                 GameOver.SetActive(true);
                 break;
