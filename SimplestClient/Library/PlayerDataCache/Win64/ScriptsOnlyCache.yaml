@@ -225,7 +225,7 @@ ScriptsOnlyBuild:
     className: TMP_FontAsset
   - hash:
       serializedVersion: 2
-      Hash: d28bfbcdf3d575f16429de4d7caeda62
+      Hash: 56b9bd55111d60c2f4070f78e68e3107
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: RecordMaker

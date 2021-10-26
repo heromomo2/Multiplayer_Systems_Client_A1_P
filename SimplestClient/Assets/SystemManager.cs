@@ -16,7 +16,7 @@ public class SystemManager : MonoBehaviour
 
 
     private NetworkedClient m_MessageReceiverFromServer = null;
-    GameObject Login, Chat, networkClient,Menu,Lobby, WaitingInQueue, Tic_Tac_Toe,GameOver;
+    GameObject Login, Chat, networkClient,Menu,Lobby, WaitingInQueue, Tic_Tac_Toe,GameOver,Replayer;
 
     // Start is called before the first frame update
     void Start()
@@ -40,6 +40,8 @@ public class SystemManager : MonoBehaviour
                 WaitingInQueue = go;
             else if (go.name == "GameOverScreen_UI ")
                 GameOver = go;
+            else if (go.name == "Replayer_UI")
+                Replayer = go;
         }
 
 
@@ -154,19 +156,21 @@ public class SystemManager : MonoBehaviour
     
     public void OpenGameOver()
     {
-        //if (i ==1) 
-        //GameOver.GetComponentInChildren<Text>().text = "GameOver" + "PlayerOne has Won";
-        //else if (i == 2)
-        //GameOver.GetComponentInChildren<Text>().text = "GameOver" + "PlayerTwo has Won";
-        //else if (i == 3)
-        //GameOver.GetComponentInChildren<Text>().text = "GameOver" + "No One has Won";
         GameOver.GetComponent<GameOver>().GamerOverTextChange();
         ChangeState(GameStates.GameOver);
-
-        // networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.ReMatchOfTicTacToe + ",");
-
     }
-
+    public void OpenReplayer()
+    {
+        ChangeState(GameStates.Replayer);
+    }
+    public void OpenMenu()
+    {
+        ChangeState(GameStates.MainMenu);
+    }
+    public void OpenLogin()
+    {
+        ChangeState(GameStates.LoginMenu);
+    }
     public void GameRoomButtonIsPreessed()
     {
 
@@ -188,6 +192,7 @@ public class SystemManager : MonoBehaviour
                 WaitingInQueue.SetActive(false);
                 Tic_Tac_Toe.SetActive(false);
                 GameOver.SetActive(false);
+                Replayer.SetActive(false);
                 break;
             case GameStates.MainMenu:
                 Login.SetActive(false);
@@ -206,6 +211,7 @@ public class SystemManager : MonoBehaviour
                 Lobby.SetActive(false);
                 Tic_Tac_Toe.SetActive(false);
                 GameOver.SetActive(false);
+                Replayer.SetActive(false);
                 break;
             case GameStates.TicTacToe:
                 Login.SetActive(false);
@@ -215,6 +221,7 @@ public class SystemManager : MonoBehaviour
                 Lobby.SetActive(false);
                 Tic_Tac_Toe.SetActive(true);
                 GameOver.SetActive(false);
+                Replayer.SetActive(false);
                 break;
             case GameStates.GameOver:
                 Login.SetActive(false);
@@ -224,6 +231,18 @@ public class SystemManager : MonoBehaviour
                 Lobby.SetActive(true);
                 Tic_Tac_Toe.SetActive(true);
                 GameOver.SetActive(true);
+                Replayer.SetActive(false);
+                break;
+            case GameStates.Replayer:
+                Login.SetActive(false);
+                Chat.SetActive(false);
+                Menu.SetActive(false);
+                WaitingInQueue.SetActive(false);
+                Lobby.SetActive(false);
+                Tic_Tac_Toe.SetActive(false);
+                GameOver.SetActive(false);
+                Replayer.SetActive(true);
+
                 break;
         }
     }
@@ -241,7 +260,9 @@ public class SystemManager : MonoBehaviour
 
         public const int chatroom = 5;
 
-        public const int GameOver = 5;
+        public const int GameOver = 6;
+
+        public const int Replayer = 7;
     }
         // Update is called once per frame
     void Update()

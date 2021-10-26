@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class TicTacToe : MonoBehaviour
 {
-  LinkedList <int[]> m_ListOFBoard;
+  LinkedList <TicTacToeBoard> m_ListOFBoard;
 
     private NetworkedClient m_MessageReceiverFromServer = null;
     private GameObject networkClient, SystemMangerObject;
@@ -60,7 +60,8 @@ public class TicTacToe : MonoBehaviour
 
         GiveButtonsPosition();
         CurrentPlayer = Oneplayersymbol;
-        m_ListOFBoard = new <int[]>() ;
+        m_ListOFBoard = new LinkedList<TicTacToeBoard>() ;
+        m_ListOFBoard.AddLast(new TicTacToeBoard(mboard[0], mboard[1], mboard[2], mboard[3], mboard[4], mboard[5], mboard[6], mboard[7], mboard[8]));
     }
 
     private void OnDestroy()
@@ -130,6 +131,10 @@ public class TicTacToe : MonoBehaviour
     {
         // 
         mboard[ButtonPosition] = CurrentPlayer;
+
+        m_ListOFBoard.AddLast(new TicTacToeBoard(mboard[0], mboard[1], mboard[2], mboard[3], mboard[4], mboard[5], mboard[6], mboard[7], mboard[8]));
+
+
         CheckForWin();
 
 
@@ -161,7 +166,7 @@ public class TicTacToe : MonoBehaviour
 
 
 
-        m_ListOFBoard.AddLast(new int[9]  = m_ListOFBoard[]);
+       
         
     }
 
@@ -176,23 +181,25 @@ public class TicTacToe : MonoBehaviour
 
     void printoutAllBoards()
     {
-        foreach(int[] m in m_ListOFBoard) 
+        // TicTacToe tempB;
+        foreach (TicTacToeBoard b in m_ListOFBoard)
         {
-           Debug.Log(m.ToString());
+            Debug.Log("\n board: " );
+            Debug.Log(" [ "+ b.topleft.ToString() + " , " + b.topmid.ToString() + " , " + b.topright.ToString() + " ] ");
+            Debug.Log(" [ " + b.midleft.ToString() + " , " + b.midmid.ToString() + " , " + b.midright.ToString()+ " ] ");
+            Debug.Log(" [ " + b.botleft.ToString() + " , " + b.botmid.ToString() + " , " + b.botright.ToString()+ " ] ");
+            Debug.Log("\n");
+            //if (b)
         }
-       
+       // tempB= m_ListOFBoard.First.Value();
     }
-
-
-
-
-
 
 
 
     void GiveButtonsPosition() 
     {
         int PositionNumber = 0;
+
         foreach(GameObject b in ListOFButton)
         {
             
@@ -334,7 +341,12 @@ public class TicTacToe : MonoBehaviour
             }
 
         }
-        
+
+        foreach (TicTacToeBoard b in m_ListOFBoard)
+        {
+            SystemMangerObject.GetComponent<RecordMaker>().Give_TicTacToeBoard(b.topleft, b.topmid, b.topright, b.midleft, b.midmid, b.midright, b.botleft, b.botmid, b.botright);
+        }
+        m_ListOFBoard.Clear();
         SystemMangerObject.GetComponent<SystemManager>().OpenGameOver();
    }
 
@@ -359,14 +371,22 @@ public class TicTacToe : MonoBehaviour
     }
 
 
-    public class board 
+    public class TicTacToeBoard 
     {
-        public int[] Board;
-       // public int index ;
+        public int topleft, topmid, topright, midleft, midmid, midright, botleft, botmid, botright;
+        
 
-        board (int []b )
+      public  TicTacToeBoard (int tl, int tm, int tr, int ml, int mm,int mr, int bl, int bm, int br)
         {
-            b = Board;
+            topleft = tl;
+            topmid = tm;
+            topright = tr;
+            midleft = ml;
+            midmid = mm;
+            midright = mr;
+            botleft = bl;
+            botmid = bm;
+            botright = br;
         }
 
     }

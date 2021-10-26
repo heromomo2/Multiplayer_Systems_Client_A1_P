@@ -101,7 +101,7 @@ public class LogInScript : MonoBehaviour
             case 1:
                 StatusText.GetComponent<Text>().text = "Status: Login Success";
                 SystemManager.GetComponent<SystemManager>().SetUserName = s;
-                
+                ResetLogic();
                 break;
             case 2:
                 StatusText.GetComponent<Text>().text = "Status: User name Invalid";
