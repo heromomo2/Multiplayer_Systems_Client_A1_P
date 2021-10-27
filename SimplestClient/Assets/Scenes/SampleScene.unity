@@ -2048,13 +2048,7 @@ MonoBehaviour:
   m_ItemImage: {fileID: 0}
   m_Value: 0
   m_Options:
-    m_Options:
-    - m_Text: Option A
-      m_Image: {fileID: 0}
-    - m_Text: Option B
-      m_Image: {fileID: 0}
-    - m_Text: Option C
-      m_Image: {fileID: 0}
+    m_Options: []
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -3810,7 +3804,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Option A
+  m_Text: 
 --- !u!222 &569611184
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4184,7 +4178,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 100, y: 0}
   m_SizeDelta: {x: -100, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &656933357
@@ -5429,6 +5423,34 @@ PrefabInstance:
       propertyPath: m_Name
       value: Replay_ForwardButton
       objectReference: {fileID: 0}
+    - target: {fileID: 5084277282015150791, guid: c3559b8768bc0214097d94574bdbc20f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5084277282015150791, guid: c3559b8768bc0214097d94574bdbc20f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5084277282015150791, guid: c3559b8768bc0214097d94574bdbc20f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 840785474}
+    - target: {fileID: 5084277282015150791, guid: c3559b8768bc0214097d94574bdbc20f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5084277282015150791, guid: c3559b8768bc0214097d94574bdbc20f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ForwardButtonPressed
+      objectReference: {fileID: 0}
+    - target: {fileID: 5084277282015150791, guid: c3559b8768bc0214097d94574bdbc20f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: RecordMaker, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5084277282015150791, guid: c3559b8768bc0214097d94574bdbc20f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 7642773462379818457, guid: c3559b8768bc0214097d94574bdbc20f, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -6238,6 +6260,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7345e09b76e058b4283bb19dcb69fc72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_dropdown: {fileID: 371221615}
   RePlayer_Text: {fileID: 135557756}
   GrideSpace:
   - {fileID: 529483599}
@@ -15061,6 +15084,34 @@ PrefabInstance:
     - target: {fileID: 1399818497217370102, guid: c3559b8768bc0214097d94574bdbc20f, type: 3}
       propertyPath: m_Name
       value: Replay_BackwardButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 5084277282015150791, guid: c3559b8768bc0214097d94574bdbc20f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5084277282015150791, guid: c3559b8768bc0214097d94574bdbc20f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5084277282015150791, guid: c3559b8768bc0214097d94574bdbc20f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 840785474}
+    - target: {fileID: 5084277282015150791, guid: c3559b8768bc0214097d94574bdbc20f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5084277282015150791, guid: c3559b8768bc0214097d94574bdbc20f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: BackwardButtonPressed
+      objectReference: {fileID: 0}
+    - target: {fileID: 5084277282015150791, guid: c3559b8768bc0214097d94574bdbc20f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: RecordMaker, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5084277282015150791, guid: c3559b8768bc0214097d94574bdbc20f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 7642773462379818457, guid: c3559b8768bc0214097d94574bdbc20f, type: 3}
       propertyPath: m_Pivot.x

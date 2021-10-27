@@ -79,7 +79,7 @@ public class TicTacToe : MonoBehaviour
         switch (sigifier)
         {
             case ServerToClientSignifiers.GameStart:
-                Debug.Log("you set as  x or o");
+                Debug.Log("you set as  x or o"); m_ListOFBoard.Clear();
                 setCurrentPlayerSymbol(int.Parse(s));
                 break;
             case ServerToClientSignifiers.OpponentPlayed:
@@ -96,6 +96,7 @@ public class TicTacToe : MonoBehaviour
             case ServerToClientSignifiers.ReMatchOfTicTacToeComplete:
                 // Debug.LogWarning("resetting board");
                 resetBoard(); setCurrentPlayerSymbol(int.Parse(s));
+                m_ListOFBoard.Clear();
                 break;
         }
     }
@@ -371,7 +372,10 @@ public class TicTacToe : MonoBehaviour
     }
 
 
-    public class TicTacToeBoard 
+   
+
+}
+ public class TicTacToeBoard 
     {
         public int topleft, topmid, topright, midleft, midmid, midright, botleft, botmid, botright;
         
@@ -390,5 +394,3 @@ public class TicTacToe : MonoBehaviour
         }
 
     }
-
-}

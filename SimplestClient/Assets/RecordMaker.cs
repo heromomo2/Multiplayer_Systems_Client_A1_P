@@ -6,7 +6,10 @@ using System.IO;
 
 public class RecordMaker : MonoBehaviour
 {
-    
+    bool isSelectedRecord = false;
+    int maxmove,SelectedMove = 0;
+    public List<TicTacToeBoard> MoveBoard = new List<TicTacToeBoard>();
+    public Dropdown m_dropdown = null;
     public Text RePlayer_Text = null;
     public List<Text> GrideSpace = new List<Text>();
     public NetworkedClient m_MessageReceiverFromServer = null;
@@ -53,6 +56,13 @@ public class RecordMaker : MonoBehaviour
         {
             m_MessageReceiverFromServer.OnMessageReceivedFromSever += RecordMakerReceived;
         }
+
+        //m_dropdown.options.Clear();
+        SetDropDownChanged();
+       // LoadDropDownChanged();
+        m_dropdown.onValueChanged.AddListener(delegate { LoadDropDownChanged(); });
+    
+        
     }
     private void OnDestroy()
     {
@@ -74,6 +84,12 @@ public class RecordMaker : MonoBehaviour
             case ServerToClientSignifiers.ReMatchOfTicTacToeComplete:
                 ResetReplayMaker(); 
                 break;
+            case ServerToClientSignifiers.LoginComplete:
+                //WriteSaveManagementFile();
+                //ReadSaveManagementFile();
+                
+                SetDropDownChanged();
+                break;
         }
     }
     // Update is called once per frame
@@ -85,23 +101,111 @@ public class RecordMaker : MonoBehaviour
      public List<string> GetListOfReplayerByNames()
     {
 
+        
 
-
-        return ReplayofNames;   
+        return ReplayofNames; 
     }
 
-     public void LoadReplayDropDownChanged(string selectedName)
+
+
+    public void SetDropDownChanged()
     {
-       
+        m_dropdown.options.Clear();
+        foreach (string s in ReplayofNames)
+        {
+            m_dropdown.options.Add(new Dropdown.OptionData() {text = s });
+        }
     }
 
+    public void LoadDropDownChanged()
+    {
+        Debug.Log("LoadDropDownChanged");
+        int menuIndex = m_dropdown.GetComponent<Dropdown>().value;
+        List<Dropdown.OptionData> menuOptions = m_dropdown.GetComponent<Dropdown>().options;
+        string value = menuOptions[menuIndex].text;
+
+        int intdexToload = -1;
+        foreach (SaveManagementFile SMF in m_SaveManagementFiles) 
+        {
+            if(SMF.name == value) 
+            {
+                intdexToload = SMF.index;
+                LastSelectedName = value;
+            }
+        }
+
+
+        StreamReader sr = new StreamReader(Application.dataPath + Path.DirectorySeparatorChar + intdexToload + ".txt");
+        string line;
+        MoveBoard.Clear();
+        maxmove = 0;
+        SelectedMove = 0;
+        while ((line = sr.ReadLine()) != null)
+        {
+            Debug.Log(line);
+            string[] csv = line.Split(',');
+            int signifier = int.Parse(csv[0]);
+            if (signifier == BoardSaveDataSignifier)
+            {
+                MoveBoard.Add(new TicTacToeBoard (  int.Parse(csv[1]), int.Parse(csv[2]), int.Parse(csv[3]), int.Parse(csv[4]), int.Parse(csv[5]), int.Parse(csv[6]), int.Parse(csv[7]), int.Parse(csv[8]), int.Parse(csv[9]) ));
+               
+            }
+ 
+        };
+        maxmove = MoveBoard.Count;
+        isSelectedRecord = true;
+        RePlayer_Text.text = "Replayer " + "\n  Move :" + SelectedMove.ToString();
+        display(); 
+    }
+    void display() 
+    {
+         TicTacToeBoard t = MoveBoard[SelectedMove];
+        check(t.topleft,GrideSpace[0]); check(t.topmid, GrideSpace[1]); check(t.topright, GrideSpace[2]);
+        check(t.midleft, GrideSpace[3]); check(t.midmid, GrideSpace[4]); check(t.midright, GrideSpace[5]);
+        check(t.botleft, GrideSpace[6]); check(t.botmid, GrideSpace[7]); check(t.botright, GrideSpace[8]);
+    }
+    void check(int space, Text t)
+    {
+        if (space == 0) 
+        {
+            t.text = "Empty";
+        }
+        else if( space == 1) 
+        {
+            t.text = "X";
+        }
+        else if(space == 2)
+        {
+            t.text = "O";
+        }
+    }
+    
     public void ForwardButtonPressed()
     {
         // pick a list
+        if (SelectedMove < maxmove - 1 && isSelectedRecord == true)
+        {
+  
+            SelectedMove= SelectedMove + 1;
+            RePlayer_Text.text = "Replayer " + "\n  Move :" + SelectedMove.ToString();
+            display();
+        }
+        //RePlayer_Text.text = "Replayer " + "\n  Move :" + SelectedMove.ToString();
+        //display();
+        Debug.Log("SelectedMove :-> " + SelectedMove.ToString());
     }
     public void BackwardButtonPressed()
     {
         // pick a list
+        if (SelectedMove > 0 && isSelectedRecord == true)
+        {
+            SelectedMove = SelectedMove - 1;
+            RePlayer_Text.text = "Replayer " + "\n  Move :" + SelectedMove.ToString();
+            display();
+        }
+        //RePlayer_Text.text = "Replayer " + "\n  Move :" + SelectedMove.ToString();
+        //display();
+        Debug.Log("SelectedMove :-> " + SelectedMove.ToString());
     }
 
 
@@ -144,6 +248,7 @@ public class RecordMaker : MonoBehaviour
         m_inputField.interactable = true;
         m_InformationText.text = "Make a record Bottom or Just continue ";
         m_InformationText.color = Color.black;
+        m_allBoards.Clear();
         Debug.Log(" ResetReplayMaker");
     }
 
@@ -243,24 +348,24 @@ public class RecordMaker : MonoBehaviour
    }
 
 
-    public class TicTacToeBoard
-    {
-        public int topleft, topmid, topright, midleft, midmid, midright, botleft, botmid, botright;
+    //public class TicTacToeBoard
+    //{
+    //    public int topleft, topmid, topright, midleft, midmid, midright, botleft, botmid, botright;
 
 
-        public TicTacToeBoard(int tl, int tm, int tr, int ml, int mm, int mr, int bl, int bm, int br)
-        {
-            topleft = tl;
-            topmid = tm;
-            topright = tr;
-            midleft = ml;
-            midmid = mm;
-            midright = mr;
-            botleft = bl;
-            botmid = bm;
-            botright = br;
-        }
+    //    public TicTacToeBoard(int tl, int tm, int tr, int ml, int mm, int mr, int bl, int bm, int br)
+    //    {
+    //        topleft = tl;
+    //        topmid = tm;
+    //        topright = tr;
+    //        midleft = ml;
+    //        midmid = mm;
+    //        midright = mr;
+    //        botleft = bl;
+    //        botmid = bm;
+    //        botright = br;
+    //    }
 
-    }
+    //}
 
 }
