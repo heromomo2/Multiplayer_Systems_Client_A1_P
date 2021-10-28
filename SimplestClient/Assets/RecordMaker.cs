@@ -10,7 +10,7 @@ public class RecordMaker : MonoBehaviour
     int maxmove,SelectedMove = 0;
     public List<TicTacToeBoard> MoveBoard = new List<TicTacToeBoard>();
     public Dropdown m_dropdown = null;
-    public Text RePlayer_Text = null;
+    public Text RePlayer_Text,RePlayer_Opponent_Text,RePlayer_Player_Text = null;
     public List<Text> GrideSpace = new List<Text>();
     public NetworkedClient m_MessageReceiverFromServer = null;
     GameObject TicTacToe_Game, Network ;
@@ -85,9 +85,7 @@ public class RecordMaker : MonoBehaviour
                 ResetReplayMaker(); 
                 break;
             case ServerToClientSignifiers.LoginComplete:
-                //WriteSaveManagementFile();
-                //ReadSaveManagementFile();
-                
+                ResetReplayer();
                 SetDropDownChanged();
                 break;
         }
@@ -147,8 +145,7 @@ public class RecordMaker : MonoBehaviour
             int signifier = int.Parse(csv[0]);
             if (signifier == BoardSaveDataSignifier)
             {
-                MoveBoard.Add(new TicTacToeBoard (  int.Parse(csv[1]), int.Parse(csv[2]), int.Parse(csv[3]), int.Parse(csv[4]), int.Parse(csv[5]), int.Parse(csv[6]), int.Parse(csv[7]), int.Parse(csv[8]), int.Parse(csv[9]) ));
-               
+                MoveBoard.Add(new TicTacToeBoard (  int.Parse(csv[1]), int.Parse(csv[2]), int.Parse(csv[3]), int.Parse(csv[4]), int.Parse(csv[5]), int.Parse(csv[6]), int.Parse(csv[7]), int.Parse(csv[8]), int.Parse(csv[9]), int.Parse(csv[10]) ));
             }
  
         };
@@ -163,6 +160,8 @@ public class RecordMaker : MonoBehaviour
         check(t.topleft,GrideSpace[0]); check(t.topmid, GrideSpace[1]); check(t.topright, GrideSpace[2]);
         check(t.midleft, GrideSpace[3]); check(t.midmid, GrideSpace[4]); check(t.midright, GrideSpace[5]);
         check(t.botleft, GrideSpace[6]); check(t.botmid, GrideSpace[7]); check(t.botright, GrideSpace[8]);
+
+        DisplayWhoturn(t.WhosMove, RePlayer_Player_Text, RePlayer_Opponent_Text);
     }
     void check(int space, Text t)
     {
@@ -179,7 +178,31 @@ public class RecordMaker : MonoBehaviour
             t.text = "O";
         }
     }
-    
+    void DisplayWhoturn(int Whoturn, Text P, Text O)
+    {
+        if (Whoturn == 41)
+        {
+            P.text = "Player:";
+            P.color = Color.black;
+            O.color = Color.black;
+            O.text = "Opponent:";
+        }
+        else if (Whoturn == 43)
+        {
+            P.text = "Player: Waiting";
+            P.color = Color.black;
+            O.color = Color.blue;
+            O.text = "Opponent: Turn";
+        }
+        else if ( Whoturn == 42)
+        {
+            P.text = "Player: Turn";
+            P.color = Color.blue;
+            O.color = Color.black;
+            O.text = "Opponent: Waiting";
+        }
+    }
+
     public void ForwardButtonPressed()
     {
         // pick a list
@@ -234,10 +257,8 @@ public class RecordMaker : MonoBehaviour
             m_inputField.text = "";
         }
 
-
         WriteSaveManagementFile();
         ReadSaveManagementFile();
-
       
     }
 
@@ -252,6 +273,15 @@ public class RecordMaker : MonoBehaviour
         Debug.Log(" ResetReplayMaker");
     }
 
+
+    public void ResetReplayer()
+    {
+        foreach (Text t in GrideSpace)
+        {
+            t.text = "";
+        }
+        DisplayWhoturn( 41, RePlayer_Player_Text, RePlayer_Opponent_Text);
+    }
 
 
 
@@ -312,7 +342,7 @@ public class RecordMaker : MonoBehaviour
 
         foreach (TicTacToeBoard b in m_allBoards)
         {
-            sw.WriteLine(BoardSaveDataSignifier + "," + b.topleft.ToString() + "," + b.topmid.ToString() + "," + b.topright.ToString() + "," + b.midleft.ToString() + "," + b.midmid.ToString() + "," + b.midright.ToString() + "," + b.botleft.ToString() + "," + b.botmid.ToString()+ ","+ b.botright);
+            sw.WriteLine(BoardSaveDataSignifier + "," + b.topleft.ToString() + "," + b.topmid.ToString() + "," + b.topright.ToString() + "," + b.midleft.ToString() + "," + b.midmid.ToString() + "," + b.midright.ToString() + "," + b.botleft.ToString() + "," + b.botmid.ToString()+ ","+ b.botright.ToString() +","+ b.WhosMove.ToString());
         }
 
         sw.Close();
@@ -342,9 +372,9 @@ public class RecordMaker : MonoBehaviour
    
 
 
-    public void Give_TicTacToeBoard ( int topleft, int topmid, int topright, int midleft, int midmid, int midright, int botleft, int botmid, int botright)
+    public void Give_TicTacToeBoard ( int topleft, int topmid, int topright, int midleft, int midmid, int midright, int botleft, int botmid, int botright, int wsm)
    {
-        m_allBoards.AddLast(new TicTacToeBoard (topleft, topmid,  topright, midleft,  midmid, midright,  botleft,  botmid,  botright));
+        m_allBoards.AddLast(new TicTacToeBoard (topleft, topmid,  topright, midleft,  midmid, midright,  botleft,  botmid,  botright, wsm));
    }
 
 

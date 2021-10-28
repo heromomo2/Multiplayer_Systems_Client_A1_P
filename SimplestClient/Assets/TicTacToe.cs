@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class TicTacToe : MonoBehaviour
 {
+    int test = 0;
+
   LinkedList <TicTacToeBoard> m_ListOFBoard;
 
     private NetworkedClient m_MessageReceiverFromServer = null;
@@ -17,7 +19,7 @@ public class TicTacToe : MonoBehaviour
     bool DoWeHaveAWinner = false;
     bool m_IsWaitTurn = false;
     bool m_IsOnePlayer = false;
-
+    
     private int CurrentPlayer;
 
 
@@ -61,7 +63,6 @@ public class TicTacToe : MonoBehaviour
         GiveButtonsPosition();
         CurrentPlayer = Oneplayersymbol;
         m_ListOFBoard = new LinkedList<TicTacToeBoard>() ;
-        m_ListOFBoard.AddLast(new TicTacToeBoard(mboard[0], mboard[1], mboard[2], mboard[3], mboard[4], mboard[5], mboard[6], mboard[7], mboard[8]));
     }
 
     private void OnDestroy()
@@ -79,24 +80,27 @@ public class TicTacToe : MonoBehaviour
         switch (sigifier)
         {
             case ServerToClientSignifiers.GameStart:
-                Debug.Log("you set as  x or o"); m_ListOFBoard.Clear();
+                Debug.Log("you set as  x or o");
+                m_ListOFBoard.Clear();
                 setCurrentPlayerSymbol(int.Parse(s));
                 break;
             case ServerToClientSignifiers.OpponentPlayed:
-
                 OpponentpressAButton(int.Parse(s)); m_IsWaitTurn = true;
                 Debug.LogWarning("Your Opponet Just played. Opponent has pressed-> : " + s);
                 activeButtonUnMarkSpaces(DoWeHaveAWinner);
+                test = 42;
                 break;
             case ServerToClientSignifiers.WaitForOppentMoved:
                 Debug.LogWarning(" wait for your OppenMoved");
                 DeactiveButtons();
                 m_IsWaitTurn = false;
+                test = 43;
                 break;
             case ServerToClientSignifiers.ReMatchOfTicTacToeComplete:
                 // Debug.LogWarning("resetting board");
-                resetBoard(); setCurrentPlayerSymbol(int.Parse(s));
+                resetBoard();
                 m_ListOFBoard.Clear();
+                setCurrentPlayerSymbol(int.Parse(s));
                 break;
         }
     }
@@ -106,21 +110,24 @@ public class TicTacToe : MonoBehaviour
     {
         if (i == 1)
         {
-            // CurrentPlayer = Oneplayersymbol;
+            CurrentPlayer = Oneplayersymbol;
             Debug.Log("Im player one");
             m_IsWaitTurn = true;
             m_IsOnePlayer = true;
+            m_ListOFBoard.AddLast(new TicTacToeBoard(mboard[0], mboard[1], mboard[2], mboard[3], mboard[4], mboard[5], mboard[6], mboard[7], mboard[8], 41));
+            test = 42;
         }
         else
         {
-            //CurrentPlayer = Twoplayersymbol;
+            CurrentPlayer = Oneplayersymbol;
             Debug.Log("Im player Two");
             m_IsOnePlayer = false;
             m_IsWaitTurn = false;
             DeactiveButtons();
+            m_ListOFBoard.AddLast(new TicTacToeBoard(mboard[0], mboard[1], mboard[2], mboard[3], mboard[4], mboard[5], mboard[6], mboard[7], mboard[8], 41));
+            test = 43;
         }
     }
-
 
 
     private void OpponentpressAButton(int ButtonPositon)
@@ -130,14 +137,14 @@ public class TicTacToe : MonoBehaviour
 
     public void MakeAMove(int ButtonPosition)
     {
-        // 
+      
+
+
         mboard[ButtonPosition] = CurrentPlayer;
 
-        m_ListOFBoard.AddLast(new TicTacToeBoard(mboard[0], mboard[1], mboard[2], mboard[3], mboard[4], mboard[5], mboard[6], mboard[7], mboard[8]));
-
+        m_ListOFBoard.AddLast(new TicTacToeBoard(mboard[0], mboard[1], mboard[2], mboard[3], mboard[4], mboard[5], mboard[6], mboard[7], mboard[8], test));
 
         CheckForWin();
-
 
         // change turn
         if (CurrentPlayer == Oneplayersymbol)
@@ -163,11 +170,9 @@ public class TicTacToe : MonoBehaviour
         {
             networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.TicTacToesSomethingSomthing + "," + ButtonPosition.ToString());
         }
-
-
-
-
-       
+         
+        
+            
         
     }
 
@@ -183,7 +188,7 @@ public class TicTacToe : MonoBehaviour
     void printoutAllBoards()
     {
         // TicTacToe tempB;
-        foreach (TicTacToeBoard b in m_ListOFBoard)
+       foreach (TicTacToeBoard b in m_ListOFBoard)
         {
             Debug.Log("\n board: " );
             Debug.Log(" [ "+ b.topleft.ToString() + " , " + b.topmid.ToString() + " , " + b.topright.ToString() + " ] ");
@@ -244,8 +249,6 @@ public class TicTacToe : MonoBehaviour
             Debug.Log("you won by Diagonal");
             DeactiveButtons();
             ReachGameOver();
-
-            
         }
     }
 
@@ -345,7 +348,7 @@ public class TicTacToe : MonoBehaviour
 
         foreach (TicTacToeBoard b in m_ListOFBoard)
         {
-            SystemMangerObject.GetComponent<RecordMaker>().Give_TicTacToeBoard(b.topleft, b.topmid, b.topright, b.midleft, b.midmid, b.midright, b.botleft, b.botmid, b.botright);
+            SystemMangerObject.GetComponent<RecordMaker>().Give_TicTacToeBoard(b.topleft, b.topmid, b.topright, b.midleft, b.midmid, b.midright, b.botleft, b.botmid, b.botright, b.WhosMove);
         }
         m_ListOFBoard.Clear();
         SystemMangerObject.GetComponent<SystemManager>().OpenGameOver();
@@ -378,9 +381,15 @@ public class TicTacToe : MonoBehaviour
  public class TicTacToeBoard 
     {
         public int topleft, topmid, topright, midleft, midmid, midright, botleft, botmid, botright;
-        
+        public int WhosMove;
+        //public enum WhosMove 
+        //{
+        //   None = 41,
+        //   Player = 42,
+        //   Opponent= 43,
+        //};
 
-      public  TicTacToeBoard (int tl, int tm, int tr, int ml, int mm,int mr, int bl, int bm, int br)
+public  TicTacToeBoard (int tl, int tm, int tr, int ml, int mm,int mr, int bl, int bm, int br, int wsm )
         {
             topleft = tl;
             topmid = tm;
@@ -391,6 +400,7 @@ public class TicTacToe : MonoBehaviour
             botleft = bl;
             botmid = bm;
             botright = br;
+            WhosMove = wsm;
         }
 
     }
