@@ -16,7 +16,7 @@ public class SystemManager : MonoBehaviour
 
 
     private NetworkedClient m_MessageReceiverFromServer = null;
-    GameObject Login, Chat, networkClient,Menu,Lobby, WaitingInQueue, Tic_Tac_Toe,GameOver,Replayer;
+    GameObject Login, Chat, networkClient,Menu,Lobby, WaitingInQueue, Tic_Tac_Toe,GameOver,Replayer,Observer;
 
     // Start is called before the first frame update
     void Start()
@@ -42,6 +42,8 @@ public class SystemManager : MonoBehaviour
                 GameOver = go;
             else if (go.name == "Replayer_UI")
                 Replayer = go;
+            else if (go.name == "Observer_UI")
+                Observer = go;
         }
 
 
@@ -171,13 +173,17 @@ public class SystemManager : MonoBehaviour
     {
         ChangeState(GameStates.LoginMenu);
     }
+    public void OpenObServer()
+    {
+        ChangeState(GameStates.Observer);
+    }
     public void GameRoomButtonIsPreessed()
     {
 
          ChangeState(GameStates.WaitingInQueueforOtherPlayer);
         // Debug.Log("You should be pressing tictactoe button right now");
         // string OurEnterTheChatMsg = ClientToServerSignifiers.EnterTheChatRoom + "," + GetUserName;
-        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.JoinQueueForGameRoom + "");
+        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.JoinQueueForGameRoom + ","+ userName);
     }
 
     void ChangeState(int newState) 
@@ -193,6 +199,7 @@ public class SystemManager : MonoBehaviour
                 Tic_Tac_Toe.SetActive(false);
                 GameOver.SetActive(false);
                 Replayer.SetActive(false);
+                Observer.SetActive(false);
                 break;
             case GameStates.MainMenu:
                 Login.SetActive(false);
@@ -202,6 +209,7 @@ public class SystemManager : MonoBehaviour
                 Lobby.SetActive(false);
                 Tic_Tac_Toe.SetActive(false);
                 GameOver.SetActive(false);
+                Observer.SetActive(false);
                 break;
             case GameStates.WaitingInQueueforOtherPlayer:
                 Login.SetActive(false);
@@ -212,6 +220,7 @@ public class SystemManager : MonoBehaviour
                 Tic_Tac_Toe.SetActive(false);
                 GameOver.SetActive(false);
                 Replayer.SetActive(false);
+                Observer.SetActive(false);
                 break;
             case GameStates.TicTacToe:
                 Login.SetActive(false);
@@ -222,6 +231,7 @@ public class SystemManager : MonoBehaviour
                 Tic_Tac_Toe.SetActive(true);
                 GameOver.SetActive(false);
                 Replayer.SetActive(false);
+                Observer.SetActive(false);
                 break;
             case GameStates.GameOver:
                 Login.SetActive(false);
@@ -232,6 +242,7 @@ public class SystemManager : MonoBehaviour
                 Tic_Tac_Toe.SetActive(true);
                 GameOver.SetActive(true);
                 Replayer.SetActive(false);
+                Observer.SetActive(false);
                 break;
             case GameStates.Replayer:
                 Login.SetActive(false);
@@ -242,7 +253,18 @@ public class SystemManager : MonoBehaviour
                 Tic_Tac_Toe.SetActive(false);
                 GameOver.SetActive(false);
                 Replayer.SetActive(true);
-
+                Observer.SetActive(false);
+                break;
+            case GameStates.Observer:
+                Login.SetActive(false);
+                Chat.SetActive(false);
+                Menu.SetActive(false);
+                WaitingInQueue.SetActive(false);
+                Lobby.SetActive(false);
+                Tic_Tac_Toe.SetActive(false);
+                GameOver.SetActive(false);
+                Replayer.SetActive(false);
+                Observer.SetActive(true);
                 break;
         }
     }
@@ -263,6 +285,8 @@ public class SystemManager : MonoBehaviour
         public const int GameOver = 6;
 
         public const int Replayer = 7;
+
+        public const int Observer = 8;
     }
         // Update is called once per frame
     void Update()

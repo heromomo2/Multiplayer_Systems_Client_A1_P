@@ -167,7 +167,7 @@ public class RecordMaker : MonoBehaviour
     {
         if (space == 0) 
         {
-            t.text = "Empty";
+            t.text = "";
         }
         else if( space == 1) 
         {

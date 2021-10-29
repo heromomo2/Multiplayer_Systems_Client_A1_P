@@ -172,6 +172,7 @@ public class ClientToServerSignifiers
 
     public const int  ExitTacTacToe = 10;
 
+    public const int SearchGameRoomsByUserName = 11;
 }
 
 public class ServerToClientSignifiers
@@ -207,5 +208,11 @@ public class ServerToClientSignifiers
     public const int ExitTacTacToeComplete = 15;
 
     public const int PreventRematch = 16;
+
+    public const int SearchGameRoomsByUserNameComplete = 17;
+    
+    public const int SearchGameRoomsByUserNameFailed = 18;
+
 }
+
 

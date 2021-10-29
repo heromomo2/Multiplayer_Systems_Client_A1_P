@@ -6,6 +6,7 @@ ScriptsOnlyBuild:
     - GridSpace
     - LogInScript
     - NetworkedClient
+    - Observer
     - PMButton
     - PopulateGrid
     - RecordMaker
@@ -15,6 +16,7 @@ ScriptsOnlyBuild:
     - UnityEditor.U2D.Animation.BoneGizmo
     Unity.2D.IK.Editor.dll:
     - UnityEditor.U2D.IK.IKEditorManager
+    - UnityEditor.U2D.IK.IKGizmos
     Unity.2D.IK.Runtime.dll:
     - UnityEditor.U2D.IK.IKEditorManagerHelper
     Unity.2D.Tilemap.Editor.dll:
@@ -115,6 +117,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 4834}
     - Class: 114
       Script: {instanceID: 5570}
+    - Class: 114
+      Script: {instanceID: 25722}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -230,7 +234,7 @@ ScriptsOnlyBuild:
     className: TMP_FontAsset
   - hash:
       serializedVersion: 2
-      Hash: e0dcb0048a1270c325b287a46684b40e
+      Hash: b2b3eba94bf47ec9e3cb5a3a40674cf0
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: RecordMaker
@@ -720,7 +724,13 @@ ScriptsOnlyBuild:
     assemblyName: Unity.2D.IK.Runtime.dll
     namespaceName: UnityEngine.U2D.IK
     className: FabrikSolver2D
+  - hash:
+      serializedVersion: 2
+      Hash: 481e049d378e5223e412ae9593c54ed2
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Observer
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: C:/Users/Owner/Desktop/build 2/SimplestClient.exe
+  playerPath: C:/Users/Owner/Desktop/build/SimplestClient.exe
