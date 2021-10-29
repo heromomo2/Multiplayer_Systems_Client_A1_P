@@ -12,7 +12,8 @@ public class Observer : MonoBehaviour
     public Text m_Observer_Search_Text;
     public Button m_Observer_Search_Button;
     bool m_IsGameRoomFound = false;
-    string m_UserName = "";
+    string m_UserNameSearchFor = "";
+   // string m_UserName = "<The Player>";
     /// <summary>
     /// watcher
     /// </summary>
@@ -58,9 +59,11 @@ public class Observer : MonoBehaviour
                 SetObservrSearch();
                 break;
             case ServerToClientSignifiers.SearchGameRoomsByUserNameComplete:
+                m_IsGameRoomFound = true;
                 DisplayPlayerSearchResult(m_IsGameRoomFound, m_Observer_Search_Text);
                 break;
             case ServerToClientSignifiers.SearchGameRoomsByUserNameFailed:
+                m_IsGameRoomFound = false;
                 DisplayPlayerSearchResult(m_IsGameRoomFound, m_Observer_Search_Text);
                 break;
         }
@@ -81,8 +84,8 @@ public class Observer : MonoBehaviour
     {
         if (m_Observer_Search_InputField.text != "" && m_Observer_Search_InputField.text != null)
         {
-            m_UserName =  m_Observer_Search_InputField.text;
-            Network.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.SearchGameRoomsByUserName + "," + m_UserName);
+            m_UserNameSearchFor =  m_Observer_Search_InputField.text;
+            Network.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.SearchGameRoomsByUserName + "," + m_UserNameSearchFor);
         }
     }
 
@@ -91,12 +94,12 @@ public class Observer : MonoBehaviour
     {
         if (IsGameRoomFound)
         {
-            t.text = "That Player was found in a game.";
+            t.text = m_UserNameSearchFor + " was found in a game.";
             m_Observer_Search_Button.interactable = false;
         }
         else 
         {
-            t.text = "That Player wasn't in a gameRoom.";
+            t.text = m_UserNameSearchFor + " wasn't in a gameRoom.";
         }
 
     }
