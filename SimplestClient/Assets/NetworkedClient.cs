@@ -182,6 +182,9 @@ public class ClientToServerSignifiers
     public const int SearchGameRoomsByUserName = 11;
 
     public const int SendObserverData = 12;
+
+    public const int StopObserving = 13;
+
 }
 
 public class ServerToClientSignifiers
@@ -229,6 +232,8 @@ public class ServerToClientSignifiers
     public const int YouAreNotBeingObserved = 22;
 
     public const int PlayerDisconnectFromGameRoom = 23;
+
+    public const int StopObservingComplete = 24;
 }
 
 

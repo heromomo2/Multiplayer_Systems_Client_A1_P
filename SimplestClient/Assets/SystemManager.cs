@@ -155,6 +155,11 @@ public class SystemManager : MonoBehaviour
                 Login.GetComponentInChildren<LogInScript>().ResetLogic();
                 Tic_Tac_Toe.GetComponent<TicTacToe>().resetBoard();
                 break;
+            case ServerToClientSignifiers.StopObservingComplete:
+                ChangeState(GameStates.LoginMenu);
+                Login.GetComponentInChildren<LogInScript>().ResetLogic();
+                Tic_Tac_Toe.GetComponent<TicTacToe>().resetBoard();
+                break;
         }
     
     }
@@ -182,6 +187,7 @@ public class SystemManager : MonoBehaviour
     {
         ChangeState(GameStates.Observer);
     }
+    
     public void GameRoomButtonIsPreessed()
     {
 

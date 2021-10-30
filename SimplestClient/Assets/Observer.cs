@@ -20,6 +20,8 @@ public class Observer : MonoBehaviour
     public GameObject Observer_Watcher;
     public List<Text> m_GridSpaces_Observer_Watcher = new List<Text>();
     public TicTacToeBoard m_Board_Observer_Watcher = null;
+    public Text m_Observer_Watcher_Player_text, m_Observer_Watcher_Opponent_text = null;
+    string m_UserNameOther = "";
     /// <summary>
     /// /
     /// </summary>
@@ -60,7 +62,7 @@ public class Observer : MonoBehaviour
                 SetObservrSearch();
                 break;
             case ServerToClientSignifiers.SearchGameRoomsByUserNameComplete:
-                m_IsGameRoomFound = true;
+                m_IsGameRoomFound = true;  m_UserNameOther = s;
                 DisplayPlayerSearchResult(m_IsGameRoomFound, m_Observer_Search_Text);
                 SetObservrWatcher();
                 break;
@@ -89,6 +91,8 @@ public class Observer : MonoBehaviour
     {
         Observer_Watcher.SetActive(true);
         Observer_Search.SetActive(false);
+        DisplayMovePart1(new TicTacToeBoard(0, 0, 0, 0, 0, 0,0, 0, 0, 0));
+        DisplayMovePart3( 41, m_Observer_Watcher_Player_text, m_Observer_Watcher_Opponent_text);
     }
 
     public void Observer_Search_ButtonIsPressed()
@@ -100,6 +104,11 @@ public class Observer : MonoBehaviour
         }
     }
 
+
+    public void Observer_Watcher_Logout_ButtonIsPressed()
+    {
+        Network.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.StopObserving + ",");
+    }
 
     void DisplayPlayerSearchResult (bool IsGameRoomFound, Text t) 
     {
@@ -126,6 +135,7 @@ public class Observer : MonoBehaviour
         DisplayMovePart2(b.midleft, m_GridSpaces_Observer_Watcher[3]); DisplayMovePart2(b.midmid, m_GridSpaces_Observer_Watcher[4]); DisplayMovePart2(b.midright, m_GridSpaces_Observer_Watcher[5]);
         DisplayMovePart2(b.botleft, m_GridSpaces_Observer_Watcher[6]); DisplayMovePart2(b.botmid, m_GridSpaces_Observer_Watcher[7]); DisplayMovePart2(b.botright, m_GridSpaces_Observer_Watcher[8]);
 
+        DisplayMovePart3(b.WhosMove, m_Observer_Watcher_Player_text, m_Observer_Watcher_Opponent_text);
     }
 
     void DisplayMovePart2(int space, Text t)
@@ -143,7 +153,30 @@ public class Observer : MonoBehaviour
             t.text = "O";
         }
     }
-
+    void DisplayMovePart3(int Whoturn, Text P, Text O)
+    {
+        if (Whoturn == 41)
+        {
+            P.text =   "Player:";
+            P.color = Color.black;
+            O.color = Color.black;
+            O.text = "Opponent:";
+        }
+        else if (Whoturn == 43)
+        {
+            P.text = m_UserNameSearchFor +": Waiting";
+            P.color = Color.black;
+            O.color = Color.blue;
+            O.text = m_UserNameOther + " : Turn";
+        }
+        else if (Whoturn == 42)
+        {
+            P.text = m_UserNameSearchFor + ": Turn";
+            P.color = Color.blue;
+            O.color = Color.black;
+            O.text = m_UserNameOther + ": Waiting";
+        }
+    }
 
     // Update is called once per frame
     void Update()
