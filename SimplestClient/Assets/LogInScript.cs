@@ -94,7 +94,7 @@ public class LogInScript : MonoBehaviour
 
     }
 
-    private void LoginStates(int signifier, string s) 
+    private void LoginStates(int signifier, string s, TicTacToeBoard t) 
     {
         switch (signifier) 
         {

@@ -129,9 +129,9 @@ public class SystemManager : MonoBehaviour
     //    }
     //}
     
-    void SystemManagerReceived (int sigifier, string s) 
+    void SystemManagerReceived (int signifier, string s, TicTacToeBoard t) 
     {
-        switch (sigifier)
+        switch (signifier)
         {
             case ServerToClientSignifiers.LoginComplete:
                 ChangeState(GameStates.MainMenu);
@@ -146,6 +146,11 @@ public class SystemManager : MonoBehaviour
                 ChangeState(GameStates.TicTacToe);
                 break;
             case ServerToClientSignifiers.ExitTacTacToeComplete:
+                ChangeState(GameStates.LoginMenu);
+                Login.GetComponentInChildren<LogInScript>().ResetLogic();
+                Tic_Tac_Toe.GetComponent<TicTacToe>().resetBoard();
+                break;
+            case ServerToClientSignifiers.PlayerDisconnectFromGameRoom:
                 ChangeState(GameStates.LoginMenu);
                 Login.GetComponentInChildren<LogInScript>().ResetLogic();
                 Tic_Tac_Toe.GetComponent<TicTacToe>().resetBoard();

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 public class NetworkedClient : MonoBehaviour
 {
-    private Action<int,string> m_MessageReceiverFromServer = null;
+    private Action<int,string,TicTacToeBoard> m_MessageReceiverFromServer = null;
 
 
     int connectionID;
@@ -115,7 +115,7 @@ public class NetworkedClient : MonoBehaviour
 
   
 
-    public event Action<int,string> OnMessageReceivedFromSever
+    public event Action<int,string, TicTacToeBoard> OnMessageReceivedFromSever
     {
         add
         {
@@ -135,11 +135,18 @@ public class NetworkedClient : MonoBehaviour
     {
         int signifier = int.Parse(csv[0]);
         string FirstElement = csv[1].ToString();
-
-
-        if( m_MessageReceiverFromServer != null)
+        TicTacToeBoard TempTicTacToe;
+        if (signifier == ServerToClientSignifiers.ObserverGetsMove)
         {
-           m_MessageReceiverFromServer(signifier, FirstElement);
+            TempTicTacToe = new TicTacToeBoard(int.Parse(csv[1]), int.Parse(csv[2]), int.Parse(csv[3]), int.Parse(csv[4]), int.Parse(csv[5]), int.Parse(csv[6]), int.Parse(csv[7]), int.Parse(csv[8]), int.Parse(csv[9]), int.Parse(csv[10]));
+        }
+        else
+        {
+            TempTicTacToe = new TicTacToeBoard(0,0,0,0,0,0,0,0,0,0);
+        }
+        if ( m_MessageReceiverFromServer != null)
+        {
+           m_MessageReceiverFromServer(signifier, FirstElement, TempTicTacToe);
         }
         
     }
@@ -170,9 +177,11 @@ public class ClientToServerSignifiers
 
     public const int ReMatchOfTicTacToe = 9;
 
-    public const int  ExitTacTacToe = 10;
+    public const int ExitTacTacToe = 10;
 
     public const int SearchGameRoomsByUserName = 11;
+
+    public const int SendObserverData = 12;
 }
 
 public class ServerToClientSignifiers
@@ -210,9 +219,17 @@ public class ServerToClientSignifiers
     public const int PreventRematch = 16;
 
     public const int SearchGameRoomsByUserNameComplete = 17;
-    
+
     public const int SearchGameRoomsByUserNameFailed = 18;
 
+    public const int YouareBeingObserved = 20;
+
+    public const int ObserverGetsMove = 21;
+
+    public const int YouAreNotBeingObserved = 22;
+
+    public const int PlayerDisconnectFromGameRoom = 23;
 }
+
 
 

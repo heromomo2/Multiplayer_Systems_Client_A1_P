@@ -18,7 +18,8 @@ public class Observer : MonoBehaviour
     /// watcher
     /// </summary>
     public GameObject Observer_Watcher;
-
+    public List<Text> m_GridSpaces_Observer_Watcher = new List<Text>();
+    public TicTacToeBoard m_Board_Observer_Watcher = null;
     /// <summary>
     /// /
     /// </summary>
@@ -51,7 +52,7 @@ public class Observer : MonoBehaviour
         }
 
     }
-    void ObserverReceived(int sigifier, string s)
+    void ObserverReceived(int sigifier, string s, TicTacToeBoard t)
     {
         switch (sigifier)
         {
@@ -61,10 +62,14 @@ public class Observer : MonoBehaviour
             case ServerToClientSignifiers.SearchGameRoomsByUserNameComplete:
                 m_IsGameRoomFound = true;
                 DisplayPlayerSearchResult(m_IsGameRoomFound, m_Observer_Search_Text);
+                SetObservrWatcher();
                 break;
             case ServerToClientSignifiers.SearchGameRoomsByUserNameFailed:
                 m_IsGameRoomFound = false;
                 DisplayPlayerSearchResult(m_IsGameRoomFound, m_Observer_Search_Text);
+                break;
+            case ServerToClientSignifiers.ObserverGetsMove:
+                DisplayMovePart1(t);
                 break;
         }
     }
@@ -78,6 +83,12 @@ public class Observer : MonoBehaviour
         m_Observer_Search_Button.interactable = true;
         m_Observer_Search_Text.text = "Please type a User name to view a GameRoom.";
         m_IsGameRoomFound = false;
+    }
+
+    void SetObservrWatcher()
+    {
+        Observer_Watcher.SetActive(true);
+        Observer_Search.SetActive(false);
     }
 
     public void Observer_Search_ButtonIsPressed()
@@ -102,6 +113,35 @@ public class Observer : MonoBehaviour
             t.text = m_UserNameSearchFor + " wasn't in a gameRoom.";
         }
 
+    }
+
+    void ReceivedMove() 
+    {
+        
+    }
+
+    void DisplayMovePart1(TicTacToeBoard b)
+    {
+        DisplayMovePart2(b.topleft, m_GridSpaces_Observer_Watcher[0]); DisplayMovePart2(b.topmid, m_GridSpaces_Observer_Watcher[1]); DisplayMovePart2(b.topright, m_GridSpaces_Observer_Watcher[2]);
+        DisplayMovePart2(b.midleft, m_GridSpaces_Observer_Watcher[3]); DisplayMovePart2(b.midmid, m_GridSpaces_Observer_Watcher[4]); DisplayMovePart2(b.midright, m_GridSpaces_Observer_Watcher[5]);
+        DisplayMovePart2(b.botleft, m_GridSpaces_Observer_Watcher[6]); DisplayMovePart2(b.botmid, m_GridSpaces_Observer_Watcher[7]); DisplayMovePart2(b.botright, m_GridSpaces_Observer_Watcher[8]);
+
+    }
+
+    void DisplayMovePart2(int space, Text t)
+    {
+        if (space == 0)
+        {
+            t.text = "";
+        }
+        else if (space == 1)
+        {
+            t.text = "X";
+        }
+        else if (space == 2)
+        {
+            t.text = "O";
+        }
     }
 
 

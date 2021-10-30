@@ -19,7 +19,8 @@ public class TicTacToe : MonoBehaviour
     bool DoWeHaveAWinner = false;
     bool m_IsWaitTurn = false;
     bool m_IsOnePlayer = false;
-    
+    bool m_IsBeingObserved = false;
+
     private int CurrentPlayer;
 
 
@@ -75,7 +76,7 @@ public class TicTacToe : MonoBehaviour
     }
 
 
-    void TicTacToeMessageReceived(int sigifier, string s)
+    void TicTacToeMessageReceived(int sigifier, string s, TicTacToeBoard t)
     {
         switch (sigifier)
         {
@@ -101,6 +102,12 @@ public class TicTacToe : MonoBehaviour
                 resetBoard();
                 m_ListOFBoard.Clear();
                 setCurrentPlayerSymbol(int.Parse(s));
+                break;
+            case ServerToClientSignifiers.YouareBeingObserved:
+                m_IsBeingObserved = true;
+                break;
+            case ServerToClientSignifiers.YouAreNotBeingObserved:
+                m_IsBeingObserved = false;
                 break;
         }
     }
@@ -143,6 +150,12 @@ public class TicTacToe : MonoBehaviour
         mboard[ButtonPosition] = CurrentPlayer;
 
         m_ListOFBoard.AddLast(new TicTacToeBoard(mboard[0], mboard[1], mboard[2], mboard[3], mboard[4], mboard[5], mboard[6], mboard[7], mboard[8], test));
+
+        if (m_IsBeingObserved) 
+        {
+            networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.SendObserverData+ "," + mboard[0 ].ToString() + ","+ mboard[1].ToString() + "," + mboard[2].ToString() + "," + mboard[3].ToString() + "," + mboard[4].ToString() + "," + mboard[5].ToString() + "," + mboard[6].ToString() + "," + mboard[7].ToString() + "," + mboard[8].ToString() + "," +  test.ToString());
+        }
+
 
         CheckForWin();
 
@@ -382,12 +395,7 @@ public class TicTacToe : MonoBehaviour
     {
         public int topleft, topmid, topright, midleft, midmid, midright, botleft, botmid, botright;
         public int WhosMove;
-        //public enum WhosMove 
-        //{
-        //   None = 41,
-        //   Player = 42,
-        //   Opponent= 43,
-        //};
+        
 
 public  TicTacToeBoard (int tl, int tm, int tr, int ml, int mm,int mr, int bl, int bm, int br, int wsm )
         {

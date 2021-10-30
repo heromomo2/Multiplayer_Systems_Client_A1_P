@@ -74,9 +74,9 @@ public class RecordMaker : MonoBehaviour
     }
 
 
-    void RecordMakerReceived (int sigifier, string s) 
+    void RecordMakerReceived (int signifier, string s, TicTacToeBoard t) 
     {
-        switch (sigifier)
+        switch (signifier)
         {
             case ServerToClientSignifiers.ExitTacTacToeComplete:
                 ResetReplayMaker();
@@ -96,15 +96,7 @@ public class RecordMaker : MonoBehaviour
 
     }
 
-     public List<string> GetListOfReplayerByNames()
-    {
-
-        
-
-        return ReplayofNames; 
-    }
-
-
+    
 
     public void SetDropDownChanged()
     {

@@ -77,7 +77,7 @@ public class ChatBox : MonoBehaviour
         }
     }
 
-    public void GlobalMessageToChat(int signifier, string s)
+    public void GlobalMessageToChat(int signifier, string s, TicTacToeBoard tt)
     {
         if (signifier == ServerToClientSignifiers.ChatView)
         {
@@ -122,7 +122,7 @@ public class ChatBox : MonoBehaviour
         SendText.GetComponent<Text>().text = "Sending Message To: Globle";
     }
 
-    public void AddListOfPlayerToChat(int signifier, string s)
+    public void AddListOfPlayerToChat(int signifier, string s, TicTacToeBoard t)
     {
        
 
@@ -136,7 +136,7 @@ public class ChatBox : MonoBehaviour
         }
     }
 
-    public void ClearListOfPlayerToChat(int signifier, string s)
+    public void ClearListOfPlayerToChat(int signifier, string s, TicTacToeBoard t)
     {
         if (signifier == ServerToClientSignifiers.ReceiveClearListOFPlayerInChat)
         {
