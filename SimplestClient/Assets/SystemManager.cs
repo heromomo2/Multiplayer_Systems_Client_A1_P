@@ -187,7 +187,25 @@ public class SystemManager : MonoBehaviour
     {
         ChangeState(GameStates.Observer);
     }
-    
+
+    public void OpenChatRoom()
+    {
+        // open gameroom Ui and send a msg to server
+
+        ChangeState(GameStates.chatroom);
+        string OurEnterTheChatMsg = ClientToServerSignifiers.EnterTheChatRoom + "," + GetUserName;
+        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(OurEnterTheChatMsg);
+    }
+    public void Logout()
+    {
+        string logoutMsg = ClientToServerSignifiers.Logout + ",";
+
+        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(logoutMsg);
+        ChangeState(GameStates.LoginMenu);
+
+    }
+
+
     public void GameRoomButtonIsPreessed()
     {
 
@@ -276,6 +294,18 @@ public class SystemManager : MonoBehaviour
                 GameOver.SetActive(false);
                 Replayer.SetActive(false);
                 Observer.SetActive(true);
+                break;
+
+            case GameStates.chatroom:
+                Login.SetActive(false);
+                Chat.SetActive(true);
+                Menu.SetActive(false);
+                WaitingInQueue.SetActive(false);
+                Lobby.SetActive(false);
+                Tic_Tac_Toe.SetActive(false);
+                GameOver.SetActive(false);
+                Replayer.SetActive(false);
+                Observer.SetActive(false);
                 break;
         }
     }
