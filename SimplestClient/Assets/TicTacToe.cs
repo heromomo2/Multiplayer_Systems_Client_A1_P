@@ -23,7 +23,7 @@ public class TicTacToe : MonoBehaviour
 
     private int CurrentPlayer;
 
-
+    public GameObject m_TicTacToe_Text;
     public int GetCurrentPlayerSymbol
     {
         get { return CurrentPlayer; }
@@ -53,6 +53,8 @@ public class TicTacToe : MonoBehaviour
                 networkClient = go;
             else if (go.name == "SystemManagerObject")
                 SystemMangerObject = go;
+            else if (go.name == "TicTacToe_Text")
+                m_TicTacToe_Text = go;
         }
         m_MessageReceiverFromServer = networkClient.GetComponent<NetworkedClient>();
 
@@ -82,18 +84,19 @@ public class TicTacToe : MonoBehaviour
         {
             case ServerToClientSignifiers.GameStart:
                 Debug.Log("you set as  x or o");
-                m_ListOFBoard.Clear();
+                m_ListOFBoard.Clear(); m_IsBeingObserved = false;
                 setCurrentPlayerSymbol(int.Parse(s));
                 break;
             case ServerToClientSignifiers.OpponentPlayed:
                 OpponentpressAButton(int.Parse(s)); m_IsWaitTurn = true;
                 Debug.LogWarning("Your Opponet Just played. Opponent has pressed-> : " + s);
                 activeButtonUnMarkSpaces(DoWeHaveAWinner);
+                DisplayWhoTurn(1);
                 test = 42;
                 break;
             case ServerToClientSignifiers.WaitForOppentMoved:
                 Debug.LogWarning(" wait for your OppenMoved");
-                DeactiveButtons();
+                DeactiveButtons(); DisplayWhoTurn(2);
                 m_IsWaitTurn = false;
                 test = 43;
                 break;
@@ -123,6 +126,7 @@ public class TicTacToe : MonoBehaviour
             m_IsOnePlayer = true;
             m_ListOFBoard.AddLast(new TicTacToeBoard(mboard[0], mboard[1], mboard[2], mboard[3], mboard[4], mboard[5], mboard[6], mboard[7], mboard[8], 41));
             test = 42;
+            DisplayWhoTurn(1);
         }
         else
         {
@@ -133,6 +137,7 @@ public class TicTacToe : MonoBehaviour
             DeactiveButtons();
             m_ListOFBoard.AddLast(new TicTacToeBoard(mboard[0], mboard[1], mboard[2], mboard[3], mboard[4], mboard[5], mboard[6], mboard[7], mboard[8], 41));
             test = 43;
+            DisplayWhoTurn(2);
         }
     }
 
@@ -212,7 +217,23 @@ public class TicTacToe : MonoBehaviour
         }
        // tempB= m_ListOFBoard.First.Value();
     }
-
+    void DisplayWhoTurn(int i)
+    {
+        switch (i) 
+        {
+            case 0:
+                m_TicTacToe_Text.GetComponent<Text>().text = "It's your turn now";
+                break;  
+            case 1:
+                m_TicTacToe_Text.GetComponent<Text>().text = "It's your turn now";
+                break;
+            case 2:
+                m_TicTacToe_Text.GetComponent<Text>().text = "With your turn";
+                break;
+   
+        }
+        
+    }
 
 
     void GiveButtonsPosition() 
