@@ -185,6 +185,8 @@ public class ClientToServerSignifiers
 
     public const int StopObserving = 13;
 
+    public const int SendGameRoomChatMSG = 14;
+
 }
 
 public class ServerToClientSignifiers
@@ -234,6 +236,8 @@ public class ServerToClientSignifiers
     public const int PlayerDisconnectFromGameRoom = 23;
 
     public const int StopObservingComplete = 24;
+
+    public const int ReceiveGameRoomChatMSG = 25;
 }
 
 

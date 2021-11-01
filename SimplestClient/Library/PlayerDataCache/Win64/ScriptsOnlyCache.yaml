@@ -2,6 +2,7 @@ ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
     - ChatBox
+    - ChatRoom2
     - GameOver
     - GridSpace
     - LogInScript
@@ -119,6 +120,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 4836}
     - Class: 114
       Script: {instanceID: 5572}
+    - Class: 114
+      Script: {instanceID: 24694}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -730,6 +733,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.2D.IK.Runtime.dll
     namespaceName: UnityEngine.U2D.IK
     className: FabrikSolver2D
+  - hash:
+      serializedVersion: 2
+      Hash: 97737c321945b89569ddcb359bdf0024
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ChatRoom2
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
