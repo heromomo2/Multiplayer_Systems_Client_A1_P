@@ -89,39 +89,39 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 2784}
     - Class: 114
-      Script: {instanceID: 2850}
+      Script: {instanceID: 2822}
     - Class: 114
-      Script: {instanceID: 2892}
+      Script: {instanceID: 2852}
     - Class: 114
-      Script: {instanceID: 3004}
+      Script: {instanceID: 2894}
     - Class: 114
-      Script: {instanceID: 3062}
+      Script: {instanceID: 3006}
     - Class: 114
-      Script: {instanceID: 3248}
+      Script: {instanceID: 3064}
     - Class: 114
-      Script: {instanceID: 3258}
+      Script: {instanceID: 3250}
     - Class: 114
-      Script: {instanceID: 3360}
+      Script: {instanceID: 3260}
     - Class: 114
-      Script: {instanceID: 3656}
+      Script: {instanceID: 3362}
     - Class: 114
-      Script: {instanceID: 3742}
+      Script: {instanceID: 3658}
     - Class: 114
-      Script: {instanceID: 3868}
+      Script: {instanceID: 3744}
     - Class: 114
-      Script: {instanceID: 4158}
+      Script: {instanceID: 3870}
     - Class: 114
-      Script: {instanceID: 4310}
+      Script: {instanceID: 4160}
     - Class: 114
-      Script: {instanceID: 4366}
+      Script: {instanceID: 4312}
     - Class: 114
-      Script: {instanceID: 4562}
+      Script: {instanceID: 4368}
     - Class: 114
-      Script: {instanceID: 4836}
+      Script: {instanceID: 4564}
     - Class: 114
-      Script: {instanceID: 5572}
+      Script: {instanceID: 4838}
     - Class: 114
-      Script: {instanceID: 24694}
+      Script: {instanceID: 5574}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -337,6 +337,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: TimelineAsset
+  - hash:
+      serializedVersion: 2
+      Hash: 9e523d79597e77242c9a3335aeaad84d
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: ChatRoom2
   - hash:
       serializedVersion: 2
       Hash: 760787567e1b60d64a3e421ab83ee14a
@@ -733,12 +739,6 @@ ScriptsOnlyBuild:
     assemblyName: Unity.2D.IK.Runtime.dll
     namespaceName: UnityEngine.U2D.IK
     className: FabrikSolver2D
-  - hash:
-      serializedVersion: 2
-      Hash: 97737c321945b89569ddcb359bdf0024
-    assemblyName: Assembly-CSharp.dll
-    namespaceName: 
-    className: ChatRoom2
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity

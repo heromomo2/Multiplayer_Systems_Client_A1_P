@@ -9,7 +9,7 @@ public class ChatRoom2 : MonoBehaviour
 
     private string m_plyersInChat;
 
-    GameObject GRC_postButton, GRC_usermessageInput, networkObject, GRCM_Content, SystemManager, GRC_SendText,GRC_Player_Toggle,
+    GameObject GRC_postButton, GRC_usermessageInput, networkObject, GRCM_Content, SystemManager, GRC_SendText,GRC_Player_Toggle, GRC_DropDownMenu,
         GRC_Observer_Toggle, GRC_Everyone_Toggle;
     public GameObject prefabTextObject = null;
 
@@ -44,6 +44,8 @@ public class ChatRoom2 : MonoBehaviour
                 GRC_Player_Toggle = go;
             else if (go.name == "GameRoomChat_Global_Toggle")
                 GRC_Everyone_Toggle = go;
+            else if (go.name == "GameRoomChat_Dropdown")
+                GRC_DropDownMenu = go;
         }
         GRC_postButton.GetComponent<Button>().onClick.AddListener(GRC_PostButtonOnPressed);
 
@@ -58,29 +60,50 @@ public class ChatRoom2 : MonoBehaviour
         if (m_MessageReceiverFromServer != null)
         {
             m_MessageReceiverFromServer.OnMessageReceivedFromSever += MessageToChat;
-
         }
+        GRC_DropDownMenu.GetComponent<Dropdown>().onValueChanged.AddListener(GRC_DropDownPrefixMsg);
     }
 
 
 
     public void GlobleToggleChanged(bool newValue)
     {
-        GRC_Player_Toggle.GetComponent<Toggle>().SetIsOnWithoutNotify(!newValue);
-        GRC_Observer_Toggle.GetComponent<Toggle>().SetIsOnWithoutNotify(!newValue);
+       
+        GRC_Player_Toggle.GetComponent<Toggle>().isOn = false;
+        GRC_Observer_Toggle.GetComponent<Toggle>().isOn = false;
         GRC_SendText.GetComponent<Text>().text = "Sending Message To: Globle";
+
+        if(GRC_Everyone_Toggle.GetComponent<Toggle>().isOn == false && GRC_Observer_Toggle.GetComponent<Toggle>().isOn == false 
+            && GRC_Player_Toggle.GetComponent<Toggle>().isOn == false)
+        {
+            GRC_SendText.GetComponent<Text>().text = "Sending Message To: NoOne";
+        }
     }
     public void PlayerToggleChanged(bool newValue)
     {
-        GRC_Everyone_Toggle.GetComponent<Toggle>().SetIsOnWithoutNotify(!newValue);
-        GRC_Observer_Toggle.GetComponent<Toggle>().SetIsOnWithoutNotify(!newValue);
+      
+        GRC_Everyone_Toggle.GetComponent<Toggle>().isOn = false;
+        GRC_Observer_Toggle.GetComponent<Toggle>().isOn = false;
         GRC_SendText.GetComponent<Text>().text = "Sending Message To: Players";
+
+        if (GRC_Everyone_Toggle.GetComponent<Toggle>().isOn == false && GRC_Observer_Toggle.GetComponent<Toggle>().isOn == false
+            && GRC_Player_Toggle.GetComponent<Toggle>().isOn == false)
+        {
+            GRC_SendText.GetComponent<Text>().text = "Sending Message To: NoOne";
+        }
     }
     public void ObserverToggleChanged(bool newValue)
     {
-        GRC_Player_Toggle.GetComponent<Toggle>().SetIsOnWithoutNotify(!newValue);
-        GRC_Everyone_Toggle.GetComponent<Toggle>().SetIsOnWithoutNotify(!newValue);
+       
+        GRC_Player_Toggle.GetComponent<Toggle>().isOn = false;
+        GRC_Everyone_Toggle.GetComponent<Toggle>().isOn = false;
         GRC_SendText.GetComponent<Text>().text = "Sending Message To: Observers";
+
+        if (GRC_Everyone_Toggle.GetComponent<Toggle>().isOn == false && GRC_Observer_Toggle.GetComponent<Toggle>().isOn == false
+            && GRC_Player_Toggle.GetComponent<Toggle>().isOn == false)
+        {
+            GRC_SendText.GetComponent<Text>().text = "Sending Message To: NoOne";
+        }
     }
 
 
@@ -103,17 +126,20 @@ public class ChatRoom2 : MonoBehaviour
        
         if (GRC_Player_Toggle.GetComponent<Toggle>().isOn)
         {
-           
+            string ourMsg = ClientToServerSignifiers.SendOnlyPlayerGameRoomChatMSG + ", OnlyPlayers <" + n + "> : " + ourChatText;
+            networkObject.GetComponent<NetworkedClient>().SendMessageToHost(ourMsg);
         }
         
         else if (GRC_Observer_Toggle.GetComponent<Toggle>().isOn)
         {
-         
+            string ourMsg = ClientToServerSignifiers.SendOnlyObserverGameRoomChatMSG + ", OnlyObservers <" + n + "> : " + ourChatText;
+            networkObject.GetComponent<NetworkedClient>().SendMessageToHost(ourMsg);
+
         }
 
         else if (GRC_Everyone_Toggle.GetComponent<Toggle>().isOn)
         {
-            string ourMsg = ClientToServerSignifiers.SendGameRoomChatMSG + ",Globe " + n + ": " + ourChatText;
+            string ourMsg = ClientToServerSignifiers.SendGameRoomChatMSG + ", Globe < " + n + " >  : " + ourChatText;
             networkObject.GetComponent<NetworkedClient>().SendMessageToHost(ourMsg);
         }
 
@@ -133,8 +159,10 @@ public class ChatRoom2 : MonoBehaviour
         }
         if (signifier == ServerToClientSignifiers.LoginComplete)
         {
+            // restart
             ClearAllGameRoomChatlMessage();
             GRC_usermessageInput.GetComponent<InputField>().text = "";
+            GlobleToggleChanged(true);
         }
     }
 
@@ -160,7 +188,7 @@ public class ChatRoom2 : MonoBehaviour
         
     }
 
-     void ClearSomeGameRoomChatlMessage()
+    void ClearSomeGameRoomChatlMessage()
     {
         if (ListPrefabTextObject != null && ListPrefabTextObject.Count != 0)
         {
@@ -180,7 +208,7 @@ public class ChatRoom2 : MonoBehaviour
     }
 
 
-    public void DropDownPrefixMsg(int val)
+    public void GRC_DropDownPrefixMsg(int val)
     {
         switch (val)
         {

@@ -86,6 +86,7 @@ public class TicTacToe : MonoBehaviour
                 Debug.Log("you set as  x or o");
                 m_ListOFBoard.Clear(); m_IsBeingObserved = false;
                 setCurrentPlayerSymbol(int.Parse(s));
+                SystemMangerObject.GetComponent<RecordMaker>().GetThePlayerNameRecord(SystemMangerObject.GetComponent<SystemManager>().GetUserName);
                 break;
             case ServerToClientSignifiers.OpponentPlayed:
                 OpponentpressAButton(int.Parse(s)); m_IsWaitTurn = true;

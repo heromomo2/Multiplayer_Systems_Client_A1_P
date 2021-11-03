@@ -187,6 +187,10 @@ public class ClientToServerSignifiers
 
     public const int SendGameRoomChatMSG = 14;
 
+    public const int SendOnlyPlayerGameRoomChatMSG = 15;
+
+    public const int SendOnlyObserverGameRoomChatMSG = 16;
+
 }
 
 public class ServerToClientSignifiers

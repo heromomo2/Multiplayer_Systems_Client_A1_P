@@ -6,6 +6,9 @@ using System.IO;
 
 public class RecordMaker : MonoBehaviour
 {
+
+    string PlayerName = "Player", OpponentName ="Opponent";
+     
     bool isSelectedRecord = false;
     int maxmove,SelectedMove = 0;
     public List<TicTacToeBoard> MoveBoard = new List<TicTacToeBoard>();
@@ -29,7 +32,7 @@ public class RecordMaker : MonoBehaviour
     static int m_lastIndexUsed;
 
      List<string> ReplayofNames;
-    SaveManagementFile TempSMF = new SaveManagementFile(1, "jj");
+    SaveManagementFile TempSMF = new SaveManagementFile(1, "jj", "testplayer");
      LinkedList<SaveManagementFile> m_SaveManagementFiles;
 
     const string IndexFilePath = "Indices.txt";
@@ -124,7 +127,6 @@ public class RecordMaker : MonoBehaviour
             }
         }
 
-
         StreamReader sr = new StreamReader(Application.dataPath + Path.DirectorySeparatorChar + intdexToload + ".txt");
         string line;
         MoveBoard.Clear();
@@ -181,17 +183,17 @@ public class RecordMaker : MonoBehaviour
         }
         else if (Whoturn == 43)
         {
-            P.text = "Player: Waiting";
+            P.text = PlayerName+": Waiting";
             P.color = Color.black;
             O.color = Color.blue;
-            O.text = "Opponent: Turn";
+            O.text = OpponentName+": Turn";
         }
         else if ( Whoturn == 42)
         {
-            P.text = "Player: Turn";
+            P.text = PlayerName +": Turn";
             P.color = Color.blue;
             O.color = Color.black;
-            O.text = "Opponent: Waiting";
+            O.text =  OpponentName+": Waiting";
         }
     }
 
@@ -287,12 +289,12 @@ public class RecordMaker : MonoBehaviour
 
         foreach (SaveManagementFile SMF in m_SaveManagementFiles)
         {
-            sw.WriteLine(SaveManagementFileSignifier + "," + SMF.index + "," + SMF.name);
+            sw.WriteLine(SaveManagementFileSignifier + "," + SMF.index + "," + SMF.name+ "," + SMF.PlayerName = PlayerName);
         }
         sw.Close();
     }
 
-     public void ReadSaveManagementFile()
+    public void ReadSaveManagementFile()
     {
         m_SaveManagementFiles = new LinkedList<SaveManagementFile>();
         if (File.Exists(Application.dataPath + Path.DirectorySeparatorChar + IndexFilePath))
@@ -327,7 +329,7 @@ public class RecordMaker : MonoBehaviour
 
     }
 
-     public void SaveReplayRecord(string fileName)
+    public void SaveReplayRecord(string fileName)
     {
         Debug.Log("Save ReplayRecord Funtion  has been called");
         StreamWriter sw = new StreamWriter(fileName);
@@ -345,11 +347,13 @@ public class RecordMaker : MonoBehaviour
     {
         public string name;
         public int index;
+        public string PlayerName;
 
-        public SaveManagementFile(int Index, string Name)
+        public SaveManagementFile(int Index, string Name, string playerName)
         {
             name = Name;
             index = Index;
+            PlayerName = playerName;
         }
         public string GetName
         {
@@ -364,30 +368,15 @@ public class RecordMaker : MonoBehaviour
    
 
 
-    public void Give_TicTacToeBoard ( int topleft, int topmid, int topright, int midleft, int midmid, int midright, int botleft, int botmid, int botright, int wsm)
+   public void Give_TicTacToeBoard ( int topleft, int topmid, int topright, int midleft, int midmid, int midright, int botleft, int botmid, int botright, int wsm)
    {
         m_allBoards.AddLast(new TicTacToeBoard (topleft, topmid,  topright, midleft,  midmid, midright,  botleft,  botmid,  botright, wsm));
    }
 
+    public void GetThePlayerNameRecord( string py)
+    {
+        PlayerName = py;
+    }
 
-    //public class TicTacToeBoard
-    //{
-    //    public int topleft, topmid, topright, midleft, midmid, midright, botleft, botmid, botright;
-
-
-    //    public TicTacToeBoard(int tl, int tm, int tr, int ml, int mm, int mr, int bl, int bm, int br)
-    //    {
-    //        topleft = tl;
-    //        topmid = tm;
-    //        topright = tr;
-    //        midleft = ml;
-    //        midmid = mm;
-    //        midright = mr;
-    //        botleft = bl;
-    //        botmid = bm;
-    //        botright = br;
-    //    }
-
-    //}
 
 }
