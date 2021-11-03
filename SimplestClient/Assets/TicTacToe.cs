@@ -222,13 +222,13 @@ public class TicTacToe : MonoBehaviour
         switch (i) 
         {
             case 0:
-                m_TicTacToe_Text.GetComponent<Text>().text = "It's your turn now";
+                m_TicTacToe_Text.GetComponent<Text>().text = "";
                 break;  
             case 1:
                 m_TicTacToe_Text.GetComponent<Text>().text = "It's your turn now";
                 break;
             case 2:
-                m_TicTacToe_Text.GetComponent<Text>().text = "With your turn";
+                m_TicTacToe_Text.GetComponent<Text>().text = "Wait your turn";
                 break;
    
         }

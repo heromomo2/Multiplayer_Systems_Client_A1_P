@@ -59,12 +59,12 @@ public class Observer : MonoBehaviour
         switch (sigifier)
         {
             case ServerToClientSignifiers.LoginComplete:
-                SetObservrSearch();
+               // SetObservrSearch();
                 break;
             case ServerToClientSignifiers.SearchGameRoomsByUserNameComplete:
                 m_IsGameRoomFound = true;  m_UserNameOther = s;
                 DisplayPlayerSearchResult(m_IsGameRoomFound, m_Observer_Search_Text);
-                SetObservrWatcher();
+               /// SetObservrWatcher();
                 break;
             case ServerToClientSignifiers.SearchGameRoomsByUserNameFailed:
                 m_IsGameRoomFound = false;
@@ -77,20 +77,16 @@ public class Observer : MonoBehaviour
     }
 
 
-    void SetObservrSearch()
+    public void SetObservrSearch()
     {
-        Observer_Watcher.SetActive(false);
-        Observer_Search.SetActive(true);
         m_Observer_Search_InputField.text = "";
         m_Observer_Search_Button.interactable = true;
         m_Observer_Search_Text.text = "Please type a User name to view a GameRoom.";
         m_IsGameRoomFound = false;
     }
 
-    void SetObservrWatcher()
+    public void SetObservrWatcher()
     {
-        Observer_Watcher.SetActive(true);
-        Observer_Search.SetActive(false);
         DisplayMovePart1(new TicTacToeBoard(0, 0, 0, 0, 0, 0,0, 0, 0, 0));
         DisplayMovePart3( 41, m_Observer_Watcher_Player_text, m_Observer_Watcher_Opponent_text);
     }

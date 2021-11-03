@@ -16,7 +16,7 @@ public class SystemManager : MonoBehaviour
 
 
     private NetworkedClient m_MessageReceiverFromServer = null;
-    GameObject Login, Chat, networkClient,Menu,Lobby, WaitingInQueue, Tic_Tac_Toe,GameOver,Replayer,Observer, GameRoomChat;
+    GameObject Login, Chat, networkClient,Menu,Lobby, WaitingInQueue, Tic_Tac_Toe,GameOver,Replayer,Observer, GameRoomChat, Observer_Search, Observer_watcher;
 
     // Start is called before the first frame update
     void Start()
@@ -46,6 +46,10 @@ public class SystemManager : MonoBehaviour
                 Observer = go;
             else if (go.name == "GameRoomChat_UI")
                 GameRoomChat = go;
+            else if (go.name == "Observer_Search_UI")
+                Observer_Search = go;
+            else if (go.name == "Observer_Watcher_UI")
+                Observer_watcher = go;
         }
 
 
@@ -162,6 +166,9 @@ public class SystemManager : MonoBehaviour
                 Login.GetComponentInChildren<LogInScript>().ResetLogic();
                 Tic_Tac_Toe.GetComponent<TicTacToe>().resetBoard();
                 break;
+            case ServerToClientSignifiers.SearchGameRoomsByUserNameComplete:
+                OpenObserverWatcer();
+                break;
         }
     
     }
@@ -185,11 +192,17 @@ public class SystemManager : MonoBehaviour
     {
         ChangeState(GameStates.LoginMenu);
     }
-    public void OpenObServer()
+    public void OpenObserverSearch()
     {
-        ChangeState(GameStates.Observer);
+        ChangeState(GameStates.Observer_Search);
+        Observer.GetComponent<Observer>().SetObservrSearch();
     }
 
+    private void OpenObserverWatcer()
+    {
+        ChangeState(GameStates.Observer_Watcher);
+        Observer.GetComponent<Observer>().SetObservrWatcher();
+    }
     public void OpenChatRoom()
     {
         // open gameroom Ui and send a msg to server
@@ -232,6 +245,8 @@ public class SystemManager : MonoBehaviour
                 Replayer.SetActive(false);
                 Observer.SetActive(false);
                 GameRoomChat.SetActive(false);
+                Observer_Search.SetActive(false);
+                Observer_watcher.SetActive(false);
                 break;
             case GameStates.MainMenu:
                 Login.SetActive(false);
@@ -243,6 +258,8 @@ public class SystemManager : MonoBehaviour
                 GameOver.SetActive(false);
                 Observer.SetActive(false);
                 GameRoomChat.SetActive(false);
+                Observer_Search.SetActive(false);
+                Observer_watcher.SetActive(false);
                 break;
             case GameStates.WaitingInQueueforOtherPlayer:
                 Login.SetActive(false);
@@ -255,6 +272,8 @@ public class SystemManager : MonoBehaviour
                 Replayer.SetActive(false);
                 Observer.SetActive(false);
                 GameRoomChat.SetActive(false);
+                Observer_Search.SetActive(false);
+                Observer_watcher.SetActive(false);
                 break;
             case GameStates.TicTacToe:
                 Login.SetActive(false);
@@ -267,6 +286,8 @@ public class SystemManager : MonoBehaviour
                 Replayer.SetActive(false);
                 Observer.SetActive(false);
                 GameRoomChat.SetActive(true);
+                Observer_Search.SetActive(false);
+                Observer_watcher.SetActive(false);
                 break;
             case GameStates.GameOver:
                 Login.SetActive(false);
@@ -279,6 +300,8 @@ public class SystemManager : MonoBehaviour
                 Replayer.SetActive(false);
                 Observer.SetActive(false);
                 GameRoomChat.SetActive(false);
+                Observer_Search.SetActive(false);
+                Observer_watcher.SetActive(false);
                 break;
             case GameStates.Replayer:
                 Login.SetActive(false);
@@ -291,8 +314,10 @@ public class SystemManager : MonoBehaviour
                 Replayer.SetActive(true);
                 Observer.SetActive(false);
                 GameRoomChat.SetActive(false);
+                Observer_Search.SetActive(false);
+                Observer_watcher.SetActive(false);
                 break;
-            case GameStates.Observer:
+            case GameStates.Observer_Search:
                 Login.SetActive(false);
                 Chat.SetActive(false);
                 Menu.SetActive(false);
@@ -303,6 +328,23 @@ public class SystemManager : MonoBehaviour
                 Replayer.SetActive(false);
                 Observer.SetActive(true);
                 GameRoomChat.SetActive(false);
+                Observer_Search.SetActive(true);
+                Observer_watcher.SetActive(false);
+                break;
+
+            case GameStates.Observer_Watcher:
+                Login.SetActive(false);
+                Chat.SetActive(false);
+                Menu.SetActive(false);
+                WaitingInQueue.SetActive(false);
+                Lobby.SetActive(false);
+                Tic_Tac_Toe.SetActive(false);
+                GameOver.SetActive(false);
+                Replayer.SetActive(false);
+                Observer.SetActive(true);
+                GameRoomChat.SetActive(true);
+                Observer_Search.SetActive(false);
+                Observer_watcher.SetActive(true);
                 break;
 
             case GameStates.chatroom:
@@ -316,6 +358,8 @@ public class SystemManager : MonoBehaviour
                 Replayer.SetActive(false);
                 Observer.SetActive(false);
                 GameRoomChat.SetActive(false);
+                Observer_Search.SetActive(false);
+                Observer_watcher.SetActive(false);
                 break;
         }
     }
@@ -337,7 +381,9 @@ public class SystemManager : MonoBehaviour
 
         public const int Replayer = 7;
 
-        public const int Observer = 8;
+        public const int Observer_Search = 8;
+
+        public const int Observer_Watcher = 9;
 
     }
         // Update is called once per frame
