@@ -242,6 +242,8 @@ public class ServerToClientSignifiers
     public const int StopObservingComplete = 24;
 
     public const int ReceiveGameRoomChatMSG = 25;
+
+    public const int ReceiveOpponentName = 26;
 }
 
 

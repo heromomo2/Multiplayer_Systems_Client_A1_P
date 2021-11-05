@@ -82,11 +82,14 @@ public class TicTacToe : MonoBehaviour
     {
         switch (sigifier)
         {
+
+            case ServerToClientSignifiers.ReceiveOpponentName:
+                SystemMangerObject.GetComponent<RecordMaker>().GetThePlayerNameRecord(SystemMangerObject.GetComponent<SystemManager>().GetUserName,s);
+                break;
             case ServerToClientSignifiers.GameStart:
                 Debug.Log("you set as  x or o");
                 m_ListOFBoard.Clear(); m_IsBeingObserved = false;
                 setCurrentPlayerSymbol(int.Parse(s));
-                SystemMangerObject.GetComponent<RecordMaker>().GetThePlayerNameRecord(SystemMangerObject.GetComponent<SystemManager>().GetUserName);
                 break;
             case ServerToClientSignifiers.OpponentPlayed:
                 OpponentpressAButton(int.Parse(s)); m_IsWaitTurn = true;

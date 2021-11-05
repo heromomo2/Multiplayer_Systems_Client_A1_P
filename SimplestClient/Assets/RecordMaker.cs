@@ -7,7 +7,7 @@ using System.IO;
 public class RecordMaker : MonoBehaviour
 {
 
-    string PlayerName = "Player", OpponentName ="Opponent";
+    string m_OurOpponentPlayerName = "Opponent", m_OurPlayerName = "Player";
      
     bool isSelectedRecord = false;
     int maxmove,SelectedMove = 0;
@@ -27,12 +27,13 @@ public class RecordMaker : MonoBehaviour
 
 
     const int BoardSaveDataSignifier = 888;
+    const int   PlayerNameSignifier = 67;
     const int SaveManagementFileLastUsedIndexIndexSignifier = 1;
     const int SaveManagementFileSignifier = 2;
     static int m_lastIndexUsed;
 
      List<string> ReplayofNames;
-    SaveManagementFile TempSMF = new SaveManagementFile(1, "jj", "testplayer");
+    SaveManagementFile TempSMF = new SaveManagementFile(1, "jj");
      LinkedList<SaveManagementFile> m_SaveManagementFiles;
 
     const string IndexFilePath = "Indices.txt";
@@ -139,9 +140,12 @@ public class RecordMaker : MonoBehaviour
             int signifier = int.Parse(csv[0]);
             if (signifier == BoardSaveDataSignifier)
             {
-                MoveBoard.Add(new TicTacToeBoard (  int.Parse(csv[1]), int.Parse(csv[2]), int.Parse(csv[3]), int.Parse(csv[4]), int.Parse(csv[5]), int.Parse(csv[6]), int.Parse(csv[7]), int.Parse(csv[8]), int.Parse(csv[9]), int.Parse(csv[10]) ));
+                MoveBoard.Add(new TicTacToeBoard(int.Parse(csv[1]), int.Parse(csv[2]), int.Parse(csv[3]), int.Parse(csv[4]), int.Parse(csv[5]), int.Parse(csv[6]), int.Parse(csv[7]), int.Parse(csv[8]), int.Parse(csv[9]), int.Parse(csv[10])));
             }
- 
+            else if (signifier == PlayerNameSignifier) 
+            {
+                m_OurPlayerName = csv[1]; m_OurOpponentPlayerName = csv[2];
+            }
         };
         maxmove = MoveBoard.Count;
         isSelectedRecord = true;
@@ -183,17 +187,17 @@ public class RecordMaker : MonoBehaviour
         }
         else if (Whoturn == 43)
         {
-            P.text = PlayerName+": Waiting";
+            P.text = m_OurPlayerName + ": Waiting";
             P.color = Color.black;
             O.color = Color.blue;
-            O.text = OpponentName+": Turn";
+            O.text = m_OurOpponentPlayerName + ": Turn";
         }
         else if ( Whoturn == 42)
         {
-            P.text = PlayerName +": Turn";
+            P.text = m_OurPlayerName + ": Turn";
             P.color = Color.blue;
             O.color = Color.black;
-            O.text =  OpponentName+": Waiting";
+            O.text = m_OurOpponentPlayerName + ": Waiting";
         }
     }
 
@@ -265,6 +269,8 @@ public class RecordMaker : MonoBehaviour
         m_InformationText.color = Color.black;
         m_allBoards.Clear();
         Debug.Log(" ResetReplayMaker");
+        m_OurPlayerName = "Player";
+        m_OurOpponentPlayerName = "Opponent";
     }
 
 
@@ -289,7 +295,7 @@ public class RecordMaker : MonoBehaviour
 
         foreach (SaveManagementFile SMF in m_SaveManagementFiles)
         {
-            sw.WriteLine(SaveManagementFileSignifier + "," + SMF.index + "," + SMF.name+ "," + SMF.PlayerName = PlayerName);
+            sw.WriteLine(SaveManagementFileSignifier + "," + SMF.index + "," + SMF.name);
         }
         sw.Close();
     }
@@ -315,6 +321,7 @@ public class RecordMaker : MonoBehaviour
                 else if (signifier == SaveManagementFileSignifier)
                 {
                     m_SaveManagementFiles.AddLast(new SaveManagementFile(int.Parse(csv[1]), csv[2]));
+                    
                 }
             }
 
@@ -334,6 +341,7 @@ public class RecordMaker : MonoBehaviour
         Debug.Log("Save ReplayRecord Funtion  has been called");
         StreamWriter sw = new StreamWriter(fileName);
 
+        sw.WriteLine(PlayerNameSignifier+ "," + m_OurPlayerName +"," + m_OurOpponentPlayerName );
         foreach (TicTacToeBoard b in m_allBoards)
         {
             sw.WriteLine(BoardSaveDataSignifier + "," + b.topleft.ToString() + "," + b.topmid.ToString() + "," + b.topright.ToString() + "," + b.midleft.ToString() + "," + b.midmid.ToString() + "," + b.midright.ToString() + "," + b.botleft.ToString() + "," + b.botmid.ToString()+ ","+ b.botright.ToString() +","+ b.WhosMove.ToString());
@@ -347,13 +355,12 @@ public class RecordMaker : MonoBehaviour
     {
         public string name;
         public int index;
-        public string PlayerName;
+        
 
-        public SaveManagementFile(int Index, string Name, string playerName)
+        public SaveManagementFile(int Index, string Name)
         {
             name = Name;
             index = Index;
-            PlayerName = playerName;
         }
         public string GetName
         {
@@ -373,9 +380,10 @@ public class RecordMaker : MonoBehaviour
         m_allBoards.AddLast(new TicTacToeBoard (topleft, topmid,  topright, midleft,  midmid, midright,  botleft,  botmid,  botright, wsm));
    }
 
-    public void GetThePlayerNameRecord( string py)
+    public void GetThePlayerNameRecord( string py, string op)
     {
-        PlayerName = py;
+        m_OurPlayerName = py;
+        m_OurOpponentPlayerName = op;
     }
 
 
