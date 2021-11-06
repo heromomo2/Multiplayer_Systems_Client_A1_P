@@ -16,7 +16,7 @@ public class SystemManager : MonoBehaviour
 
 
     private NetworkedClient m_MessageReceiverFromServer = null;
-    GameObject Login, Chat, networkClient,Menu,Lobby, WaitingInQueue, Tic_Tac_Toe,GameOver,Replayer,Observer, GameRoomChat, Observer_Search, Observer_watcher;
+    GameObject Login, Chat, networkClient,Menu,RecordRequest, WaitingInQueue, Tic_Tac_Toe,GameOver,Replayer,Observer, GameRoomChat, Observer_Search, Observer_watcher;
 
     // Start is called before the first frame update
     void Start()
@@ -32,8 +32,8 @@ public class SystemManager : MonoBehaviour
                 networkClient = go;
             else if (go.name == "Menu_UI ")
                 Menu = go;
-            else if (go.name == "Lobby_UI")
-                Lobby = go;
+            else if (go.name == "RecordRequest_UI")
+                RecordRequest = go;
             else if (go.name == "Game_UI")
                 Tic_Tac_Toe = go;
             else if (go.name == "WaitingInQueue_UI")
@@ -57,15 +57,11 @@ public class SystemManager : MonoBehaviour
 
         if (m_MessageReceiverFromServer != null)
         {
-            //m_MessageReceiverFromServer.OnMessageReceivedFromSever += OpenMenu;
-            //m_MessageReceiverFromServer.OnMessageReceivedFromSever += reOpenLogin;
+          
             m_MessageReceiverFromServer.OnMessageReceivedFromSever += SystemManagerReceived;
         }
 
-        //Login.SetActive(true);
-        //Chat.SetActive(false);
-        //Menu.SetActive(false);
-        //Lobby.SetActive(false);
+
         ChangeState(GameStates.LoginMenu);
     }
 
@@ -74,66 +70,14 @@ public class SystemManager : MonoBehaviour
     { 
         if (m_MessageReceiverFromServer != null)
         {
-            //m_MessageReceiverFromServer.OnMessageReceivedFromSever -= OpenMenu;
-            //m_MessageReceiverFromServer.OnMessageReceivedFromSever -= reOpenLogin;
+            
             m_MessageReceiverFromServer.OnMessageReceivedFromSever -= SystemManagerReceived;
         }
     
     }
 
 
-    //public void OpenChatRoom() 
-    //{
-    //    // open gameroom Ui and send a msg to server
-    //    Login.SetActive(false);
-    //    Chat.SetActive(true);
-    //    Menu.SetActive(false);
-    //    Lobby.SetActive(false);
-
-    //    string OurEnterTheChatMsg = ClientToServerSignifiers.EnterTheChatRoom + "," + GetUserName;
-    //    networkClient.GetComponent<NetworkedClient>().SendMessageToHost(OurEnterTheChatMsg);
-    //}
-    //public void OpenLobbyRoom()
-    //{
-    //    // open gameroom Ui and send a msg to server
-    //    Login.SetActive(false);
-    //    Chat.SetActive(false);
-    //    Menu.SetActive(false);
-    //    Lobby.SetActive(true);
-
-    //    //string OurEnterTheChatMsg = ClientToServerSignifiers.EnterTheChatRoom + "," + GetUserName;
-    //    //networkClient.GetComponent<NetworkedClient>().SendMessageToHost(OurEnterTheChatMsg);
-    //}
-    //public void Logout()
-    //{
-    //    string logoutMsg = ClientToServerSignifiers.Logout+ ",";
-       
-    //    networkClient.GetComponent<NetworkedClient>().SendMessageToHost(logoutMsg);
-    //}
-    //public void reOpenLogin(int signifier, string s)
-    //{
-    //    switch (signifier)
-    //    {
-    //        case ServerToClientSignifiers.LogOutComplete:
-    //            Login.SetActive(true);
-    //            Chat.SetActive(false);
-    //            Menu.SetActive(false);
-    //            Lobby.SetActive(false);
-    //            break;
-    //    }
-    //}
-    
-    //public void OpenMenu(int signifier, string s) 
-    //{
-    //    switch ( signifier)
-    //    {
-    //        case ServerToClientSignifiers.LoginComplete:
-    //            Login.SetActive(false);
-    //            Chat.SetActive(false);
-    //            Menu.SetActive(true);
-    //            break;
-    //    }
-    //}
+ 
     
     void SystemManagerReceived (int signifier, string s, TicTacToeBoard t) 
     {
@@ -225,8 +169,6 @@ public class SystemManager : MonoBehaviour
     {
 
          ChangeState(GameStates.WaitingInQueueforOtherPlayer);
-        // Debug.Log("You should be pressing tictactoe button right now");
-        // string OurEnterTheChatMsg = ClientToServerSignifiers.EnterTheChatRoom + "," + GetUserName;
         networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.JoinQueueForGameRoom + ","+ userName);
     }
 
@@ -238,7 +180,7 @@ public class SystemManager : MonoBehaviour
                 Login.SetActive(true);
                 Chat.SetActive(false);
                 Menu.SetActive(false);
-                Lobby.SetActive(false);
+                RecordRequest.SetActive(false);
                 WaitingInQueue.SetActive(false);
                 Tic_Tac_Toe.SetActive(false);
                 GameOver.SetActive(false);
@@ -253,7 +195,7 @@ public class SystemManager : MonoBehaviour
                 Chat.SetActive(false);
                 Menu.SetActive(true);
                 WaitingInQueue.SetActive(false);
-                Lobby.SetActive(false);
+                RecordRequest.SetActive(false);
                 Tic_Tac_Toe.SetActive(false);
                 GameOver.SetActive(false);
                 Observer.SetActive(false);
@@ -266,7 +208,7 @@ public class SystemManager : MonoBehaviour
                 Chat.SetActive(false);
                 Menu.SetActive(false);
                 WaitingInQueue.SetActive(true);
-                Lobby.SetActive(false);
+                RecordRequest.SetActive(false);
                 Tic_Tac_Toe.SetActive(false);
                 GameOver.SetActive(false);
                 Replayer.SetActive(false);
@@ -280,7 +222,7 @@ public class SystemManager : MonoBehaviour
                 Chat.SetActive(false);
                 Menu.SetActive(false);
                 WaitingInQueue.SetActive(false);
-                Lobby.SetActive(false);
+                RecordRequest.SetActive(false);
                 Tic_Tac_Toe.SetActive(true);
                 GameOver.SetActive(false);
                 Replayer.SetActive(false);
@@ -294,7 +236,7 @@ public class SystemManager : MonoBehaviour
                 Chat.SetActive(false);
                 Menu.SetActive(false);
                 WaitingInQueue.SetActive(false);
-                Lobby.SetActive(true);
+                RecordRequest.SetActive(true);
                 Tic_Tac_Toe.SetActive(true);
                 GameOver.SetActive(true);
                 Replayer.SetActive(false);
@@ -308,7 +250,7 @@ public class SystemManager : MonoBehaviour
                 Chat.SetActive(false);
                 Menu.SetActive(false);
                 WaitingInQueue.SetActive(false);
-                Lobby.SetActive(false);
+                RecordRequest.SetActive(false);
                 Tic_Tac_Toe.SetActive(false);
                 GameOver.SetActive(false);
                 Replayer.SetActive(true);
@@ -322,7 +264,7 @@ public class SystemManager : MonoBehaviour
                 Chat.SetActive(false);
                 Menu.SetActive(false);
                 WaitingInQueue.SetActive(false);
-                Lobby.SetActive(false);
+                RecordRequest.SetActive(false);
                 Tic_Tac_Toe.SetActive(false);
                 GameOver.SetActive(false);
                 Replayer.SetActive(false);
@@ -337,7 +279,7 @@ public class SystemManager : MonoBehaviour
                 Chat.SetActive(false);
                 Menu.SetActive(false);
                 WaitingInQueue.SetActive(false);
-                Lobby.SetActive(false);
+                RecordRequest.SetActive(false);
                 Tic_Tac_Toe.SetActive(false);
                 GameOver.SetActive(false);
                 Replayer.SetActive(false);
@@ -352,7 +294,7 @@ public class SystemManager : MonoBehaviour
                 Chat.SetActive(true);
                 Menu.SetActive(false);
                 WaitingInQueue.SetActive(false);
-                Lobby.SetActive(false);
+                RecordRequest.SetActive(false);
                 Tic_Tac_Toe.SetActive(false);
                 GameOver.SetActive(false);
                 Replayer.SetActive(false);

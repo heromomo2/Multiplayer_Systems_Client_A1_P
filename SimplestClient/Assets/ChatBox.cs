@@ -11,8 +11,8 @@ public class ChatBox : MonoBehaviour
 
     GameObject postButton, usermessageInput, CU_Content, networkObject,CM_Content,SystemManager, SendText;
     public GameObject prefabTextObject = null,prefebButtonObject;
-    public static List<GameObject> ListPrefabButtons = new List<GameObject>();
-    public static List<GameObject> ListPrefabTextObject = new List<GameObject>();
+    public  List<GameObject> ListPrefabButtons = new List<GameObject>();
+    public  List<GameObject> ListPrefabTextObject = new List<GameObject>();
     bool IsPrivateMsg = false;
     private string PmUsername;
     void Start()
@@ -97,6 +97,7 @@ public class ChatBox : MonoBehaviour
                 }
 
                 Debug.Log("ListPrefabTextObject isn't empty!!");
+                ListPrefabTextObject.Clear();
             }
         }
         if (signifier == ServerToClientSignifiers.ReceivePrivateChatMsg)
@@ -149,7 +150,9 @@ public class ChatBox : MonoBehaviour
                 }
 
                 Debug.Log("ListPrefabButtons isn't empty!!");
+                ListPrefabButtons.Clear();
             }
+            
         }
         Debug.Log("ClearListOfPlayerToChat--->Herrre!!");
     }
@@ -186,12 +189,24 @@ public class ChatBox : MonoBehaviour
                 break;
         }
     }
-    
+    void ClearSomeGameRoomChatlMessage()
+    {
+        if (ListPrefabTextObject != null && ListPrefabTextObject.Count != 0)
+        {
+
+            for (int i = 0; ListPrefabTextObject.Count > 50; i++)
+            {
+                Destroy(ListPrefabTextObject[i]);
+                ListPrefabTextObject.RemoveAt(i);
+            }
+            // Debug.Log("ListPrefabTextObject isn't empty!!");
+        }
+    }
 
     // Update is called once per frame
     void Update()
     {
-        
+        ClearSomeGameRoomChatlMessage();
     }
 
 }

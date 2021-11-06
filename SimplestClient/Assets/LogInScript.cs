@@ -55,24 +55,27 @@ public class LogInScript : MonoBehaviour
 
     public void SubmitButtonOnPressed() 
     {
-        Debug.Log("SubmitButton has been press");
-        string p = passwordInput.GetComponent<InputField>().text;
-        string n = userNameInput.GetComponent<InputField>().text;
-
-        string msg;
-        if (createToggle.GetComponent<Toggle>().isOn)
+        if (passwordInput.GetComponent<InputField>().text != "" && passwordInput.GetComponent<InputField>().text != null 
+           && userNameInput.GetComponent<InputField>().text != "" && userNameInput.GetComponent<InputField>().text != null)
         {
-            msg = ClientToServerSignifiers.CreateAcount + "," + n + "," + p;
-        }
-        else
-        {
-            msg = ClientToServerSignifiers.Login + "," + n + "," + p;
-        }
-        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(msg);
-        Debug.Log("msg: -> " + msg);
+            Debug.Log("SubmitButton has been press");
+            string p = passwordInput.GetComponent<InputField>().text;
+            string n = userNameInput.GetComponent<InputField>().text;
 
-        //networkClient.GetComponent<NetworkedClient>().Msg();
+            string msg;
+            if (createToggle.GetComponent<Toggle>().isOn)
+            {
+                msg = ClientToServerSignifiers.CreateAcount + "," + n + "," + p;
+            }
+            else
+            {
+                msg = ClientToServerSignifiers.Login + "," + n + "," + p;
+            }
+            networkClient.GetComponent<NetworkedClient>().SendMessageToHost(msg);
+            Debug.Log("msg: -> " + msg);
 
+            //networkClient.GetComponent<NetworkedClient>().Msg();
+        }
     }
     
     public void LoginToggleChanged (bool newValue)

@@ -17,6 +17,7 @@ ScriptsOnlyBuild:
     - UnityEditor.U2D.Animation.BoneGizmo
     Unity.2D.IK.Editor.dll:
     - UnityEditor.U2D.IK.IKEditorManager
+    - UnityEditor.U2D.IK.IKGizmos
     Unity.2D.IK.Runtime.dll:
     - UnityEditor.U2D.IK.IKEditorManagerHelper
     Unity.2D.Tilemap.Editor.dll:
@@ -350,7 +351,7 @@ ScriptsOnlyBuild:
     className: TextMeshProUGUI
   - hash:
       serializedVersion: 2
-      Hash: b9f680c2acaf68de7393d5fc060bbcd2
+      Hash: 8ae16bb63f1630081dadb917a43bb36f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ChatBox
@@ -741,4 +742,4 @@ ScriptsOnlyBuild:
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: C:/Users/Owner/Desktop/build 2/SimplestClient.exe
+  playerPath: C:/Users/Owner/Desktop/A3_Mohamed_Mohamud_Client/SimplestClient.exe
