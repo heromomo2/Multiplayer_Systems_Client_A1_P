@@ -244,6 +244,8 @@ public class ServerToClientSignifiers
     public const int ReceiveGameRoomChatMSG = 25;
 
     public const int ReceiveOpponentName = 26;
+
+    public const int SearchGameRoomsByUserNameSizeFailed = 27;
 }
 
 

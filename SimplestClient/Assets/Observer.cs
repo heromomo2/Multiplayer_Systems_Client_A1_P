@@ -11,7 +11,7 @@ public class Observer : MonoBehaviour
     public InputField m_Observer_Search_InputField;
     public Text m_Observer_Search_Text;
     public Button m_Observer_Search_Button;
-    bool m_IsGameRoomFound = false;
+   // bool m_IsGameRoomFound = false;
     string m_UserNameSearchFor = "";
    // string m_UserName = "<The Player>";
     /// <summary>
@@ -62,13 +62,18 @@ public class Observer : MonoBehaviour
                // SetObservrSearch();
                 break;
             case ServerToClientSignifiers.SearchGameRoomsByUserNameComplete:
-                m_IsGameRoomFound = true;  m_UserNameOther = s;
-                DisplayPlayerSearchResult(m_IsGameRoomFound, m_Observer_Search_Text);
+               // m_IsGameRoomFound = true; 
+                m_UserNameOther = s;
+                DisplayPlayerSearchResult(0, m_Observer_Search_Text);
                /// SetObservrWatcher();
                 break;
             case ServerToClientSignifiers.SearchGameRoomsByUserNameFailed:
-                m_IsGameRoomFound = false;
-                DisplayPlayerSearchResult(m_IsGameRoomFound, m_Observer_Search_Text);
+              //  m_IsGameRoomFound = false;
+                DisplayPlayerSearchResult( 1, m_Observer_Search_Text);
+                break;
+            case ServerToClientSignifiers.SearchGameRoomsByUserNameSizeFailed:
+              //  m_IsGameRoomFound = false;
+                DisplayPlayerSearchResult( 2, m_Observer_Search_Text);
                 break;
             case ServerToClientSignifiers.ObserverGetsMove:
                 DisplayMovePart1(t);
@@ -82,7 +87,7 @@ public class Observer : MonoBehaviour
         m_Observer_Search_InputField.text = "";
         m_Observer_Search_Button.interactable = true;
         m_Observer_Search_Text.text = "Please type a User name to view a GameRoom.";
-        m_IsGameRoomFound = false;
+       // m_IsGameRoomFound = false;
     }
 
     public void SetObservrWatcher()
@@ -106,16 +111,20 @@ public class Observer : MonoBehaviour
         Network.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.StopObserving + ",");
     }
 
-    void DisplayPlayerSearchResult (bool IsGameRoomFound, Text t) 
+    void DisplayPlayerSearchResult (int IsGameRoomFound, Text t) 
     {
-        if (IsGameRoomFound)
+        if (IsGameRoomFound == 0)
         {
             t.text = m_UserNameSearchFor + " was found in a game.";
             m_Observer_Search_Button.interactable = false;
         }
-        else 
+        else if (IsGameRoomFound == 1)
         {
             t.text = m_UserNameSearchFor + " wasn't in a gameRoom.";
+        }
+        else if (IsGameRoomFound == 2)
+        {
+            t.text = m_UserNameSearchFor + "'s gameRoom is at maximum capacity.";
         }
 
     }

@@ -742,4 +742,4 @@ ScriptsOnlyBuild:
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: C:/Users/Owner/Desktop/A3_Mohamed_Mohamud_Client/SimplestClient.exe
+  playerPath: C:/Users/Owner/Desktop/build 2/SimplestClient.exe
