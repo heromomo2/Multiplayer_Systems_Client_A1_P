@@ -191,6 +191,7 @@ public class ClientToServerSignifiers
 
     public const int SendOnlyObserverGameRoomChatMSG = 16;
 
+    public const int CreateARecored = 17;
 }
 
 public class ServerToClientSignifiers
