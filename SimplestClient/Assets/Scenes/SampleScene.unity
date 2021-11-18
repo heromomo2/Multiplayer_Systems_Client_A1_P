@@ -4255,7 +4255,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 437665279}
-  - component: {fileID: 437665278}
   m_Layer: 0
   m_Name: Replayer_UI
   m_TagString: Untagged
@@ -4263,29 +4262,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &437665278
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 437665277}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca156b73c01d957408d2085191a36f94, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ReplayofNames: []
-  GrideSpace: []
-  m_MessageReceiverFromServer: {fileID: 0}
-  m_Network: {fileID: 0}
-  m_SystemManager: {fileID: 0}
-  m_ForwardButton: {fileID: 0}
-  m_BackwardButton: {fileID: 0}
-  m_RePlayer_Text: {fileID: 0}
-  m_RePlayer_Opponent_Text: {fileID: 0}
-  m_RePlayer_Player_Text: {fileID: 0}
-  m_dropdown: {fileID: 0}
 --- !u!4 &437665279
 Transform:
   m_ObjectHideFlags: 0
@@ -6446,7 +6422,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 100, y: 0}
   m_SizeDelta: {x: -100, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &656933357
@@ -9151,7 +9127,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 840785471}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7345e09b76e058b4283bb19dcb69fc72, type: 3}
   m_Name: 
@@ -9171,6 +9147,9 @@ MonoBehaviour:
   - {fileID: 1022088134}
   - {fileID: 1089247957}
   m_MessageReceiverFromServer: {fileID: 0}
+  m_inputField: {fileID: 669665475}
+  m_CreateButton: {fileID: 1311503410}
+  m_InformationText: {fileID: 1084167204}
 --- !u!1001 &841981644
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19953,7 +19932,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1871023759}
-  - component: {fileID: 1871023760}
   m_Layer: 0
   m_Name: RecordRequest_UI
   m_TagString: Untagged
@@ -19976,24 +19954,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1871023760
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1871023758}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1eff03b75c393f84b97da5e9f86c5404, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_inputField: {fileID: 0}
-  m_CreateButton: {fileID: 0}
-  m_InformationText: {fileID: 0}
-  m_Network: {fileID: 0}
-  m_SystemManager: {fileID: 0}
-  m_MessageReceiverFromServer: {fileID: 0}
 --- !u!1 &1874383885
 GameObject:
   m_ObjectHideFlags: 0
