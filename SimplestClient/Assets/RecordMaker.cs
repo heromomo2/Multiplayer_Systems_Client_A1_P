@@ -83,10 +83,10 @@ public class RecordMaker : MonoBehaviour
         switch (signifier)
         {
             case ServerToClientSignifiers.ExitTacTacToeComplete:
-                ResetReplayMaker(1);
+                ResetReplayMaker();
                 break;
             case ServerToClientSignifiers.ReMatchOfTicTacToeComplete:
-                ResetReplayMaker(0); 
+                ResetReplayMaker(); 
                 break;
             case ServerToClientSignifiers.LoginComplete:
                 ResetReplayer();
@@ -252,38 +252,25 @@ public class RecordMaker : MonoBehaviour
             m_InformationText.color = Color.blue;
             m_CreateButton.interactable = false;
             m_inputField.interactable = false;
-            RequestToMakeARecordOnTheServer();///
             m_inputField.text = "";
         }
 
         WriteSaveManagementFile();
         ReadSaveManagementFile();
-        
-    }
-
-   private void RequestToMakeARecordOnTheServer() 
-    {
-        m_MessageReceiverFromServer.SendMessageToHost(ClientToServerSignifiers.CreateARecored+ ","+ m_OurPlayerName + "," + m_inputField.text.ToString());
+      
     }
 
 
-
-
-
-    public void ResetReplayMaker(int i)
+    public void ResetReplayMaker() 
     {
-
         m_CreateButton.interactable = true;
         m_inputField.interactable = true;
         m_InformationText.text = "Make a record Bottom or Just continue ";
         m_InformationText.color = Color.black;
         m_allBoards.Clear();
         Debug.Log(" ResetReplayMaker");
-        if ( i == 1) 
-        { 
         m_OurPlayerName = "Player";
-        m_OurOpponentPlayerName = "Opponent"; 
-        }
+        m_OurOpponentPlayerName = "Opponent";
     }
 
 
