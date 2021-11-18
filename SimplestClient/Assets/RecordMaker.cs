@@ -21,9 +21,9 @@ public class RecordMaker : MonoBehaviour
     LinkedList<TicTacToeBoard> m_allBoards = null;
 
 
-    public InputField m_inputField = null;
-    public Button m_CreateButton = null;
-    public Text m_InformationText = null;
+    //public InputField m_inputField = null;
+    //public Button m_CreateButton = null;
+    //public Text m_InformationText = null;
 
 
     const int BoardSaveDataSignifier = 888;
@@ -83,10 +83,10 @@ public class RecordMaker : MonoBehaviour
         switch (signifier)
         {
             case ServerToClientSignifiers.ExitTacTacToeComplete:
-                ResetReplayMaker(1);
+                ////ResetReplayMaker(1);
                 break;
             case ServerToClientSignifiers.ReMatchOfTicTacToeComplete:
-                ResetReplayMaker(0); 
+                //ResetReplayMaker(0); 
                 break;
             case ServerToClientSignifiers.LoginComplete:
                 ResetReplayer();
@@ -230,41 +230,41 @@ public class RecordMaker : MonoBehaviour
     }
 
 
-    public void CreateReplayReplay()
-    {
-        bool isUniqueName = true;
-        foreach (SaveManagementFile SMF in m_SaveManagementFiles)
-        {
-            if (SMF.name == m_inputField.text.ToString())
-            {
-                SaveReplayRecord(Application.dataPath + Path.DirectorySeparatorChar + SMF.index + ".txt");
-                isUniqueName = false;
-                m_InformationText.text = "Invaild record Name. ";
-                m_InformationText.color = Color.red;
-            }
-        }
-        if (isUniqueName)
-        {
-            m_lastIndexUsed++;
-            SaveReplayRecord(Application.dataPath + Path.DirectorySeparatorChar + m_lastIndexUsed + ".txt");
-            m_SaveManagementFiles.AddLast(new SaveManagementFile(m_lastIndexUsed, m_inputField.text.ToString()));
-            m_InformationText.text = "Success recoded saved. ";
-            m_InformationText.color = Color.blue;
-            m_CreateButton.interactable = false;
-            m_inputField.interactable = false;
-            RequestToMakeARecordOnTheServer();///
-            m_inputField.text = "";
-        }
+    //public void CreateReplayReplay()
+    //{
+    //    bool isUniqueName = true;
+    //    foreach (SaveManagementFile SMF in m_SaveManagementFiles)
+    //    {
+    //        if (SMF.name == m_inputField.text.ToString())
+    //        {
+    //            SaveReplayRecord(Application.dataPath + Path.DirectorySeparatorChar + SMF.index + ".txt");
+    //            isUniqueName = false;
+    //            m_InformationText.text = "Invaild record Name. ";
+    //            m_InformationText.color = Color.red;
+    //        }
+    //    }
+    //    if (isUniqueName)
+    //    {
+    //        m_lastIndexUsed++;
+    //        SaveReplayRecord(Application.dataPath + Path.DirectorySeparatorChar + m_lastIndexUsed + ".txt");
+    //        m_SaveManagementFiles.AddLast(new SaveManagementFile(m_lastIndexUsed, m_inputField.text.ToString()));
+    //        m_InformationText.text = "Success recoded saved. ";
+    //        m_InformationText.color = Color.blue;
+    //        m_CreateButton.interactable = false;
+    //        m_inputField.interactable = false;
+    //        RequestToMakeARecordOnTheServer();///
+    //        m_inputField.text = "";
+    //    }
 
-        WriteSaveManagementFile();
-        ReadSaveManagementFile();
+    //    WriteSaveManagementFile();
+    //    ReadSaveManagementFile();
         
-    }
+    //}
 
-   private void RequestToMakeARecordOnTheServer() 
-    {
-        m_MessageReceiverFromServer.SendMessageToHost(ClientToServerSignifiers.CreateARecored+ ","+ m_OurPlayerName + "," + m_inputField.text.ToString());
-    }
+   //private void RequestToMakeARecordOnTheServer() 
+   // {
+   //     m_MessageReceiverFromServer.SendMessageToHost(ClientToServerSignifiers.CreateARecored+ ","+ m_OurPlayerName + "," + m_inputField.text.ToString());
+   // }
 
 
 
@@ -273,10 +273,10 @@ public class RecordMaker : MonoBehaviour
     public void ResetReplayMaker(int i)
     {
 
-        m_CreateButton.interactable = true;
-        m_inputField.interactable = true;
-        m_InformationText.text = "Make a record Bottom or Just continue ";
-        m_InformationText.color = Color.black;
+        //m_CreateButton.interactable = true;
+        //m_inputField.interactable = true;
+        //m_InformationText.text = "Make a record Bottom or Just continue ";
+        //m_InformationText.color = Color.black;
         m_allBoards.Clear();
         Debug.Log(" ResetReplayMaker");
         if ( i == 1) 

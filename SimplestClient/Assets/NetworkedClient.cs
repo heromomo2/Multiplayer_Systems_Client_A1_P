@@ -247,6 +247,10 @@ public class ServerToClientSignifiers
     public const int ReceiveOpponentName = 26;
 
     public const int SearchGameRoomsByUserNameSizeFailed = 27;
+
+    public const int CreateARecoredSuccess = 28;
+
+    public const int CreateARecoredFail = 29;
 }
 
 
