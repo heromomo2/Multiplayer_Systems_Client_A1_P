@@ -78,13 +78,13 @@ public class TicTacToe : MonoBehaviour
     }
 
 
-    void TicTacToeMessageReceived(int sigifier, string s, TicTacToeBoard t)
+    void TicTacToeMessageReceived(int sigifier, string s, TicTacToeBoard t, MatchData matchData)
     {
         switch (sigifier)
         {
 
             case ServerToClientSignifiers.ReceiveOpponentName:
-                SystemMangerObject.GetComponent<RecordMaker>().GetThePlayerNameRecord(SystemMangerObject.GetComponent<SystemManager>().GetUserName,s);
+               // SystemMangerObject.GetComponent<RecordMaker>().GetThePlayerNameRecord(SystemMangerObject.GetComponent<SystemManager>().GetUserName,s);
                 break;
             case ServerToClientSignifiers.GameStart:
                 Debug.Log("you set as  x or o");
@@ -386,7 +386,7 @@ public class TicTacToe : MonoBehaviour
 
         foreach (TicTacToeBoard b in m_ListOFBoard)
         {
-            SystemMangerObject.GetComponent<RecordMaker>().Give_TicTacToeBoard(b.topleft, b.topmid, b.topright, b.midleft, b.midmid, b.midright, b.botleft, b.botmid, b.botright, b.WhosMove);
+           // SystemMangerObject.GetComponent<RecordMaker>().Give_TicTacToeBoard(b.topleft, b.topmid, b.topright, b.midleft, b.midmid, b.midright, b.botleft, b.botmid, b.botright, b.WhosMove);
         }
         m_ListOFBoard.Clear();
         SystemMangerObject.GetComponent<SystemManager>().OpenGameOver();

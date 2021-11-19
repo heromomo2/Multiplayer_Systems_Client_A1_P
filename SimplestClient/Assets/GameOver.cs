@@ -36,7 +36,7 @@ public class GameOver : MonoBehaviour
     }
 
 
-    void GameOverReceived(int signifier, string s, TicTacToeBoard t)
+    void GameOverReceived(int signifier, string s, TicTacToeBoard t, MatchData matchData)
     {
         if(signifier == ServerToClientSignifiers.PreventRematch) 
         {

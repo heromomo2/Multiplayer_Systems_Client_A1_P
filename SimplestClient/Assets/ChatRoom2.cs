@@ -148,7 +148,7 @@ public class ChatRoom2 : MonoBehaviour
 
     }
 
-    public void MessageToChat(int signifier, string s, TicTacToeBoard tt)
+    public void MessageToChat(int signifier, string s, TicTacToeBoard tt, MatchData matchData)
     {
         if (signifier == ServerToClientSignifiers.ReceiveGameRoomChatMSG)
         {

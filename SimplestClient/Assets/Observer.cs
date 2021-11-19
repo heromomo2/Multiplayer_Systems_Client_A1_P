@@ -54,7 +54,7 @@ public class Observer : MonoBehaviour
         }
 
     }
-    void ObserverReceived(int sigifier, string s, TicTacToeBoard t)
+    void ObserverReceived(int sigifier, string s, TicTacToeBoard t, MatchData matchData)
     {
         switch (sigifier)
         {

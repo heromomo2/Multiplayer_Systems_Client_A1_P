@@ -4275,8 +4275,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca156b73c01d957408d2085191a36f94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ReplayofNames: []
-  GrideSpace: []
+  RecordNames: []
+  GrideSpace:
+  - {fileID: 529483599}
+  - {fileID: 484607360}
+  - {fileID: 682846566}
+  - {fileID: 323532296}
+  - {fileID: 1919390185}
+  - {fileID: 2002308738}
+  - {fileID: 431304810}
+  - {fileID: 1022088134}
+  - {fileID: 1089247957}
   m_MessageReceiverFromServer: {fileID: 0}
   m_Network: {fileID: 0}
   m_SystemManager: {fileID: 0}
@@ -6446,7 +6455,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 100, y: 0}
   m_SizeDelta: {x: -100, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &656933357

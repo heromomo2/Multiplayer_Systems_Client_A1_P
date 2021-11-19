@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 public class NetworkedClient : MonoBehaviour
 {
-    private Action<int,string,TicTacToeBoard> m_MessageReceiverFromServer = null;
+    private Action<int,string,TicTacToeBoard,MatchData> m_MessageReceiverFromServer = null;
 
 
     int connectionID;
@@ -115,7 +115,7 @@ public class NetworkedClient : MonoBehaviour
 
   
 
-    public event Action<int,string, TicTacToeBoard> OnMessageReceivedFromSever
+    public event Action<int,string, TicTacToeBoard, MatchData> OnMessageReceivedFromSever
     {
         add
         {
@@ -136,6 +136,8 @@ public class NetworkedClient : MonoBehaviour
         int signifier = int.Parse(csv[0]);
         string FirstElement = csv[1].ToString();
         TicTacToeBoard TempTicTacToe;
+        MatchData TempmatchData = new MatchData ("TempmatchData", 0, 3);
+
         if (signifier == ServerToClientSignifiers.ObserverGetsMove)
         {
             TempTicTacToe = new TicTacToeBoard(int.Parse(csv[1]), int.Parse(csv[2]), int.Parse(csv[3]), int.Parse(csv[4]), int.Parse(csv[5]), int.Parse(csv[6]), int.Parse(csv[7]), int.Parse(csv[8]), int.Parse(csv[9]), int.Parse(csv[10]));
@@ -144,9 +146,15 @@ public class NetworkedClient : MonoBehaviour
         {
             TempTicTacToe = new TicTacToeBoard(0,0,0,0,0,0,0,0,0,0);
         }
+        if (signifier == ServerToClientSignifiers.SendAllThisRecoredMatchData) 
+        {
+            TempmatchData = new MatchData(csv[1],int.Parse(csv[2]), int.Parse(csv[3]));
+        }
+
+
         if ( m_MessageReceiverFromServer != null)
         {
-           m_MessageReceiverFromServer(signifier, FirstElement, TempTicTacToe);
+           m_MessageReceiverFromServer(signifier, FirstElement, TempTicTacToe, TempmatchData);
         }
         
     }
@@ -192,6 +200,10 @@ public class ClientToServerSignifiers
     public const int SendOnlyObserverGameRoomChatMSG = 16;
 
     public const int CreateARecored = 17;
+
+    public const int AskForAllRecoreds = 18;
+
+    public const int AskForThisRecoredMatchData = 19;
 }
 
 public class ServerToClientSignifiers
@@ -251,6 +263,18 @@ public class ServerToClientSignifiers
     public const int CreateARecoredSuccess = 28;
 
     public const int CreateARecoredFail = 29;
+
+    public const int StartSendAllRecoredsName = 30;
+
+    public const int SendAllRecoredsNameData = 31;
+
+    public const int DoneSendAllRecoredsName = 32;
+
+    public const int StartSendThisRecoredMatchData = 33;
+
+    public const int SendAllThisRecoredMatchData = 34;
+
+    public const int DoneSendAllThisRecoredMatchData = 35;
 }
 
 

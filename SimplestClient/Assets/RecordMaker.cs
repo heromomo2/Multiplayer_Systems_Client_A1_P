@@ -78,7 +78,7 @@ public class RecordMaker : MonoBehaviour
     }
 
 
-    void RecordMakerReceived (int signifier, string s, TicTacToeBoard t) 
+    void RecordMakerReceived (int signifier, string s, TicTacToeBoard t, MatchData matchData) 
     {
         switch (signifier)
         {

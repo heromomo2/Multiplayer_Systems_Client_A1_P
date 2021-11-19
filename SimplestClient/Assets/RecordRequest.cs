@@ -50,7 +50,7 @@ public class RecordRequest : MonoBehaviour
     }
 
 
-    public  void RecordRequestReceived(int signifier, string s, TicTacToeBoard t)
+    public  void RecordRequestReceived(int signifier, string s, TicTacToeBoard t, MatchData matchData)
     {
         switch (signifier)
         {

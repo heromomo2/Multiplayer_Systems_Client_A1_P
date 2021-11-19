@@ -79,7 +79,7 @@ public class SystemManager : MonoBehaviour
 
  
     
-    void SystemManagerReceived (int signifier, string s, TicTacToeBoard t) 
+    void SystemManagerReceived (int signifier, string s, TicTacToeBoard t, MatchData matchData) 
     {
         switch (signifier)
         {
@@ -127,6 +127,7 @@ public class SystemManager : MonoBehaviour
     public void OpenReplayer()
     {
         ChangeState(GameStates.Replayer);
+        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.AskForAllRecoreds+ "," + GetUserName);
     }
     public void OpenMenu()
     {
