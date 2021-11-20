@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ReplayerWatcher : MonoBehaviour
 {
-    string m_OurOpponentPlayerName = "Opponent", m_OurPlayerName = "Player";
+    string m_OurSecondPlayerName = "Playertwo", m_OurFirstPlayerName = "Playerone";
     public List<string> RecordNames;
     public List<MatchData> MatchDatas;
     public List<Text> GrideSpace = new List<Text>();
@@ -18,7 +18,7 @@ public class ReplayerWatcher : MonoBehaviour
     public GameObject m_Network = null;
     public GameObject m_SystemManager = null;
     public GameObject m_ForwardButton , m_BackwardButton = null;
-    public GameObject m_RePlayer_Text, m_RePlayer_Opponent_Text, m_RePlayer_Player_Text = null;
+    public GameObject m_RePlayer_Text, m_RePlayer_SecondPlayer_Text, m_RePlayer_FirstPlayer_Text = null;
     public GameObject m_dropdown = null;
     // Start is called before the first frame update
     void Start()
@@ -39,9 +39,9 @@ public class ReplayerWatcher : MonoBehaviour
             else if (go.name == "Replay_TitleText")
                 m_RePlayer_Text = go;
             else if (go.name == "Replay_Opponent_Text")
-                m_RePlayer_Opponent_Text = go;
+                m_RePlayer_SecondPlayer_Text = go;
             else if (go.name == "Replay_Player_Text ")
-                m_RePlayer_Player_Text = go;
+                m_RePlayer_FirstPlayer_Text = go;
             else if (go.name == "Replayer_Dropdown")
                 m_dropdown = go;
         }
@@ -55,6 +55,7 @@ public class ReplayerWatcher : MonoBehaviour
         m_dropdown.GetComponent<Dropdown>().onValueChanged.AddListener(delegate { LoadDropDownChanged(); });
         m_BackwardButton.GetComponent<Button>().onClick.AddListener(BackwardButtonPressed);
         m_ForwardButton.GetComponent<Button>().onClick.AddListener(ForwardButtonPressed);
+        MatchDatas = new List<MatchData>();
     }
 
     private void OnDestroy()
@@ -72,6 +73,7 @@ public class ReplayerWatcher : MonoBehaviour
         {
             case ServerToClientSignifiers.StartSendAllRecoredsName:
                 DisableAllInterface();
+                Reset5(true, true);
                 break;
             case ServerToClientSignifiers.DoneSendAllRecoredsName:
                 SetDropDownChanged();
@@ -82,9 +84,10 @@ public class ReplayerWatcher : MonoBehaviour
                 break;
             case ServerToClientSignifiers.StartSendThisRecoredMatchData:
                 DisableAllInterface();
+                Reset5(true, false);
                 break;
             case ServerToClientSignifiers.SendAllThisRecoredMatchData:
-                DisableAllInterface();
+                GetMataData(matchData);
                 break;
             case ServerToClientSignifiers.DoneSendAllThisRecoredMatchData :
                 ReEnbleAllInterface();
@@ -98,6 +101,13 @@ public class ReplayerWatcher : MonoBehaviour
         string value = menuOptions[menuIndex].text;
 
         m_Network.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.AskForThisRecoredMatchData + "," + value);
+        //DisplayWhoturn( new MatchData("TempMatchData", 0, 3), m_RePlayer_FirstPlayer_Text.GetComponent<Text>(), m_RePlayer_SecondPlayer_Text.GetComponent<Text>());
+        //SelectedMove = 0;
+        //m_RePlayer_Text.GetComponent<Text>().text = "Replayer " + "\n  Move :" + SelectedMove.ToString();
+        //ResetMBord();
+        //CallToDisplayBoard();
+        Reset5(true, false);
+
     }
     public void SetDropDownChanged()
     {
@@ -109,8 +119,11 @@ public class ReplayerWatcher : MonoBehaviour
     }
     public void BackwardButtonPressed()
     {
+        Debug.Log("BackwardButton Pressed is called > ");
+        //m_RePlayer_Text.GetComponent<Text>().text = "Replayer " + "\n  Move :" + SelectedMove.ToString();
         if (SelectedMove > m_minimumMove )
         {
+            ResetMBord();
             SelectedMove = SelectedMove - 1;
             MoveThroughtMatchData(SelectedMove);
             CallToDisplayBoard();
@@ -118,8 +131,11 @@ public class ReplayerWatcher : MonoBehaviour
     }
     public void ForwardButtonPressed()
     {
+        Debug.Log("ForwardButton Pressed is called > " );
+       // m_RePlayer_Text.GetComponent<Text>().text = "Replayer " + "\n  Move :" + SelectedMove.ToString();
         if (SelectedMove < m_maximumMove) 
         {
+            ResetMBord();
             SelectedMove = SelectedMove + 1;
             MoveThroughtMatchData(SelectedMove);
             CallToDisplayBoard();
@@ -173,24 +189,87 @@ public class ReplayerWatcher : MonoBehaviour
     private void GetMataData(MatchData matchData)
     {
         MatchDatas.Add(matchData);
+        m_maximumMove = MatchDatas.Count;
+
+        if(m_maximumMove == 1 && matchData.PlayerSymbol == 1) 
+        {
+            m_OurFirstPlayerName = matchData.Playername.ToString();
+        }
+        else if(m_maximumMove == 2 && matchData.PlayerSymbol == 2) 
+        {
+            m_OurSecondPlayerName = matchData.Playername.ToString();
+        }
     }
 
     private void MoveThroughtMatchData(int Move) 
     {
-       m_maximumMove = MatchDatas.Count;
+      
+         MatchData TempmatchData = new MatchData("TempMatchData",0,3);
+        for (int i = 0; i < Move; i++) 
+        {
+             TempmatchData = MatchDatas[i];
+           mboard[ MatchDatas[i].Positoin] = MatchDatas[i].PlayerSymbol;
+        }
+        //mboard[TempmatchData.Positoin] = TempmatchData.PlayerSymbol;
 
-        for (int element = 0; element > mboard.Length; element++) 
+        DisplayWhoturn(TempmatchData, m_RePlayer_FirstPlayer_Text.GetComponent<Text>(), m_RePlayer_SecondPlayer_Text.GetComponent<Text>());
+        m_RePlayer_Text.GetComponent<Text>().text = "Replayer " + "\n  Move :" + SelectedMove.ToString();
+    }
+
+
+
+    private void ResetMBord()
+    {
+        for (int element = 0; element < mboard.Length; element++)
         {
             mboard[element] = 0;
         }
-        MatchData TempmatchData = new MatchData("TempMatchData",0,3);
-        for (int i = 0; i < Move; i++) 
+    }
+    void DisplayWhoturn(MatchData m, Text FirstPlayer, Text SecondPlayer)
+    {
+        if (m.PlayerSymbol == 3)
         {
-            TempmatchData = MatchDatas[i];
+            FirstPlayer.text = "Player:";
+            FirstPlayer.color = Color.black;
+            SecondPlayer.color = Color.black;
+            SecondPlayer.text = "Opponent:";
         }
-        mboard[TempmatchData.Positoin] = TempmatchData.PlayerSymbol;
+        else if (m.PlayerSymbol == 1)
+        {
+            FirstPlayer.text = m_OurFirstPlayerName + ":  Moved";
+            FirstPlayer.color = Color.blue;
+            SecondPlayer.color = Color.black;
+            SecondPlayer.text = m_OurSecondPlayerName + ": Waiting";
+        }
+        else if (m.PlayerSymbol == 2)
+        {
+            FirstPlayer.text = m_OurFirstPlayerName + ": Waiting";
+            FirstPlayer.color = Color.black;
+            SecondPlayer.color = Color.blue;
+            SecondPlayer.text = m_OurSecondPlayerName + ": Moved";
+        }
     }
 
+    private void Reset5(bool IsLoadNewMatchdata, bool IsLoadNewRecordList)
+    {
+
+        if (IsLoadNewRecordList)
+        {
+            RecordNames.Clear();
+            m_dropdown.GetComponent<Dropdown>().options.Clear();
+        }
+        else if (IsLoadNewMatchdata)
+        {
+            MatchDatas.Clear();
+            DisplayWhoturn(new MatchData("TempMatchData", 0, 3), m_RePlayer_FirstPlayer_Text.GetComponent<Text>(), m_RePlayer_SecondPlayer_Text.GetComponent<Text>());
+            SelectedMove = 0;
+            m_RePlayer_Text.GetComponent<Text>().text = "Replayer " + "\n  Move :" + SelectedMove.ToString();
+            ResetMBord();
+            CallToDisplayBoard();
+        }
+       
+
+    }
     // Update is called once per frame
     void Update()
     {

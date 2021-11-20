@@ -4292,8 +4292,8 @@ MonoBehaviour:
   m_ForwardButton: {fileID: 0}
   m_BackwardButton: {fileID: 0}
   m_RePlayer_Text: {fileID: 0}
-  m_RePlayer_Opponent_Text: {fileID: 0}
-  m_RePlayer_Player_Text: {fileID: 0}
+  m_RePlayer_SecondPlayer_Text: {fileID: 0}
+  m_RePlayer_FirstPlayer_Text: {fileID: 0}
   m_dropdown: {fileID: 0}
 --- !u!4 &437665279
 Transform:
@@ -8345,7 +8345,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5084277282015150791, guid: c3559b8768bc0214097d94574bdbc20f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ForwardButtonPressed
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5084277282015150791, guid: c3559b8768bc0214097d94574bdbc20f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -23130,7 +23130,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5084277282015150791, guid: c3559b8768bc0214097d94574bdbc20f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: BackwardButtonPressed
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5084277282015150791, guid: c3559b8768bc0214097d94574bdbc20f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
