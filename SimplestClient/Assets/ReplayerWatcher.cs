@@ -12,6 +12,7 @@ public class ReplayerWatcher : MonoBehaviour
     public NetworkedClient m_MessageReceiverFromServer = null;
     private int[] mboard = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
     int m_maximumMove,m_minimumMove = 0, SelectedMove = 0;
+    bool HasSelected = false;
 
     // public Text RePlayer_Text, RePlayer_Opponent_Text, RePlayer_Player_Text = null;
 
@@ -74,13 +75,19 @@ public class ReplayerWatcher : MonoBehaviour
             case ServerToClientSignifiers.StartSendAllRecoredsName:
                 DisableAllInterface();
                 Reset5(true, true);
+                HasSelected = false;
+                break;
+            case ServerToClientSignifiers.NoRecordsNamefound:
+                DisableAllInterface();
+                Reset5(true, true);
+                break;
+            case ServerToClientSignifiers.SendAllRecoredsNameData:
+                GetRecordNames(s);
                 break;
             case ServerToClientSignifiers.DoneSendAllRecoredsName:
                 SetDropDownChanged();
                 ReEnbleAllInterface();
-                break;
-            case ServerToClientSignifiers.SendAllRecoredsNameData:
-                GetRecordNames(s);
+                m_dropdown.GetComponent<Dropdown>().value = -1;
                 break;
             case ServerToClientSignifiers.StartSendThisRecoredMatchData:
                 DisableAllInterface();
@@ -107,7 +114,7 @@ public class ReplayerWatcher : MonoBehaviour
         //ResetMBord();
         //CallToDisplayBoard();
         Reset5(true, false);
-
+        HasSelected = true;
     }
     public void SetDropDownChanged()
     {
@@ -121,7 +128,7 @@ public class ReplayerWatcher : MonoBehaviour
     {
         Debug.Log("BackwardButton Pressed is called > ");
         //m_RePlayer_Text.GetComponent<Text>().text = "Replayer " + "\n  Move :" + SelectedMove.ToString();
-        if (SelectedMove > m_minimumMove )
+        if (SelectedMove > m_minimumMove && HasSelected)
         {
             ResetMBord();
             SelectedMove = SelectedMove - 1;
@@ -133,7 +140,7 @@ public class ReplayerWatcher : MonoBehaviour
     {
         Debug.Log("ForwardButton Pressed is called > " );
        // m_RePlayer_Text.GetComponent<Text>().text = "Replayer " + "\n  Move :" + SelectedMove.ToString();
-        if (SelectedMove < m_maximumMove) 
+        if (SelectedMove < m_maximumMove && HasSelected) 
         {
             ResetMBord();
             SelectedMove = SelectedMove + 1;
@@ -257,14 +264,16 @@ public class ReplayerWatcher : MonoBehaviour
         {
             RecordNames.Clear();
             m_dropdown.GetComponent<Dropdown>().options.Clear();
+            m_dropdown.GetComponent<Dropdown>().ClearOptions();
         }
-        else if (IsLoadNewMatchdata)
+        if (IsLoadNewMatchdata)
         {
             MatchDatas.Clear();
+            ResetMBord();
+            SelectedMove = 0;
             DisplayWhoturn(new MatchData("TempMatchData", 0, 3), m_RePlayer_FirstPlayer_Text.GetComponent<Text>(), m_RePlayer_SecondPlayer_Text.GetComponent<Text>());
             SelectedMove = 0;
             m_RePlayer_Text.GetComponent<Text>().text = "Replayer " + "\n  Move :" + SelectedMove.ToString();
-            ResetMBord();
             CallToDisplayBoard();
         }
        
