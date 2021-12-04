@@ -46,7 +46,7 @@ public class LogInScript : MonoBehaviour
         m_MessageReceiverFromServer = networkClient.GetComponent<NetworkedClient>();
         if (m_MessageReceiverFromServer != null)
         {
-            m_MessageReceiverFromServer.OnMessageReceivedFromSever += LoginStates;
+            m_MessageReceiverFromServer.OnMessageReceivedFromServer += LoginStates;
         }
     }
 
@@ -92,7 +92,7 @@ public class LogInScript : MonoBehaviour
     {
         if (m_MessageReceiverFromServer != null)
         {
-            m_MessageReceiverFromServer.OnMessageReceivedFromSever -= LoginStates;
+            m_MessageReceiverFromServer.OnMessageReceivedFromServer -= LoginStates;
         }
 
     }

@@ -5,6 +5,16 @@ using UnityEngine.UI;
 
 public class TicTacToe : MonoBehaviour
 {
+
+
+    #region Variables
+  
+    #endregion
+
+    #region GameObjects
+    
+    #endregion 
+
     int test = 0;
 
   LinkedList <TicTacToeBoard> m_ListOFBoard;
@@ -60,7 +70,7 @@ public class TicTacToe : MonoBehaviour
 
         if (m_MessageReceiverFromServer != null)
         {
-            m_MessageReceiverFromServer.OnMessageReceivedFromSever += TicTacToeMessageReceived;
+            m_MessageReceiverFromServer.OnMessageReceivedFromServer += TicTacToeMessageReceived;
         }
 
         GiveButtonsPosition();
@@ -72,7 +82,7 @@ public class TicTacToe : MonoBehaviour
     {
         if (m_MessageReceiverFromServer != null)
         {
-            m_MessageReceiverFromServer.OnMessageReceivedFromSever -= TicTacToeMessageReceived;
+            m_MessageReceiverFromServer.OnMessageReceivedFromServer -= TicTacToeMessageReceived;
         }
 
     }
@@ -104,7 +114,7 @@ public class TicTacToe : MonoBehaviour
                 m_IsWaitTurn = false;
                 test = 43;
                 break;
-            case ServerToClientSignifiers.ReMatchOfTicTacToeComplete:
+            case ServerToClientSignifiers.RematchOfTicTacToeComplete:
                 // Debug.LogWarning("resetting board");
                 resetBoard();
                 m_ListOFBoard.Clear();
@@ -190,7 +200,7 @@ public class TicTacToe : MonoBehaviour
 
         if (m_IsWaitTurn == true)
         {
-            networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.TicTacToesSomethingSomthing + "," + ButtonPosition.ToString());
+            networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.TicTacTacDoAMove + "," + ButtonPosition.ToString());
         }
          
         

@@ -59,7 +59,7 @@ public class ChatRoom2 : MonoBehaviour
 
         if (m_MessageReceiverFromServer != null)
         {
-            m_MessageReceiverFromServer.OnMessageReceivedFromSever += MessageToChat;
+            m_MessageReceiverFromServer.OnMessageReceivedFromServer += MessageToChat;
         }
         GRC_DropDownMenu.GetComponent<Dropdown>().onValueChanged.AddListener(GRC_DropDownPrefixMsg);
     }
@@ -112,7 +112,7 @@ public class ChatRoom2 : MonoBehaviour
 
         if (m_MessageReceiverFromServer != null)
         {
-            m_MessageReceiverFromServer.OnMessageReceivedFromSever -= MessageToChat;
+            m_MessageReceiverFromServer.OnMessageReceivedFromServer -= MessageToChat;
         }
 
     }
@@ -139,7 +139,7 @@ public class ChatRoom2 : MonoBehaviour
 
         else if (GRC_Everyone_Toggle.GetComponent<Toggle>().isOn)
         {
-            string ourMsg = ClientToServerSignifiers.SendGameRoomChatMSG + ", Globe < " + n + " >  : " + ourChatText;
+            string ourMsg = ClientToServerSignifiers.SendGameRoomGlobalChatMSG + ", Globe < " + n + " >  : " + ourChatText;
             networkObject.GetComponent<NetworkedClient>().SendMessageToHost(ourMsg);
         }
 

@@ -24,14 +24,14 @@ public class GameOver : MonoBehaviour
         m_MessageReceiverFromServer = NetWorkObject.GetComponent<NetworkedClient>();
         if (m_MessageReceiverFromServer != null)
         {
-            m_MessageReceiverFromServer.OnMessageReceivedFromSever += GameOverReceived;
+            m_MessageReceiverFromServer.OnMessageReceivedFromServer += GameOverReceived;
         }
     }
     private void OnDestroy()
     {
         if (m_MessageReceiverFromServer != null)
         {
-            m_MessageReceiverFromServer.OnMessageReceivedFromSever -= GameOverReceived;
+            m_MessageReceiverFromServer.OnMessageReceivedFromServer -= GameOverReceived;
         }
     }
 
@@ -66,7 +66,7 @@ public class GameOver : MonoBehaviour
 
     public void ReMatchButtonIsPreessed()
     {
-        NetWorkObject.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.ReMatchOfTicTacToe + ",");
+        NetWorkObject.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.RematchOfTicTacToe + ",");
     }
 
     public void QuitButtonIsPreessed()

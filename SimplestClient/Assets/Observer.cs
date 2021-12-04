@@ -43,14 +43,14 @@ public class Observer : MonoBehaviour
 
         if (m_MessageReceiverFromServer != null)
         {
-            m_MessageReceiverFromServer.OnMessageReceivedFromSever += ObserverReceived;
+            m_MessageReceiverFromServer.OnMessageReceivedFromServer += ObserverReceived;
         }
     }
     private void OnDestroy()
     {
         if (m_MessageReceiverFromServer != null)
         {
-            m_MessageReceiverFromServer.OnMessageReceivedFromSever -= ObserverReceived;
+            m_MessageReceiverFromServer.OnMessageReceivedFromServer -= ObserverReceived;
         }
 
     }

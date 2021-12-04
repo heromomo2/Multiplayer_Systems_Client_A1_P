@@ -4,31 +4,36 @@ using UnityEngine;
 using UnityEngine.UI;
 public class PMButton : MonoBehaviour
 {
-    public GameObject Chat_UI = null;
-   
-    private string Name;
-    public string GetName {get { return Name; } }
-    public string SetName { set { Name = value; } }
+    #region GameObjects
+
+    public GameObject chat_ui = null;
+    #endregion
+
+    #region Variables
+    private string player_name;
+    public string GetName {get { return player_name; } }
+    public string SetName { set { player_name = value; } }
+    #endregion
     void Start()
     {
         GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
         foreach (GameObject go in allObjects)
         {
             if (go.name == "Chat_UI")
-                Chat_UI = go;
+                chat_ui = go;
         }
-        this.gameObject.GetComponent<Button>().onClick.AddListener(PMbutttonOnClick);
+        this.gameObject.GetComponent<Button>().onClick.AddListener(PriavateMessageButtonOnClick);
     }
 
 
-    public void PMbutttonOnClick()
+    public void PriavateMessageButtonOnClick()
     {
-        Chat_UI.GetComponent<ChatBox>().SetChatToPrivateMessage(Name);
+        chat_ui.GetComponent<ChatBox>().SetChatToPrivateMessage(player_name);
     }
 
-    void OnDestroy()
-    {
-        //Chat_UI.GetComponent<ChatBox>().SetChatToGlobalMessage();
-    }
+    //void OnDestroy()
+    //{
+    //    //Chat_UI.GetComponent<ChatBox>().SetChatToGlobalMessage();
+    //}
 
 }

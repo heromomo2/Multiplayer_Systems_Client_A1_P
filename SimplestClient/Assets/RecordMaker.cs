@@ -58,7 +58,7 @@ public class RecordMaker : MonoBehaviour
 
         if (m_MessageReceiverFromServer != null)
         {
-            m_MessageReceiverFromServer.OnMessageReceivedFromSever += RecordMakerReceived;
+            m_MessageReceiverFromServer.OnMessageReceivedFromServer += RecordMakerReceived;
         }
 
         //m_dropdown.options.Clear();
@@ -72,7 +72,7 @@ public class RecordMaker : MonoBehaviour
     {
         if (m_MessageReceiverFromServer != null)
         {
-            m_MessageReceiverFromServer.OnMessageReceivedFromSever -= RecordMakerReceived;
+            m_MessageReceiverFromServer.OnMessageReceivedFromServer -= RecordMakerReceived;
         }
 
     }
@@ -85,7 +85,7 @@ public class RecordMaker : MonoBehaviour
             case ServerToClientSignifiers.ExitTacTacToeComplete:
                 ////ResetReplayMaker(1);
                 break;
-            case ServerToClientSignifiers.ReMatchOfTicTacToeComplete:
+            case ServerToClientSignifiers.RematchOfTicTacToeComplete:
                 //ResetReplayMaker(0); 
                 break;
             case ServerToClientSignifiers.LoginComplete:

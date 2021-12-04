@@ -42,9 +42,9 @@ public class ChatBox : MonoBehaviour
 
         if (m_MessageReceiverFromServer != null)
         {
-            m_MessageReceiverFromServer.OnMessageReceivedFromSever += GlobalMessageToChat;
-            m_MessageReceiverFromServer.OnMessageReceivedFromSever += AddListOfPlayerToChat;
-            m_MessageReceiverFromServer.OnMessageReceivedFromSever += ClearListOfPlayerToChat;
+            m_MessageReceiverFromServer.OnMessageReceivedFromServer += GlobalMessageToChat;
+            m_MessageReceiverFromServer.OnMessageReceivedFromServer += AddListOfPlayerToChat;
+            m_MessageReceiverFromServer.OnMessageReceivedFromServer += ClearListOfPlayerToChat;
         }
     }
 
@@ -54,9 +54,9 @@ public class ChatBox : MonoBehaviour
 
         if (m_MessageReceiverFromServer != null)
         {
-            m_MessageReceiverFromServer.OnMessageReceivedFromSever -= GlobalMessageToChat;
-            m_MessageReceiverFromServer.OnMessageReceivedFromSever -= AddListOfPlayerToChat;
-            m_MessageReceiverFromServer.OnMessageReceivedFromSever -= ClearListOfPlayerToChat;
+            m_MessageReceiverFromServer.OnMessageReceivedFromServer -= GlobalMessageToChat;
+            m_MessageReceiverFromServer.OnMessageReceivedFromServer -= AddListOfPlayerToChat;
+            m_MessageReceiverFromServer.OnMessageReceivedFromServer -= ClearListOfPlayerToChat;
         }
 
     }
@@ -67,12 +67,12 @@ public class ChatBox : MonoBehaviour
         string ourChatText = usermessageInput.GetComponent<InputField>().text;
         if (IsPrivateMsg == false)
         {
-            string ourMsg = ClientToServerSignifiers.SendChatMsg + ",Globe " + n + ": " + ourChatText;
+            string ourMsg = ClientToServerSignifiers.NotifyPublicChatChatOfGlobalMsg + ",Globe " + n + ": " + ourChatText;
             networkObject.GetComponent<NetworkedClient>().SendMessageToHost(ourMsg);
         }
         else
         {
-            string ourMsg = ClientToServerSignifiers.SendChatPrivateMsg + ",PM " + n + ": " + ourChatText + "," + PmUsername;
+            string ourMsg = ClientToServerSignifiers.NotifyPublicChatWitchAPrivateMsg + ",PM " + n + ": " + ourChatText + "," + PmUsername;
             networkObject.GetComponent<NetworkedClient>().SendMessageToHost(ourMsg);
         }
     }

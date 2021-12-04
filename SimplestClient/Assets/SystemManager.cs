@@ -3,20 +3,24 @@ using UnityEngine.UI;
 
 public class SystemManager : MonoBehaviour
 {
-    private string userName = "NoAccount";  // property
+    #region Variables
+    // where we are store username
+    private string user_name = "NoAccount";  // property
+    //getter and setter for username
     public string GetUserName  // property
     {
-        get { return userName; }
+        get { return user_name; }
     }
     public string SetUserName  // property
     {
-        set { userName = value; }
+        set { user_name = value; }
     }
-    
+    #endregion
 
-
+    #region GameObjects
     private NetworkedClient m_MessageReceiverFromServer = null;
     GameObject Login, Chat, networkClient,Menu,RecordRequest, WaitingInQueue, Tic_Tac_Toe,GameOver,Replayer,Observer, GameRoomChat, Observer_Search, Observer_watcher;
+    #endregion 
 
     // Start is called before the first frame update
     void Start()
@@ -58,7 +62,7 @@ public class SystemManager : MonoBehaviour
         if (m_MessageReceiverFromServer != null)
         {
           
-            m_MessageReceiverFromServer.OnMessageReceivedFromSever += SystemManagerReceived;
+            m_MessageReceiverFromServer.OnMessageReceivedFromServer += SystemManagerReceived;
         }
 
 
@@ -71,7 +75,7 @@ public class SystemManager : MonoBehaviour
         if (m_MessageReceiverFromServer != null)
         {
             
-            m_MessageReceiverFromServer.OnMessageReceivedFromSever -= SystemManagerReceived;
+            m_MessageReceiverFromServer.OnMessageReceivedFromServer -= SystemManagerReceived;
         }
     
     }
@@ -92,7 +96,7 @@ public class SystemManager : MonoBehaviour
             case ServerToClientSignifiers.GameStart:
                 ChangeState(GameStates.TicTacToe);
                 break;
-            case ServerToClientSignifiers.ReMatchOfTicTacToeComplete:
+            case ServerToClientSignifiers.RematchOfTicTacToeComplete:
                 ChangeState(GameStates.TicTacToe);
                 break;
             case ServerToClientSignifiers.ExitTacTacToeComplete:
@@ -127,7 +131,7 @@ public class SystemManager : MonoBehaviour
     public void OpenReplayer()
     {
         ChangeState(GameStates.Replayer);
-        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.AskForAllRecoreds+ "," + GetUserName);
+        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.AskForAllRecoredNames+ "," + GetUserName);
     }
     public void OpenMenu()
     {
@@ -153,12 +157,12 @@ public class SystemManager : MonoBehaviour
         // open gameroom Ui and send a msg to server
 
         ChangeState(GameStates.chatroom);
-        string OurEnterTheChatMsg = ClientToServerSignifiers.EnterTheChatRoom + "," + GetUserName;
+        string OurEnterTheChatMsg = ClientToServerSignifiers.EnterThePublicChatRoom + "," + GetUserName;
         networkClient.GetComponent<NetworkedClient>().SendMessageToHost(OurEnterTheChatMsg);
     }
     public void Logout()
     {
-        string logoutMsg = ClientToServerSignifiers.Logout + ",";
+        string logoutMsg = ClientToServerSignifiers.NotifyPublicChatOfLogout + ",";
 
         networkClient.GetComponent<NetworkedClient>().SendMessageToHost(logoutMsg);
         ChangeState(GameStates.LoginMenu);
@@ -170,7 +174,7 @@ public class SystemManager : MonoBehaviour
     {
 
          ChangeState(GameStates.WaitingInQueueforOtherPlayer);
-        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.JoinQueueForGameRoom + ","+ userName);
+        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.JoinQueueForGameRoom + ","+ user_name);
     }
 
     void ChangeState(int newState) 
@@ -308,7 +312,7 @@ public class SystemManager : MonoBehaviour
     }
 
 
-
+    // Our Gamest
     static public class GameStates
     {
         public const int LoginMenu = 1;

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 public class NetworkedClient : MonoBehaviour
 {
-    private Action<int,string,TicTacToeBoard,MatchData> m_MessageReceiverFromServer = null;
+    private Action<int,string,TicTacToeBoard,MatchData> message_receiver_from_server = null;
 
 
     int connectionID;
@@ -26,9 +26,7 @@ public class NetworkedClient : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if(Input.GetKeyDown(KeyCode.S))
-        //    SendMessageToHost("Hello from client gg");
-
+        
         UpdateNetworkConnection();
     }
 
@@ -42,6 +40,7 @@ public class NetworkedClient : MonoBehaviour
             byte[] recBuffer = new byte[1024];
             int bufferSize = 1024;
             int dataSize;
+
             NetworkEventType recNetworkEvent = NetworkTransport.Receive(out recHostID, out recConnectionID, out recChannelID, recBuffer, bufferSize, out dataSize, out error);
 
             switch (recNetworkEvent)
@@ -105,59 +104,88 @@ public class NetworkedClient : MonoBehaviour
     {
         Debug.Log("msg recieved = " + msg + ".  connection id = " + id);
 
+        // comma-separated values
         string[] csv = msg.Split(',');
 
+        // Msg(csv);
 
-         Msg(csv);
-        
+     
+        /// extrating data from the msg from server
+        /// store them in local vars
+        /// 
+        int signifier = int.Parse(csv[0]);
+        string first_element = csv[1].ToString();
+        TicTacToeBoard temp_tic_tac_toe_state;
+        MatchData temp_match_data = new MatchData("TempmatchData", 0, 3);
+
+        if (signifier == ServerToClientSignifiers.ObserverGetsMove)
+        {
+            temp_tic_tac_toe_state = new TicTacToeBoard(int.Parse(csv[1]), int.Parse(csv[2]), int.Parse(csv[3]), int.Parse(csv[4]), int.Parse(csv[5]), int.Parse(csv[6]), int.Parse(csv[7]), int.Parse(csv[8]), int.Parse(csv[9]), int.Parse(csv[10]));
+        }
+        else
+        {
+            temp_tic_tac_toe_state = new TicTacToeBoard(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+        }
+        if (signifier == ServerToClientSignifiers.SendAllThisRecoredMatchData)
+        {
+            temp_match_data = new MatchData(csv[1], int.Parse(csv[2]), int.Parse(csv[3]));
+        }
+
+        // if  action isn't null
+        /// passing  the data into the data
+        if (message_receiver_from_server != null)
+        {
+            message_receiver_from_server(signifier, first_element, temp_tic_tac_toe_state, temp_match_data);
+        }
+
     }
 
 
   
 
-    public event Action<int,string, TicTacToeBoard, MatchData> OnMessageReceivedFromSever
+    public event Action<int,string, TicTacToeBoard, MatchData> OnMessageReceivedFromServer
     {
         add
         {
-            m_MessageReceiverFromServer -= value;
-            m_MessageReceiverFromServer += value;
+            message_receiver_from_server -= value;
+            message_receiver_from_server += value;
         }
 
         remove
         {
-            m_MessageReceiverFromServer -= value;
+            message_receiver_from_server -= value;
         }
     }
 
 
 
-    public void  Msg (string[] csv ) 
-    {
-        int signifier = int.Parse(csv[0]);
-        string FirstElement = csv[1].ToString();
-        TicTacToeBoard TempTicTacToe;
-        MatchData TempmatchData = new MatchData ("TempmatchData", 0, 3);
+    //public void  Msg (string[] csv ) 
+    //{
+    //    //int signifier = int.Parse(csv[0]);
+    //    //string first_element = csv[1].ToString();
+    //    //TicTacToeBoard temp_tic_tac_toe_state;
+    //    //MatchData temp_match_data = new MatchData("TempmatchData", 0, 3);
 
-        if (signifier == ServerToClientSignifiers.ObserverGetsMove)
-        {
-            TempTicTacToe = new TicTacToeBoard(int.Parse(csv[1]), int.Parse(csv[2]), int.Parse(csv[3]), int.Parse(csv[4]), int.Parse(csv[5]), int.Parse(csv[6]), int.Parse(csv[7]), int.Parse(csv[8]), int.Parse(csv[9]), int.Parse(csv[10]));
-        }
-        else
-        {
-            TempTicTacToe = new TicTacToeBoard(0,0,0,0,0,0,0,0,0,0);
-        }
-        if (signifier == ServerToClientSignifiers.SendAllThisRecoredMatchData) 
-        {
-            TempmatchData = new MatchData(csv[1],int.Parse(csv[2]), int.Parse(csv[3]));
-        }
+    //    //if (signifier == ServerToClientSignifiers.ObserverGetsMove)
+    //    //{
+    //    //    temp_tic_tac_toe_state = new TicTacToeBoard(int.Parse(csv[1]), int.Parse(csv[2]), int.Parse(csv[3]), int.Parse(csv[4]), int.Parse(csv[5]), int.Parse(csv[6]), int.Parse(csv[7]), int.Parse(csv[8]), int.Parse(csv[9]), int.Parse(csv[10]));
+    //    //}
+    //    //else
+    //    //{
+    //    //    temp_tic_tac_toe_state = new TicTacToeBoard(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+    //    //}
+    //    //if (signifier == ServerToClientSignifiers.SendAllThisRecoredMatchData)
+    //    //{
+    //    //    temp_match_data = new MatchData(csv[1], int.Parse(csv[2]), int.Parse(csv[3]));
+    //    //}
 
 
-        if ( m_MessageReceiverFromServer != null)
-        {
-           m_MessageReceiverFromServer(signifier, FirstElement, TempTicTacToe, TempmatchData);
-        }
-        
-    }
+    //    //if (message_receiver_from_server != null)
+    //    //{
+    //    //    message_receiver_from_server(signifier, first_element, temp_tic_tac_toe_state, temp_match_data);
+    //    //}
+
+    //}
 
     public bool IsConnected()
     {
@@ -171,19 +199,19 @@ public class ClientToServerSignifiers
 
     public const int Login = 2;
 
-    public const int SendChatMsg = 3; // send a globle chat message
+    public const int NotifyPublicChatChatOfGlobalMsg = 3; // send a globle chat message
 
-    public const int SendChatPrivateMsg = 4;// send a chat private msg
+    public const int NotifyPublicChatWitchAPrivateMsg = 4;// send a chat private msg
 
-    public const int EnterTheChatRoom = 5; // enter the chat room
+    public const int EnterThePublicChatRoom = 5; // enter the chat room
 
-    public const int Logout = 6;//
+    public const int NotifyPublicChatOfLogout = 6;//
 
     public const int JoinQueueForGameRoom = 7;
 
-    public const int TicTacToesSomethingSomthing = 8;
+    public const int TicTacTacDoAMove = 8;
 
-    public const int ReMatchOfTicTacToe = 9;
+    public const int RematchOfTicTacToe = 9;
 
     public const int ExitTacTacToe = 10;
 
@@ -193,7 +221,7 @@ public class ClientToServerSignifiers
 
     public const int StopObserving = 13;
 
-    public const int SendGameRoomChatMSG = 14;
+    public const int SendGameRoomGlobalChatMSG = 14;
 
     public const int SendOnlyPlayerGameRoomChatMSG = 15;
 
@@ -201,7 +229,7 @@ public class ClientToServerSignifiers
 
     public const int CreateARecored = 17;
 
-    public const int AskForAllRecoreds = 18;
+    public const int AskForAllRecoredNames = 18;
 
     public const int AskForThisRecoredMatchData = 19;
 }
@@ -234,7 +262,7 @@ public class ServerToClientSignifiers
 
     public const int WaitForOppentMoved = 13;
 
-    public const int ReMatchOfTicTacToeComplete = 14;
+    public const int RematchOfTicTacToeComplete = 14;
 
     public const int ExitTacTacToeComplete = 15;
 
@@ -281,3 +309,15 @@ public class ServerToClientSignifiers
 
 
 
+/*
+ * naming convention:
+
+-Enumerator Names->kEnumName
+-Funtion-> AddTableEntry
+-Constant Names -> kDaysInAWeek
+-Class Data Members -> pool_
+-Struct Data Members->table_name
+-Variable -> table_name
+ * 
+ * 
+ */
