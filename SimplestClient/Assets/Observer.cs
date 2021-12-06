@@ -5,23 +5,6 @@ using UnityEngine.UI;
 
 public class Observer : MonoBehaviour
 {
-   // public NetworkedClient m_MessageReceiverFromServer = null;
-    /// Searcher
-   
-   // bool m_IsGameRoomFound = false;
-   
-   // string m_UserName = "<The Player>";
-    /// <summary>
-    /// watcher
-    /// </summary>
-   
-    /// <summary>
-    /// /
-    /// </summary>
-    
-
-
-
     #region GameObjects
     public NetworkedClient message_receiver_from_Server = null;
     GameObject network, system_manger_object;
@@ -55,24 +38,38 @@ public class Observer : MonoBehaviour
                 network = go;
         }
         
-
+        // initializing 
         message_receiver_from_Server = network.GetComponent<NetworkedClient>();
+
+        
+        
+        ///  - check message_receiver_from_Server isn't null
+        ///  -// this line of code just register ObserverReceivedFuntion from the action.
+        ///  ObserverReceivedFuntion will  get call by the action and will get any data pas into it.
+        
 
         if (message_receiver_from_Server != null)
         {
-            message_receiver_from_Server.OnMessageReceivedFromServer += ObserverReceived;
+            message_receiver_from_Server.OnMessageReceivedFromServer += ObserverReceivedFromServer;
         }
     }
+
+    /// <summary>
+    ///  OnDestroy()
+    ///  - check message_receiver_from_Server isn't null
+    ///  -// this line of code just Unregister ObserverReceivedFuntion from the action.
+    ///  ObserverReceivedFuntion will not get call by the action and will  not get any data pas into it.
+    /// </summary>
     private void OnDestroy()
     {
         if (message_receiver_from_Server != null)
         {
-            message_receiver_from_Server.OnMessageReceivedFromServer -= ObserverReceived;
+            message_receiver_from_Server.OnMessageReceivedFromServer -= ObserverReceivedFromServer;
         }
 
     }
 
-    void ObserverReceived(int sigifier, string s, TicTacToeBoard t, MatchData matchData)
+    void ObserverReceivedFromServer(int sigifier, string s, TicTacToeBoard tic_tac_toe_board, MatchData match_data)
     {
         switch (sigifier)
         {
@@ -94,7 +91,8 @@ public class Observer : MonoBehaviour
                 DisplayPlayerSearchResult( 2, observer_search_text);
                 break;
             case ServerToClientSignifiers.ObserverGetsMove:
-                DisplayMovePart1(t);
+                // DisplayMovePart1(t);
+                DisplayBoard(tic_tac_toe_board);
                 break;
         }
     }
@@ -140,38 +138,15 @@ public class Observer : MonoBehaviour
 
     public void SetObservrWatcher()
     {
-        DisplayMovePart1(new TicTacToeBoard(0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
-        DisplayMovePart3(41, observer_watcher_player_text, observer_watcher_opponent_text);
+        DisplayBoard(new TicTacToeBoard(0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+        DisplayPlayerTurn(41, observer_watcher_player_text, observer_watcher_opponent_text);
     }
     public void Observer_Watcher_Logout_ButtonIsPressed()
     {
         network.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.StopObserving + ",");
     }
-    void DisplayMovePart1(TicTacToeBoard b)
-    {
-        DisplayMovePart2(b.topleft, grid_spaces_observer_watcher[0]); DisplayMovePart2(b.topmid, grid_spaces_observer_watcher[1]); DisplayMovePart2(b.topright, grid_spaces_observer_watcher[2]);
-        DisplayMovePart2(b.midleft, grid_spaces_observer_watcher[3]); DisplayMovePart2(b.midmid, grid_spaces_observer_watcher[4]); DisplayMovePart2(b.midright, grid_spaces_observer_watcher[5]);
-        DisplayMovePart2(b.botleft, grid_spaces_observer_watcher[6]); DisplayMovePart2(b.botmid, grid_spaces_observer_watcher[7]); DisplayMovePart2(b.botright, grid_spaces_observer_watcher[8]);
-
-        DisplayMovePart3(b.WhosMove, observer_watcher_player_text, observer_watcher_opponent_text);
-    }
-    void DisplayMovePart2(int space, Text t)
-    {
-        if (space == 0)
-        {
-            t.text = "";
-        }
-        else if (space == 1)
-        {
-            t.text = "X";
-        }
-        else if (space == 2)
-        {
-            t.text = "O";
-        }
-    }
-
-    void DisplayMovePart3(int Whoturn, Text P, Text O)
+   
+    void DisplayPlayerTurn(int Whoturn, Text P, Text O)
     {
         if (Whoturn == 41)
         {
@@ -196,12 +171,28 @@ public class Observer : MonoBehaviour
         }
     }
 
+    public void DisplayBoard(TicTacToeBoard board)
+    {
+       int [] virtual_board = board.GetTicTacToeBoardAsArray(board);
+
+        for (int i = 0; i < virtual_board.Length; i++)
+        {
+            if (virtual_board[i] == 0)
+            {
+                grid_spaces_observer_watcher[i].text = "";
+            }
+            else if (virtual_board[i] == 1)
+            {
+                grid_spaces_observer_watcher[i].text = "X";
+            }
+            else if (virtual_board[i] == 2)
+            {
+                grid_spaces_observer_watcher[i].text = "O";
+            }
+        }
+        DisplayPlayerTurn(board.whos_move_, observer_watcher_player_text, observer_watcher_opponent_text);
+    }
     #endregion
 
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

@@ -155,11 +155,11 @@ public class RecordMaker : MonoBehaviour
     void display() 
     {
          TicTacToeBoard t = MoveBoard[SelectedMove];
-        check(t.topleft,GrideSpace[0]); check(t.topmid, GrideSpace[1]); check(t.topright, GrideSpace[2]);
-        check(t.midleft, GrideSpace[3]); check(t.midmid, GrideSpace[4]); check(t.midright, GrideSpace[5]);
-        check(t.botleft, GrideSpace[6]); check(t.botmid, GrideSpace[7]); check(t.botright, GrideSpace[8]);
+        check(t.top_left_,GrideSpace[0]); check(t.top_mid_, GrideSpace[1]); check(t.top_right_, GrideSpace[2]);
+        check(t.mid_left_, GrideSpace[3]); check(t.mid_mid_, GrideSpace[4]); check(t.mid_right_, GrideSpace[5]);
+        check(t.bot_left_, GrideSpace[6]); check(t.bot_mid_, GrideSpace[7]); check(t.bot_right_, GrideSpace[8]);
 
-        DisplayWhoturn(t.WhosMove, RePlayer_Player_Text, RePlayer_Opponent_Text);
+        DisplayWhoturn(t.whos_move_, RePlayer_Player_Text, RePlayer_Opponent_Text);
     }
     void check(int space, Text t)
     {
@@ -357,7 +357,7 @@ public class RecordMaker : MonoBehaviour
         sw.WriteLine(PlayerNameSignifier+ "," + m_OurPlayerName +"," + m_OurOpponentPlayerName );
         foreach (TicTacToeBoard b in m_allBoards)
         {
-            sw.WriteLine(BoardSaveDataSignifier + "," + b.topleft.ToString() + "," + b.topmid.ToString() + "," + b.topright.ToString() + "," + b.midleft.ToString() + "," + b.midmid.ToString() + "," + b.midright.ToString() + "," + b.botleft.ToString() + "," + b.botmid.ToString()+ ","+ b.botright.ToString() +","+ b.WhosMove.ToString());
+            sw.WriteLine(BoardSaveDataSignifier + "," + b.top_left_.ToString() + "," + b.top_mid_.ToString() + "," + b.top_right_.ToString() + "," + b.mid_left_.ToString() + "," + b.mid_mid_.ToString() + "," + b.mid_right_.ToString() + "," + b.bot_left_.ToString() + "," + b.bot_mid_.ToString()+ ","+ b.bot_right_.ToString() +","+ b.whos_move_.ToString());
         }
 
         sw.Close();

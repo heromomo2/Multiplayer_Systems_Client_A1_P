@@ -223,9 +223,9 @@ public class TicTacToe : MonoBehaviour
        foreach (TicTacToeBoard b in m_ListOFBoard)
         {
             Debug.Log("\n board: " );
-            Debug.Log(" [ "+ b.topleft.ToString() + " , " + b.topmid.ToString() + " , " + b.topright.ToString() + " ] ");
-            Debug.Log(" [ " + b.midleft.ToString() + " , " + b.midmid.ToString() + " , " + b.midright.ToString()+ " ] ");
-            Debug.Log(" [ " + b.botleft.ToString() + " , " + b.botmid.ToString() + " , " + b.botright.ToString()+ " ] ");
+            Debug.Log(" [ "+ b.top_left_.ToString() + " , " + b.top_mid_.ToString() + " , " + b.top_right_.ToString() + " ] ");
+            Debug.Log(" [ " + b.mid_left_.ToString() + " , " + b.mid_mid_.ToString() + " , " + b.mid_right_.ToString()+ " ] ");
+            Debug.Log(" [ " + b.bot_left_.ToString() + " , " + b.bot_mid_.ToString() + " , " + b.bot_right_.ToString()+ " ] ");
             Debug.Log("\n");
             //if (b)
         }
@@ -427,23 +427,29 @@ public class TicTacToe : MonoBehaviour
 
 }
  public class TicTacToeBoard 
-    {
-        public int topleft, topmid, topright, midleft, midmid, midright, botleft, botmid, botright;
-        public int WhosMove;
+ {
+    public int top_left_, top_mid_, top_right_, mid_left_, mid_mid_, mid_right_, bot_left_, bot_mid_, bot_right_;
+    public int whos_move_;
         
 
-public  TicTacToeBoard (int tl, int tm, int tr, int ml, int mm,int mr, int bl, int bm, int br, int wsm )
-        {
-            topleft = tl;
-            topmid = tm;
-            topright = tr;
-            midleft = ml;
-            midmid = mm;
-            midright = mr;
-            botleft = bl;
-            botmid = bm;
-            botright = br;
-            WhosMove = wsm;
-        }
-
+    public  TicTacToeBoard (int tl, int tm, int tr, int ml, int mm,int mr, int bl, int bm, int br, int wsm )
+    {
+            top_left_ = tl;
+            top_mid_ = tm;
+            top_right_ = tr;
+            mid_left_ = ml;
+            mid_mid_ = mm;
+            mid_right_ = mr;
+            bot_left_ = bl;
+            bot_mid_ = bm;
+            bot_right_ = br;
+            whos_move_ = wsm;
     }
+
+    public int[] GetTicTacToeBoardAsArray(TicTacToeBoard b) 
+    {
+        int[] array = new int[9] { b.top_left_ , b.top_mid_ ,b.top_right_ , b.mid_left_, b.mid_mid_, mid_right_, b.bot_left_, b.bot_mid_,b.bot_right_};
+        return array;
+    }
+
+ }
