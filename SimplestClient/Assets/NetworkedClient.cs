@@ -193,6 +193,12 @@ public class NetworkedClient : MonoBehaviour
     }  
 }
 
+
+
+
+
+
+#region Protocol
 public class ClientToServerSignifiers
 {
     public const int CreateAcount = 1;
@@ -308,6 +314,48 @@ public class ServerToClientSignifiers
 }
 
 
+public class MatchData
+{
+    public int Positoin;
+    public int PlayerSymbol;
+    public string Playername;
+
+    public MatchData(string playerName, int position, int playerSymbol)
+    {
+        Positoin = position;
+        Playername = playerName;
+        PlayerSymbol = playerSymbol;
+    }
+
+}
+public class TicTacToeBoard
+{
+    public int top_left_, top_mid_, top_right_, mid_left_, mid_mid_, mid_right_, bot_left_, bot_mid_, bot_right_;
+    public int whos_move_;
+
+
+    public TicTacToeBoard(int tl, int tm, int tr, int ml, int mm, int mr, int bl, int bm, int br, int wsm)
+    {
+        top_left_ = tl;
+        top_mid_ = tm;
+        top_right_ = tr;
+        mid_left_ = ml;
+        mid_mid_ = mm;
+        mid_right_ = mr;
+        bot_left_ = bl;
+        bot_mid_ = bm;
+        bot_right_ = br;
+        whos_move_ = wsm;
+    }
+
+    public int[] GetTicTacToeBoardAsArray(TicTacToeBoard board)
+    {
+        int[] array = new int[9] { board.top_left_, board.top_mid_, board.top_right_, board.mid_left_, board.mid_mid_, mid_right_, board.bot_left_, board.bot_mid_, board.bot_right_ };
+        return array;
+    }
+
+}
+
 
 /*
  * naming convention:
@@ -321,3 +369,4 @@ public class ServerToClientSignifiers
  * 
  * 
  */
+#endregion

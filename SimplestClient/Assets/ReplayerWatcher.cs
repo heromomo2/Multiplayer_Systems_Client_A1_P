@@ -12,7 +12,7 @@ public class ReplayerWatcher : MonoBehaviour
     public GameObject forward_button, backward_button = null;
     public GameObject replayer_text, replayer_second_player_text, replayer_first_player_text = null;
     public GameObject drop_down = null;
-    public List<Text> visual_board_text = new List<Text>();
+    public List<Text> visual_board_text; 
     public NetworkedClient message_receiver_from_server = null;
     #endregion
 
@@ -69,19 +69,33 @@ public class ReplayerWatcher : MonoBehaviour
         backward_button.GetComponent<Button>().onClick.AddListener(BackwardButtonPressed);
         forward_button.GetComponent<Button>().onClick.AddListener(ForwardButtonPressed);
 
-        
-    }
 
-    private void OnDestroy()
-    {
-        if (message_receiver_from_server != null)
+        /// get the textobject and place them in the list (visual_board_text )
+        visual_board_text = new List<Text>();
+
+        for (int i = 0; i <= 9; i++)
         {
-            message_receiver_from_server.OnMessageReceivedFromServer -= ReplayerWatcherReceivedMsgFromTheServer;
+
+            GameObject temp_game_object;
+
+            temp_game_object = GameObject.Find("Replay_Text" + i);
+            Debug.Log("Replay_Text:" + i);
+            if (temp_game_object != null)
+            {
+                visual_board_text.Add(temp_game_object.GetComponent<Text>());
+            }
         }
 
     }
 
-    public void ReplayerWatcherReceivedMsgFromTheServer(int signifier, string s, TicTacToeBoard t, MatchData matchData)
+    
+
+  
+
+
+    #region ReceivingDataFromServer/Involved
+
+    public void ReplayerWatcherReceivedMsgFromTheServer(int signifier, string s, TicTacToeBoard tic_tac_toe_board, MatchData matchData)
     {
         switch (signifier)
         {
@@ -90,7 +104,7 @@ public class ReplayerWatcher : MonoBehaviour
                 ///- stop player from using the Interface
                 //- rest ReplayerWatcher
                 //- has_selected_record is set faluse, so the player can't use the buttons(forward&backward) until you get match data
-              
+
                 DisableAllInterface();
                 ResetReplayerWatcher(true, true);
                 has_selected_record = false;
@@ -128,65 +142,19 @@ public class ReplayerWatcher : MonoBehaviour
                 //- just get match data from server
                 LoadTheMatchDataFromServer(matchData);
                 break;
-            case ServerToClientSignifiers.DoneSendAllThisRecoredMatchData :
+            case ServerToClientSignifiers.DoneSendAllThisRecoredMatchData:
                 //- we done load the match data from and now we let player use interface again
                 ReenbleAllInterface();
                 break;
         }
     }
-
-    /// <summary>
-    /// SetDropDownChanged()
-    /// - set up drop_down's option with list of recordnames from server
-    /// </summary>
-    public void SetDropDownChanged()
+    private void OnDestroy()
     {
-        foreach (string rn in record_names)
+        if (message_receiver_from_server != null)
         {
-            drop_down.GetComponent<Dropdown>().options.Add(new Dropdown.OptionData() { text = rn });
+            message_receiver_from_server.OnMessageReceivedFromServer -= ReplayerWatcherReceivedMsgFromTheServer;
         }
-    }
 
-    /// <summary>
-    /// BackwardButtonPressed()
-    /// - we don't want go out of bound of the match_data that why we have the if statment, minimum_move and has_selected
-    /// - it's button call and moves us to the prev state of game
-    /// - we reset the VirtualBord{0,0,0,0,0,0,0,0,0}
-    /// - we call MoveThroughtMatchData to change the elements in VirtualBord by selected_move
-    /// - then we display the board
-    /// </summary>
-
-    public void BackwardButtonPressed()
-    {
-        Debug.Log("BackwardButton Pressed is called > ");
-        //m_RePlayer_Text.GetComponent<Text>().text = "Replayer " + "\n  Move :" + SelectedMove.ToString();
-        if (selected_move > minimum_move && has_selected_record)
-        {
-            ResetVirtualBord();
-            selected_move = selected_move - 1;
-            MoveThroughtMatchData(selected_move);
-            DisplayBoard();
-        }
-    }
-
-    /// <summary>
-    /// ForwardButtonPressed()
-    /// - we don't want go out of bound of the match_data that why we have the if statment, maximum_move and has_selected
-    /// - it's button call and moves use the next state of game
-    /// - we reset the VirtualBord{0,0,0,0,0,0,0,0,0}
-    /// - we call MoveThroughtMatchData to change the elements in VirtualBord by selected_move
-    /// - then we display the board
-    /// </summary>
-    public void ForwardButtonPressed()
-    {
-        Debug.Log("ForwardButton Pressed is called > " );
-        if (selected_move < maximum_move && has_selected_record) 
-        {
-            ResetVirtualBord();
-            selected_move = selected_move + 1;
-            MoveThroughtMatchData(selected_move);
-            DisplayBoard();
-        }
     }
 
     /// <summary>
@@ -195,7 +163,7 @@ public class ReplayerWatcher : MonoBehaviour
     /// - place in it list of string (record_names)
     /// </summary>
     /// <param name="record"></param>
-    
+
     private void LoadRecordNamesFromServer(string record) 
     {
         record_names.Add(record);
@@ -209,7 +177,7 @@ public class ReplayerWatcher : MonoBehaviour
     /// - get playerone's name and playertwo's name.
     /// </summary>
     /// <param name="match_data"></param>
-   
+  
     private void LoadTheMatchDataFromServer(MatchData match_data)
     {
         match_datas.Add(match_data);
@@ -226,31 +194,11 @@ public class ReplayerWatcher : MonoBehaviour
             our_second_player_name = match_data.Playername.ToString();
         }
     }
-
-    /// <summary>
-    /// MoveThroughtMatchData
-    /// -how we iterater throught matchdatas
-    /// - also we pass data into DisplayWhoTurnIt
-    /// - display what move we are on
-    /// </summary>
-    /// <param name="move"></param>
-    private void MoveThroughtMatchData(int move) 
-    {
-     
-         MatchData temp_match_data = new MatchData("TempMatchData",0,3);
-
-        for (int i = 0; i < move; i++) 
-        {
-             temp_match_data = match_datas[i];
-           virtual_board[ match_datas[i].Positoin] = match_datas[i].PlayerSymbol;
-        }
-        
-
-        DisplayWhoTurnIt(temp_match_data, replayer_first_player_text.GetComponent<Text>(), replayer_second_player_text.GetComponent<Text>());
-        replayer_text.GetComponent<Text>().text = "Replayer " + "\n  Move :" + selected_move.ToString();
-    }
+    #endregion
 
 
+
+    #region ResetFunctions
     /// <summary>
     /// ResetVirtualBord()
     /// - a simple way to reset the ResetVirtualBord
@@ -286,12 +234,11 @@ public class ReplayerWatcher : MonoBehaviour
         }
 
     }
+    #endregion 
+
 
     #region Interfacecode
-    /// <summary>
-    ///  DisplayWhoTurnIt
-    /// </summary>
-    /// 
+
     void DisplayWhoTurnIt(MatchData match_data, Text first_player, Text second_player)
     {
         if (match_data.PlayerSymbol == 3)
@@ -369,22 +316,82 @@ public class ReplayerWatcher : MonoBehaviour
         backward_button.GetComponent<Button>().interactable = false;
     }
 
+    /// <summary>
+    /// MoveThroughtMatchData
+    /// -how we iterater throught matchdatas
+    /// - also we pass data into DisplayWhoTurnIt
+    /// - display what move we are on
+    /// </summary>
+    /// <param name="move"></param>
+    private void MoveThroughtMatchData(int move)
+    {
+
+        MatchData temp_match_data = new MatchData("TempMatchData", 0, 3);
+
+        for (int i = 0; i < move; i++)
+        {
+            temp_match_data = match_datas[i];
+            virtual_board[match_datas[i].Positoin] = match_datas[i].PlayerSymbol;
+        }
+
+
+        DisplayWhoTurnIt(temp_match_data, replayer_first_player_text.GetComponent<Text>(), replayer_second_player_text.GetComponent<Text>());
+        replayer_text.GetComponent<Text>().text = "Replayer " + "\n  Move :" + selected_move.ToString();
+    }
+
+    /// <summary>
+    /// SetDropDownChanged()
+    /// - set up drop_down's option with list of recordnames from server
+    /// </summary>
+    public void SetDropDownChanged()
+    {
+        foreach (string rn in record_names)
+        {
+            drop_down.GetComponent<Dropdown>().options.Add(new Dropdown.OptionData() { text = rn });
+        }
+    }
+
+    /// <summary>
+    /// BackwardButtonPressed()
+    /// - we don't want go out of bound of the match_data that why we have the if statment, minimum_move and has_selected
+    /// - it's button call and moves us to the prev state of game
+    /// - we reset the VirtualBord{0,0,0,0,0,0,0,0,0}
+    /// - we call MoveThroughtMatchData to change the elements in VirtualBord by selected_move
+    /// - then we display the board
+    /// </summary>
+
+    public void BackwardButtonPressed()
+    {
+        Debug.Log("BackwardButton Pressed is called > ");
+        //m_RePlayer_Text.GetComponent<Text>().text = "Replayer " + "\n  Move :" + SelectedMove.ToString();
+        if (selected_move > minimum_move && has_selected_record)
+        {
+            ResetVirtualBord();
+            selected_move = selected_move - 1;
+            MoveThroughtMatchData(selected_move);
+            DisplayBoard();
+        }
+    }
+
+    /// <summary>
+    /// ForwardButtonPressed()
+    /// - we don't want go out of bound of the match_data that why we have the if statment, maximum_move and has_selected
+    /// - it's button call and moves use the next state of game
+    /// - we reset the VirtualBord{0,0,0,0,0,0,0,0,0}
+    /// - we call MoveThroughtMatchData to change the elements in VirtualBord by selected_move
+    /// - then we display the board
+    /// </summary>
+    public void ForwardButtonPressed()
+    {
+        Debug.Log("ForwardButton Pressed is called > ");
+        if (selected_move < maximum_move && has_selected_record)
+        {
+            ResetVirtualBord();
+            selected_move = selected_move + 1;
+            MoveThroughtMatchData(selected_move);
+            DisplayBoard();
+        }
+    }
     #endregion
 }
 
-#region Protocol
-public class MatchData
-{
-    public int Positoin;
-    public int PlayerSymbol;
-    public string Playername;
-
-    public MatchData(string playerName, int position, int playerSymbol)
-    {
-        Positoin = position;
-        Playername = playerName;
-        PlayerSymbol = playerSymbol;
-    }
-
-}
-#endregion

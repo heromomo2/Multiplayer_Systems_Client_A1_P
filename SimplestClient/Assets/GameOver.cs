@@ -50,15 +50,15 @@ public class GameOver : MonoBehaviour
 
     public void GamerOverTextChange ()
     {
-        if (Tic_Tac_Toe.GetComponent<TicTacToe>().m_ws == TicTacToe.m_WinnerStatus.Loser)
+        if (Tic_Tac_Toe.GetComponent<GameLogic>().our_win_status == GameLogic.win_status.Loser)
         {
             GameOverTitle.text = "Game Over \n You lost";
         }
-        else if (Tic_Tac_Toe.GetComponent<TicTacToe>().m_ws == TicTacToe.m_WinnerStatus.winner)
+        else if (Tic_Tac_Toe.GetComponent<GameLogic>().our_win_status == GameLogic.win_status.winner)
         {
             GameOverTitle.text = "Game Over \n You winner";
         }
-        else if (Tic_Tac_Toe.GetComponent<TicTacToe>().m_ws == TicTacToe.m_WinnerStatus.draw)
+        else if (Tic_Tac_Toe.GetComponent<GameLogic>().our_win_status == GameLogic.win_status.draw)
         {
             GameOverTitle.text = "Game Over \n No winners";
         }

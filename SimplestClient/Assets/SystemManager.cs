@@ -19,7 +19,7 @@ public class SystemManager : MonoBehaviour
 
     #region GameObjects
     private NetworkedClient m_MessageReceiverFromServer = null;
-    GameObject Login, Chat, networkClient,Menu,RecordRequest, WaitingInQueue, Tic_Tac_Toe,GameOver,Replayer,Observer, GameRoomChat, Observer_Search, Observer_watcher;
+    GameObject Login, Chat, networkClient,Menu,RecordRequest, WaitingInQueue, game_logic,GameOver,Replayer,Observer, GameRoomChat, Observer_Search, Observer_watcher;
     #endregion 
 
     // Start is called before the first frame update
@@ -39,7 +39,7 @@ public class SystemManager : MonoBehaviour
             else if (go.name == "RecordRequest_UI")
                 RecordRequest = go;
             else if (go.name == "Game_UI")
-                Tic_Tac_Toe = go;
+                game_logic = go;
             else if (go.name == "WaitingInQueue_UI")
                 WaitingInQueue = go;
             else if (go.name == "GameOverScreen_UI ")
@@ -102,17 +102,17 @@ public class SystemManager : MonoBehaviour
             case ServerToClientSignifiers.ExitTacTacToeComplete:
                 ChangeState(GameStates.LoginMenu);
                 Login.GetComponentInChildren<LogInScript>().ResetLogic();
-                Tic_Tac_Toe.GetComponent<TicTacToe>().resetBoard();
+                game_logic.GetComponent<GameLogic>().ResetBoards();
                 break;
             case ServerToClientSignifiers.PlayerDisconnectFromGameRoom:
                 ChangeState(GameStates.LoginMenu);
                 Login.GetComponentInChildren<LogInScript>().ResetLogic();
-                Tic_Tac_Toe.GetComponent<TicTacToe>().resetBoard();
+                game_logic.GetComponent<GameLogic>().ResetBoards();
                 break;
             case ServerToClientSignifiers.StopObservingComplete:
                 ChangeState(GameStates.LoginMenu);
                 Login.GetComponentInChildren<LogInScript>().ResetLogic();
-                Tic_Tac_Toe.GetComponent<TicTacToe>().resetBoard();
+                game_logic.GetComponent<GameLogic>().ResetBoards();
                 break;
             case ServerToClientSignifiers.SearchGameRoomsByUserNameComplete:
                 OpenObserverWatcer();
@@ -187,7 +187,7 @@ public class SystemManager : MonoBehaviour
                 Menu.SetActive(false);
                 RecordRequest.SetActive(false);
                 WaitingInQueue.SetActive(false);
-                Tic_Tac_Toe.SetActive(false);
+                game_logic.SetActive(false);
                 GameOver.SetActive(false);
                 Replayer.SetActive(false);
                 Observer.SetActive(false);
@@ -201,7 +201,7 @@ public class SystemManager : MonoBehaviour
                 Menu.SetActive(true);
                 WaitingInQueue.SetActive(false);
                 RecordRequest.SetActive(false);
-                Tic_Tac_Toe.SetActive(false);
+                game_logic.SetActive(false);
                 GameOver.SetActive(false);
                 Observer.SetActive(false);
                 GameRoomChat.SetActive(false);
@@ -214,7 +214,7 @@ public class SystemManager : MonoBehaviour
                 Menu.SetActive(false);
                 WaitingInQueue.SetActive(true);
                 RecordRequest.SetActive(false);
-                Tic_Tac_Toe.SetActive(false);
+                game_logic.SetActive(false);
                 GameOver.SetActive(false);
                 Replayer.SetActive(false);
                 Observer.SetActive(false);
@@ -228,7 +228,7 @@ public class SystemManager : MonoBehaviour
                 Menu.SetActive(false);
                 WaitingInQueue.SetActive(false);
                 RecordRequest.SetActive(false);
-                Tic_Tac_Toe.SetActive(true);
+                game_logic.SetActive(true);
                 GameOver.SetActive(false);
                 Replayer.SetActive(false);
                 Observer.SetActive(false);
@@ -242,7 +242,7 @@ public class SystemManager : MonoBehaviour
                 Menu.SetActive(false);
                 WaitingInQueue.SetActive(false);
                 RecordRequest.SetActive(true);
-                Tic_Tac_Toe.SetActive(true);
+                game_logic.SetActive(true);
                 GameOver.SetActive(true);
                 Replayer.SetActive(false);
                 Observer.SetActive(false);
@@ -256,7 +256,7 @@ public class SystemManager : MonoBehaviour
                 Menu.SetActive(false);
                 WaitingInQueue.SetActive(false);
                 RecordRequest.SetActive(false);
-                Tic_Tac_Toe.SetActive(false);
+                game_logic.SetActive(false);
                 GameOver.SetActive(false);
                 Replayer.SetActive(true);
                 Observer.SetActive(false);
@@ -270,7 +270,7 @@ public class SystemManager : MonoBehaviour
                 Menu.SetActive(false);
                 WaitingInQueue.SetActive(false);
                 RecordRequest.SetActive(false);
-                Tic_Tac_Toe.SetActive(false);
+                game_logic.SetActive(false);
                 GameOver.SetActive(false);
                 Replayer.SetActive(false);
                 Observer.SetActive(true);
@@ -285,7 +285,7 @@ public class SystemManager : MonoBehaviour
                 Menu.SetActive(false);
                 WaitingInQueue.SetActive(false);
                 RecordRequest.SetActive(false);
-                Tic_Tac_Toe.SetActive(false);
+                game_logic.SetActive(false);
                 GameOver.SetActive(false);
                 Replayer.SetActive(false);
                 Observer.SetActive(true);
@@ -300,7 +300,7 @@ public class SystemManager : MonoBehaviour
                 Menu.SetActive(false);
                 WaitingInQueue.SetActive(false);
                 RecordRequest.SetActive(false);
-                Tic_Tac_Toe.SetActive(false);
+                game_logic.SetActive(false);
                 GameOver.SetActive(false);
                 Replayer.SetActive(false);
                 Observer.SetActive(false);

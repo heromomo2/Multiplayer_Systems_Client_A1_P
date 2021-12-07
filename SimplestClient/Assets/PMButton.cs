@@ -28,7 +28,7 @@ public class PMButton : MonoBehaviour
 
     public void PriavateMessageButtonOnClick()
     {
-        chat_ui.GetComponent<ChatBox>().SetChatToPrivateMessage(player_name);
+        chat_ui.GetComponent<PublicChatRoom>().SetChatToPrivateMessage(player_name);
     }
 
     //void OnDestroy()

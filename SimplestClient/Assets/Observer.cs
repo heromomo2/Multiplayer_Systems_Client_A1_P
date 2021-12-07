@@ -10,7 +10,7 @@ public class Observer : MonoBehaviour
     GameObject network, system_manger_object;
     #endregion
 
-    #region Searcher
+    #region Searcher Gameobject/variables
     public GameObject observer_search;
     public InputField observer_search_inputfield;
     public Text observer_search_text;
@@ -18,9 +18,9 @@ public class Observer : MonoBehaviour
     string user_name_search_for = "";
     #endregion
 
-    #region Watcher
+    #region Watcher Gameobject/variables
     public GameObject observer_watcher;
-    public List<Text> grid_spaces_observer_watcher = new List<Text>();
+    public List<Text> grid_spaces_observer_watcher;
     public TicTacToeBoard board_observer_watcher = null;
     public Text observer_watcher_player_text, observer_watcher_opponent_text = null;
     string user_name_other = "";
@@ -40,20 +40,37 @@ public class Observer : MonoBehaviour
         
         // initializing 
         message_receiver_from_Server = network.GetComponent<NetworkedClient>();
+        
 
-        
-        
+
         ///  - check message_receiver_from_Server isn't null
         ///  -// this line of code just register ObserverReceivedFuntion from the action.
         ///  ObserverReceivedFuntion will  get call by the action and will get any data pas into it.
-        
+
 
         if (message_receiver_from_Server != null)
         {
             message_receiver_from_Server.OnMessageReceivedFromServer += ObserverReceivedFromServer;
         }
-    }
 
+        /// get the textobject and place them in the list (grid_spaces_observer_watcher)
+        grid_spaces_observer_watcher = new List<Text>();
+
+        for (int i = 0; i <= 9; i++)
+        {
+            
+            GameObject temp_game_object;
+
+            temp_game_object = GameObject.Find("Observer_Gride_Space_Text"+ i);
+            Debug.Log("Observer_Gride_Space_Text :" + i);
+            if (temp_game_object != null)
+            {
+                grid_spaces_observer_watcher.Add(temp_game_object.GetComponent<Text>());
+            }
+        }
+
+    }
+    #region ReceivingDataFromServer/Involved
     /// <summary>
     ///  OnDestroy()
     ///  - check message_receiver_from_Server isn't null
@@ -73,37 +90,35 @@ public class Observer : MonoBehaviour
     {
         switch (sigifier)
         {
-            case ServerToClientSignifiers.LoginComplete:
-               // SetObservrSearch();
-                break;
             case ServerToClientSignifiers.SearchGameRoomsByUserNameComplete:
-               // m_IsGameRoomFound = true; 
+                // found the gameroom
                 user_name_other = s;
                 DisplayPlayerSearchResult(0, observer_search_text);
-               /// SetObservrWatcher();
                 break;
             case ServerToClientSignifiers.SearchGameRoomsByUserNameFailed:
-              //  m_IsGameRoomFound = false;
+                // didn't find the game room
                 DisplayPlayerSearchResult( 1, observer_search_text);
                 break;
             case ServerToClientSignifiers.SearchGameRoomsByUserNameSizeFailed:
-              //  m_IsGameRoomFound = false;
+                // found the gameroom and it's filled
                 DisplayPlayerSearchResult( 2, observer_search_text);
                 break;
             case ServerToClientSignifiers.ObserverGetsMove:
-                // DisplayMovePart1(t);
+                // get  the game state from the sever
                 DisplayBoard(tic_tac_toe_board);
                 break;
         }
     }
+    #endregion
 
-    #region Searchfunctions
+    #region SearchGameRoomFromSpectatingAndFunctionsInvovle
+
+
     public void SetObservrSearch()
     {
         observer_search_inputfield.text = "";
         observer_search_button.interactable = true;
         observer_search_text.text = "Please type a User name to view a GameRoom.";
-        // m_IsGameRoomFound = false;
     }
 
     public void Observer_Search_ButtonIsPressed()
@@ -134,7 +149,7 @@ public class Observer : MonoBehaviour
     }
     #endregion
 
-    #region Watcherfunctions
+    #region WatcherFunctions
 
     public void SetObservrWatcher()
     {
@@ -146,28 +161,28 @@ public class Observer : MonoBehaviour
         network.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.StopObserving + ",");
     }
    
-    void DisplayPlayerTurn(int Whoturn, Text P, Text O)
+    void DisplayPlayerTurn(int Whoturn, Text player_view, Text opponent_player)
     {
         if (Whoturn == 41)
         {
-            P.text = "Player:";
-            P.color = Color.black;
-            O.color = Color.black;
-            O.text = "Opponent:";
+            player_view.text = "Player:";
+            player_view.color = Color.black;
+            opponent_player.color = Color.black;
+            opponent_player.text = "Opponent:";
         }
         else if (Whoturn == 43)
         {
-            P.text = user_name_search_for + ": Waiting";
-            P.color = Color.black;
-            O.color = Color.blue;
-            O.text = user_name_other + " : Turn";
+            player_view.text = user_name_search_for + ": Waiting";
+            player_view.color = Color.black;
+            opponent_player.color = Color.blue;
+            opponent_player.text = user_name_other + " : Turn";
         }
         else if (Whoturn == 42)
         {
-            P.text = user_name_search_for + ": Turn";
-            P.color = Color.blue;
-            O.color = Color.black;
-            O.text = user_name_other + ": Waiting";
+            player_view.text = user_name_search_for + ": Turn";
+            player_view.color = Color.blue;
+            opponent_player.color = Color.black;
+            opponent_player.text = user_name_other + ": Waiting";
         }
     }
 

@@ -36,7 +36,7 @@ public class GridSpace : MonoBehaviour
 
     public void ButtonOnclick() 
     {
-        if(GameController.GetComponent<TicTacToe>().GetCurrentPlayerSymbol == 1 )
+        if(GameController.GetComponent<GameLogic>().GetCurrentPlayerSymbol == 1 )
         {
             this.gameObject.GetComponentInChildren<Text>().text = "X";
         }
@@ -44,7 +44,7 @@ public class GridSpace : MonoBehaviour
         {
             this.gameObject.GetComponentInChildren<Text>().text = "O";
         }
-        GameController.GetComponent<TicTacToe>().MakeAMove(GetMyPositionOntheBoard);
+        GameController.GetComponent<GameLogic>().MakeAMove(GetMyPositionOntheBoard);
         this.gameObject.GetComponent<Button>().interactable = false;
     }
 
