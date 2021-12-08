@@ -946,7 +946,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1103765620759548855, guid: c9c04b686ed1da344a48c868690d9abc, type: 3}
       propertyPath: m_Name
-      value: TicTacToe_Button (4)
+      value: TicTacToe_Button4
       objectReference: {fileID: 0}
     - target: {fileID: 5692828978226411053, guid: c9c04b686ed1da344a48c868690d9abc, type: 3}
       propertyPath: m_Pivot.x
@@ -1118,7 +1118,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1103765620759548855, guid: c9c04b686ed1da344a48c868690d9abc, type: 3}
       propertyPath: m_Name
-      value: TicTacToe_Button (3)
+      value: TicTacToe_Button3
       objectReference: {fileID: 0}
     - target: {fileID: 5692828978226411053, guid: c9c04b686ed1da344a48c868690d9abc, type: 3}
       propertyPath: m_Pivot.x
@@ -6078,7 +6078,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1103765620759548855, guid: c9c04b686ed1da344a48c868690d9abc, type: 3}
       propertyPath: m_Name
-      value: TicTacToe_Button (5)
+      value: TicTacToe_Button5
       objectReference: {fileID: 0}
     - target: {fileID: 5692828978226411053, guid: c9c04b686ed1da344a48c868690d9abc, type: 3}
       propertyPath: m_Pivot.x
@@ -6373,7 +6373,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 100, y: 0}
   m_SizeDelta: {x: -100, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &656933357
@@ -8119,7 +8119,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1103765620759548855, guid: c9c04b686ed1da344a48c868690d9abc, type: 3}
       propertyPath: m_Name
-      value: TicTacToe_Button (8)
+      value: TicTacToe_Button8
       objectReference: {fileID: 0}
     - target: {fileID: 5692828978226411053, guid: c9c04b686ed1da344a48c868690d9abc, type: 3}
       propertyPath: m_Pivot.x
@@ -8860,17 +8860,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   our_win_status: 0
-  buttons:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  m_TicTacToe_Text: {fileID: 0}
+  buttons: []
+  game_logic_turn_text: {fileID: 0}
 --- !u!1 &838079729
 GameObject:
   m_ObjectHideFlags: 0
@@ -10657,7 +10648,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1103765620759548855, guid: c9c04b686ed1da344a48c868690d9abc, type: 3}
       propertyPath: m_Name
-      value: TicTacToe_Button (2)
+      value: TicTacToe_Button2
       objectReference: {fileID: 0}
     - target: {fileID: 5692828978226411053, guid: c9c04b686ed1da344a48c868690d9abc, type: 3}
       propertyPath: m_Pivot.x
@@ -11601,7 +11592,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1103765620759548855, guid: c9c04b686ed1da344a48c868690d9abc, type: 3}
       propertyPath: m_Name
-      value: TicTacToe_Button
+      value: TicTacToe_Button0
       objectReference: {fileID: 0}
     - target: {fileID: 5692828978226411053, guid: c9c04b686ed1da344a48c868690d9abc, type: 3}
       propertyPath: m_Pivot.x
@@ -17150,7 +17141,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1103765620759548855, guid: c9c04b686ed1da344a48c868690d9abc, type: 3}
       propertyPath: m_Name
-      value: TicTacToe_Button (1)
+      value: TicTacToe_Button1
       objectReference: {fileID: 0}
     - target: {fileID: 5692828978226411053, guid: c9c04b686ed1da344a48c868690d9abc, type: 3}
       propertyPath: m_Pivot.x
@@ -19206,7 +19197,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1103765620759548855, guid: c9c04b686ed1da344a48c868690d9abc, type: 3}
       propertyPath: m_Name
-      value: TicTacToe_Button (6)
+      value: TicTacToe_Button6
       objectReference: {fileID: 0}
     - target: {fileID: 5692828978226411053, guid: c9c04b686ed1da344a48c868690d9abc, type: 3}
       propertyPath: m_Pivot.x
@@ -19719,7 +19710,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1103765620759548855, guid: c9c04b686ed1da344a48c868690d9abc, type: 3}
       propertyPath: m_Name
-      value: TicTacToe_Button (7)
+      value: TicTacToe_Button7
       objectReference: {fileID: 0}
     - target: {fileID: 5692828978226411053, guid: c9c04b686ed1da344a48c868690d9abc, type: 3}
       propertyPath: m_Pivot.x

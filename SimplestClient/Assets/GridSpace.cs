@@ -4,19 +4,22 @@ using UnityEngine;
 using UnityEngine.UI;
 public class GridSpace : MonoBehaviour
 {
+    #region GameObjects
+    private GameObject game_logic;
+    #endregion
 
+    #region Variables
+    private int my_positon_on_the_board;
 
-    private GameObject GameController;
-    private int m_MyPositonOnTheBoard;
-
-    public int GetMyPositionOntheBoard   
+    public int GetPositionOnTheBoard   
     {
-         get{return m_MyPositonOnTheBoard; }
+         get{return my_positon_on_the_board; }
     }
-    public int SetMyPositionOntheBoard
+    public int SetPositionOnTheBoard
     {
-        set { m_MyPositonOnTheBoard = value; }
+        set { my_positon_on_the_board = value; }
     }
+    #endregion
 
     // Start is called before the first frame update
     void Start()
@@ -25,18 +28,16 @@ public class GridSpace : MonoBehaviour
         foreach (GameObject go in allObjects)
         {
             if (go.name == "Game_UI")
-                GameController = go;
+                game_logic = go;
         }
+        this.gameObject.GetComponent<Button>().onClick.AddListener(ButtonOnClick);
     }
 
-    void resetBoard()
-    {
-        
-    }
+   
 
-    public void ButtonOnclick() 
+    public void ButtonOnClick() 
     {
-        if(GameController.GetComponent<GameLogic>().GetCurrentPlayerSymbol == 1 )
+        if(game_logic.GetComponent<GameLogic>().GetCurrentPlayerSymbol == 1 )
         {
             this.gameObject.GetComponentInChildren<Text>().text = "X";
         }
@@ -44,7 +45,8 @@ public class GridSpace : MonoBehaviour
         {
             this.gameObject.GetComponentInChildren<Text>().text = "O";
         }
-        GameController.GetComponent<GameLogic>().MakeAMove(GetMyPositionOntheBoard);
+
+        game_logic.GetComponent<GameLogic>().MakeAMove(GetPositionOnTheBoard);
         this.gameObject.GetComponent<Button>().interactable = false;
     }
 
