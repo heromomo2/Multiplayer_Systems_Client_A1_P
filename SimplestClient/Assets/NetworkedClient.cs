@@ -159,33 +159,7 @@ public class NetworkedClient : MonoBehaviour
 
 
 
-    //public void  Msg (string[] csv ) 
-    //{
-    //    //int signifier = int.Parse(csv[0]);
-    //    //string first_element = csv[1].ToString();
-    //    //TicTacToeBoard temp_tic_tac_toe_state;
-    //    //MatchData temp_match_data = new MatchData("TempmatchData", 0, 3);
-
-    //    //if (signifier == ServerToClientSignifiers.ObserverGetsMove)
-    //    //{
-    //    //    temp_tic_tac_toe_state = new TicTacToeBoard(int.Parse(csv[1]), int.Parse(csv[2]), int.Parse(csv[3]), int.Parse(csv[4]), int.Parse(csv[5]), int.Parse(csv[6]), int.Parse(csv[7]), int.Parse(csv[8]), int.Parse(csv[9]), int.Parse(csv[10]));
-    //    //}
-    //    //else
-    //    //{
-    //    //    temp_tic_tac_toe_state = new TicTacToeBoard(0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-    //    //}
-    //    //if (signifier == ServerToClientSignifiers.SendAllThisRecoredMatchData)
-    //    //{
-    //    //    temp_match_data = new MatchData(csv[1], int.Parse(csv[2]), int.Parse(csv[3]));
-    //    //}
-
-
-    //    //if (message_receiver_from_server != null)
-    //    //{
-    //    //    message_receiver_from_server(signifier, first_element, temp_tic_tac_toe_state, temp_match_data);
-    //    //}
-
-    //}
+    
 
     public bool IsConnected()
     {

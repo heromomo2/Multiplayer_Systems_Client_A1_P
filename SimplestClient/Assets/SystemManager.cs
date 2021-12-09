@@ -18,8 +18,8 @@ public class SystemManager : MonoBehaviour
     #endregion
 
     #region GameObjects
-    private NetworkedClient m_MessageReceiverFromServer = null;
-    GameObject Login, Chat, networkClient,Menu,RecordRequest, WaitingInQueue, game_logic,GameOver,Replayer,Observer, GameRoomChat, Observer_Search, Observer_watcher;
+    private NetworkedClient message_receiver_from_server = null;
+    GameObject login, public_chat, network,menu,record_request, waiting_in_queue, game_logic,game_over,replayer,observer, game_room_chat_room, observer_search, observer_watcher;
     #endregion 
 
     // Start is called before the first frame update
@@ -29,40 +29,40 @@ public class SystemManager : MonoBehaviour
         foreach (GameObject go in allObjects)
         {
             if (go.name == "Login_Ui")
-                Login = go;
+                login = go;
             else if (go.name == "Chat_UI")
-                Chat = go;
+                public_chat = go;
             else if (go.name == "Network")
-                networkClient = go;
+                network = go;
             else if (go.name == "Menu_UI ")
-                Menu = go;
+                menu = go;
             else if (go.name == "RecordRequest_UI")
-                RecordRequest = go;
+                record_request = go;
             else if (go.name == "Game_UI")
                 game_logic = go;
             else if (go.name == "WaitingInQueue_UI")
-                WaitingInQueue = go;
+                waiting_in_queue = go;
             else if (go.name == "GameOverScreen_UI ")
-                GameOver = go;
+                game_over = go;
             else if (go.name == "Replayer_UI")
-                Replayer = go;
+                replayer = go;
             else if (go.name == "Observer_UI")
-                Observer = go;
+                observer = go;
             else if (go.name == "GameRoomChat_UI")
-                GameRoomChat = go;
+                game_room_chat_room = go;
             else if (go.name == "Observer_Search_UI")
-                Observer_Search = go;
+                observer_search = go;
             else if (go.name == "Observer_Watcher_UI")
-                Observer_watcher = go;
+                observer_watcher = go;
         }
 
 
-        m_MessageReceiverFromServer = networkClient.GetComponent<NetworkedClient>();
+        message_receiver_from_server = network.GetComponent<NetworkedClient>();
 
-        if (m_MessageReceiverFromServer != null)
+        if (message_receiver_from_server != null)
         {
           
-            m_MessageReceiverFromServer.OnMessageReceivedFromServer += SystemManagerReceived;
+            message_receiver_from_server.OnMessageReceivedFromServer += SystemManagerReceived;
         }
 
 
@@ -72,22 +72,23 @@ public class SystemManager : MonoBehaviour
 
     private void OnDestroy()
     { 
-        if (m_MessageReceiverFromServer != null)
+        if (message_receiver_from_server != null)
         {
             
-            m_MessageReceiverFromServer.OnMessageReceivedFromServer -= SystemManagerReceived;
+            message_receiver_from_server.OnMessageReceivedFromServer -= SystemManagerReceived;
         }
     
     }
 
 
- 
-    
+    #region ReceiviedFromTheServer
+
     void SystemManagerReceived (int signifier, string s, TicTacToeBoard t, MatchData matchData) 
     {
         switch (signifier)
         {
             case ServerToClientSignifiers.LoginComplete:
+                login.GetComponentInChildren<Login>().ResetLogin();
                 ChangeState(GameStates.MainMenu);
                 break;
             case ServerToClientSignifiers.OpponentPlayed:
@@ -101,212 +102,230 @@ public class SystemManager : MonoBehaviour
                 break;
             case ServerToClientSignifiers.ExitTacTacToeComplete:
                 ChangeState(GameStates.LoginMenu);
-                Login.GetComponentInChildren<LogInScript>().ResetLogic();
+                login.GetComponentInChildren<Login>().ResetLogin();
                 game_logic.GetComponent<GameLogic>().ResetBoards();
                 break;
             case ServerToClientSignifiers.PlayerDisconnectFromGameRoom:
                 ChangeState(GameStates.LoginMenu);
-                Login.GetComponentInChildren<LogInScript>().ResetLogic();
+                login.GetComponentInChildren<Login>().ResetLogin();
                 game_logic.GetComponent<GameLogic>().ResetBoards();
                 break;
             case ServerToClientSignifiers.StopObservingComplete:
                 ChangeState(GameStates.LoginMenu);
-                Login.GetComponentInChildren<LogInScript>().ResetLogic();
+                login.GetComponentInChildren<Login>().ResetLogin();
                 game_logic.GetComponent<GameLogic>().ResetBoards();
                 break;
             case ServerToClientSignifiers.SearchGameRoomsByUserNameComplete:
                 OpenObserverWatcer();
                 break;
+            case ServerToClientSignifiers.LogOutComplete:
+                login.GetComponentInChildren<Login>().ResetLogin();
+                break;
         }
     
     }
 
+    #endregion
 
-    
     public void OpenGameOver()
     {
-        GameOver.GetComponent<GameOver>().GamerOverTextChange();
+        game_over.GetComponent<GameOver>().GamerOverMessageText();
         ChangeState(GameStates.GameOver);
     }
-    public void OpenReplayer()
-    {
-        ChangeState(GameStates.Replayer);
-        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.AskForAllRecoredNames+ "," + GetUserName);
-    }
+
     public void OpenMenu()
     {
         ChangeState(GameStates.MainMenu);
     }
-    public void OpenLogin()
-    {
-        ChangeState(GameStates.LoginMenu);
-    }
-    public void OpenObserverSearch()
-    {
-        ChangeState(GameStates.Observer_Search);
-        Observer.GetComponent<Observer>().SetObservrSearch();
-    }
+   
+   
 
     private void OpenObserverWatcer()
     {
         ChangeState(GameStates.Observer_Watcher);
-        Observer.GetComponent<Observer>().SetObservrWatcher();
+        observer.GetComponent<Observer>().SetObservrWatcher();
     }
-    public void OpenChatRoom()
+    
+    public void Logout()
+    {
+        string logoutMsg = ClientToServerSignifiers.NotifyPublicChatOfLogout + ",";
+
+        network.GetComponent<NetworkedClient>().SendMessageToHost(logoutMsg);
+        ChangeState(GameStates.LoginMenu);
+
+    }
+
+
+
+
+
+    #region MainMenu
+    public void PublicChatRoomButtonIsPressed()
     {
         // open gameroom Ui and send a msg to server
 
         ChangeState(GameStates.chatroom);
         string OurEnterTheChatMsg = ClientToServerSignifiers.EnterThePublicChatRoom + "," + GetUserName;
-        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(OurEnterTheChatMsg);
+        network.GetComponent<NetworkedClient>().SendMessageToHost(OurEnterTheChatMsg);
     }
-    public void Logout()
-    {
-        string logoutMsg = ClientToServerSignifiers.NotifyPublicChatOfLogout + ",";
 
-        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(logoutMsg);
+    public void GameRoomButtonIsPressed()
+    {
+
+        ChangeState(GameStates.WaitingInQueueforOtherPlayer);
+        network.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.JoinQueueForGameRoom + "," + user_name);
+    }
+
+    public void ReplayerButtonIsPressed()
+    {
+        ChangeState(GameStates.Replayer);
+        network.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.AskForAllRecoredNames + "," + GetUserName);
+    }
+    public void OpenLogin()
+    {
         ChangeState(GameStates.LoginMenu);
-
     }
 
-
-    public void GameRoomButtonIsPreessed()
+    public void Observer()
     {
-
-         ChangeState(GameStates.WaitingInQueueforOtherPlayer);
-        networkClient.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.JoinQueueForGameRoom + ","+ user_name);
+        ChangeState(GameStates.Observer_Search);
+        observer.GetComponent<Observer>().SetObservrSearch();
     }
 
+    #endregion
+
+
+    #region GameStateMahice
     void ChangeState(int newState) 
     {
         switch (newState) 
         {
             case GameStates.LoginMenu:
-                Login.SetActive(true);
-                Chat.SetActive(false);
-                Menu.SetActive(false);
-                RecordRequest.SetActive(false);
-                WaitingInQueue.SetActive(false);
+                login.SetActive(true);
+                public_chat.SetActive(false);
+                menu.SetActive(false);
+                record_request.SetActive(false);
+                waiting_in_queue.SetActive(false);
                 game_logic.SetActive(false);
-                GameOver.SetActive(false);
-                Replayer.SetActive(false);
-                Observer.SetActive(false);
-                GameRoomChat.SetActive(false);
-                Observer_Search.SetActive(false);
-                Observer_watcher.SetActive(false);
+                game_over.SetActive(false);
+                replayer.SetActive(false);
+                observer.SetActive(false);
+                game_room_chat_room.SetActive(false);
+                observer_search.SetActive(false);
+                observer_watcher.SetActive(false);
                 break;
             case GameStates.MainMenu:
-                Login.SetActive(false);
-                Chat.SetActive(false);
-                Menu.SetActive(true);
-                WaitingInQueue.SetActive(false);
-                RecordRequest.SetActive(false);
+                login.SetActive(false);
+                public_chat.SetActive(false);
+                menu.SetActive(true);
+                waiting_in_queue.SetActive(false);
+                record_request.SetActive(false);
                 game_logic.SetActive(false);
-                GameOver.SetActive(false);
-                Observer.SetActive(false);
-                GameRoomChat.SetActive(false);
-                Observer_Search.SetActive(false);
-                Observer_watcher.SetActive(false);
+                game_over.SetActive(false);
+                observer.SetActive(false);
+                game_room_chat_room.SetActive(false);
+                observer_search.SetActive(false);
+                observer_watcher.SetActive(false);
                 break;
             case GameStates.WaitingInQueueforOtherPlayer:
-                Login.SetActive(false);
-                Chat.SetActive(false);
-                Menu.SetActive(false);
-                WaitingInQueue.SetActive(true);
-                RecordRequest.SetActive(false);
+                login.SetActive(false);
+                public_chat.SetActive(false);
+                menu.SetActive(false);
+                waiting_in_queue.SetActive(true);
+                record_request.SetActive(false);
                 game_logic.SetActive(false);
-                GameOver.SetActive(false);
-                Replayer.SetActive(false);
-                Observer.SetActive(false);
-                GameRoomChat.SetActive(false);
-                Observer_Search.SetActive(false);
-                Observer_watcher.SetActive(false);
+                game_over.SetActive(false);
+                replayer.SetActive(false);
+                observer.SetActive(false);
+                game_room_chat_room.SetActive(false);
+                observer_search.SetActive(false);
+                observer_watcher.SetActive(false);
                 break;
             case GameStates.TicTacToe:
-                Login.SetActive(false);
-                Chat.SetActive(false);
-                Menu.SetActive(false);
-                WaitingInQueue.SetActive(false);
-                RecordRequest.SetActive(false);
+                login.SetActive(false);
+                public_chat.SetActive(false);
+                menu.SetActive(false);
+                waiting_in_queue.SetActive(false);
+                record_request.SetActive(false);
                 game_logic.SetActive(true);
-                GameOver.SetActive(false);
-                Replayer.SetActive(false);
-                Observer.SetActive(false);
-                GameRoomChat.SetActive(true);
-                Observer_Search.SetActive(false);
-                Observer_watcher.SetActive(false);
+                game_over.SetActive(false);
+                replayer.SetActive(false);
+                observer.SetActive(false);
+                game_room_chat_room.SetActive(true);
+                observer_search.SetActive(false);
+                observer_watcher.SetActive(false);
                 break;
             case GameStates.GameOver:
-                Login.SetActive(false);
-                Chat.SetActive(false);
-                Menu.SetActive(false);
-                WaitingInQueue.SetActive(false);
-                RecordRequest.SetActive(true);
+                login.SetActive(false);
+                public_chat.SetActive(false);
+                menu.SetActive(false);
+                waiting_in_queue.SetActive(false);
+                record_request.SetActive(true);
                 game_logic.SetActive(true);
-                GameOver.SetActive(true);
-                Replayer.SetActive(false);
-                Observer.SetActive(false);
-                GameRoomChat.SetActive(false);
-                Observer_Search.SetActive(false);
-                Observer_watcher.SetActive(false);
+                game_over.SetActive(true);
+                replayer.SetActive(false);
+                observer.SetActive(false);
+                game_room_chat_room.SetActive(false);
+                observer_search.SetActive(false);
+                observer_watcher.SetActive(false);
                 break;
             case GameStates.Replayer:
-                Login.SetActive(false);
-                Chat.SetActive(false);
-                Menu.SetActive(false);
-                WaitingInQueue.SetActive(false);
-                RecordRequest.SetActive(false);
+                login.SetActive(false);
+                public_chat.SetActive(false);
+                menu.SetActive(false);
+                waiting_in_queue.SetActive(false);
+                record_request.SetActive(false);
                 game_logic.SetActive(false);
-                GameOver.SetActive(false);
-                Replayer.SetActive(true);
-                Observer.SetActive(false);
-                GameRoomChat.SetActive(false);
-                Observer_Search.SetActive(false);
-                Observer_watcher.SetActive(false);
+                game_over.SetActive(false);
+                replayer.SetActive(true);
+                observer.SetActive(false);
+                game_room_chat_room.SetActive(false);
+                observer_search.SetActive(false);
+                observer_watcher.SetActive(false);
                 break;
             case GameStates.Observer_Search:
-                Login.SetActive(false);
-                Chat.SetActive(false);
-                Menu.SetActive(false);
-                WaitingInQueue.SetActive(false);
-                RecordRequest.SetActive(false);
+                login.SetActive(false);
+                public_chat.SetActive(false);
+                menu.SetActive(false);
+                waiting_in_queue.SetActive(false);
+                record_request.SetActive(false);
                 game_logic.SetActive(false);
-                GameOver.SetActive(false);
-                Replayer.SetActive(false);
-                Observer.SetActive(true);
-                GameRoomChat.SetActive(false);
-                Observer_Search.SetActive(true);
-                Observer_watcher.SetActive(false);
+                game_over.SetActive(false);
+                replayer.SetActive(false);
+                observer.SetActive(true);
+                game_room_chat_room.SetActive(false);
+                observer_search.SetActive(true);
+                observer_watcher.SetActive(false);
                 break;
 
             case GameStates.Observer_Watcher:
-                Login.SetActive(false);
-                Chat.SetActive(false);
-                Menu.SetActive(false);
-                WaitingInQueue.SetActive(false);
-                RecordRequest.SetActive(false);
+                login.SetActive(false);
+                public_chat.SetActive(false);
+                menu.SetActive(false);
+                waiting_in_queue.SetActive(false);
+                record_request.SetActive(false);
                 game_logic.SetActive(false);
-                GameOver.SetActive(false);
-                Replayer.SetActive(false);
-                Observer.SetActive(true);
-                GameRoomChat.SetActive(true);
-                Observer_Search.SetActive(false);
-                Observer_watcher.SetActive(true);
+                game_over.SetActive(false);
+                replayer.SetActive(false);
+                observer.SetActive(true);
+                game_room_chat_room.SetActive(true);
+                observer_search.SetActive(false);
+                observer_watcher.SetActive(true);
                 break;
 
             case GameStates.chatroom:
-                Login.SetActive(false);
-                Chat.SetActive(true);
-                Menu.SetActive(false);
-                WaitingInQueue.SetActive(false);
-                RecordRequest.SetActive(false);
+                login.SetActive(false);
+                public_chat.SetActive(true);
+                menu.SetActive(false);
+                waiting_in_queue.SetActive(false);
+                record_request.SetActive(false);
                 game_logic.SetActive(false);
-                GameOver.SetActive(false);
-                Replayer.SetActive(false);
-                Observer.SetActive(false);
-                GameRoomChat.SetActive(false);
-                Observer_Search.SetActive(false);
-                Observer_watcher.SetActive(false);
+                game_over.SetActive(false);
+                replayer.SetActive(false);
+                observer.SetActive(false);
+                game_room_chat_room.SetActive(false);
+                observer_search.SetActive(false);
+                observer_watcher.SetActive(false);
                 break;
         }
     }
@@ -333,9 +352,5 @@ public class SystemManager : MonoBehaviour
         public const int Observer_Watcher = 9;
 
     }
-        // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    #endregion 
 }

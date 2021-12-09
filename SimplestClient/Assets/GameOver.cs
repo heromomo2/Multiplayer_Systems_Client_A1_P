@@ -3,82 +3,108 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 public class GameOver : MonoBehaviour
-    
+
 {
-    public Text GameOverTitle;
-    private NetworkedClient m_MessageReceiverFromServer = null;
-    private GameObject NetWorkObject, Tic_Tac_Toe, ReMatchButton;
+    #region GameObject/UI
+    public GameObject game_over_title_text;
+    private NetworkedClient message_receiver_from_server = null;
+    private GameObject network, game_logic, rematch_button, quit_button;
+    #endregion
+
+
     // Start is called before the first frame update
     void Start()
     {
+        //Initializing
         GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
         foreach (GameObject go in allObjects)
         {
             if (go.name == "Network")
-                NetWorkObject = go;
+                network = go;
             else if (go.name == "Game_UI")
-                Tic_Tac_Toe = go;
+                game_logic = go;
             else if (go.name == "GameOverScreen_RematchButton")
-                ReMatchButton = go;
+                rematch_button = go;
+            else if (go.name == "GameOverScreen_QuitButton")
+                quit_button = go;
+            else if (go.name == "GameOverScreen_TitleText")
+                game_over_title_text = go;
         }
-        m_MessageReceiverFromServer = NetWorkObject.GetComponent<NetworkedClient>();
-        if (m_MessageReceiverFromServer != null)
+        message_receiver_from_server = network.GetComponent<NetworkedClient>();
+
+        if (message_receiver_from_server != null)
         {
-            m_MessageReceiverFromServer.OnMessageReceivedFromServer += GameOverReceived;
+            message_receiver_from_server.OnMessageReceivedFromServer += GameOverReceivedMessageFromTheServer;
+        }
+
+        rematch_button.GetComponent<Button>().onClick.AddListener(RematchButtonIsPreessed);
+        quit_button.GetComponent<Button>().onClick.AddListener(QuitButtonIsPreessed);
+    }
+  
+    #region ReceivedMessageFromTheServer
+
+    void GameOverReceivedMessageFromTheServer(int signifier, string s, TicTacToeBoard t, MatchData match_datas)
+    {
+        if(signifier == ServerToClientSignifiers.PreventRematch) 
+        {
+            RematchButtonChanges(1);
+        }
+        if (signifier == ServerToClientSignifiers.LoginComplete)
+        {
+            RematchButtonChanges(2);
         }
     }
     private void OnDestroy()
     {
-        if (m_MessageReceiverFromServer != null)
+        if (message_receiver_from_server != null)
         {
-            m_MessageReceiverFromServer.OnMessageReceivedFromServer -= GameOverReceived;
+            message_receiver_from_server.OnMessageReceivedFromServer -= GameOverReceivedMessageFromTheServer;
         }
     }
 
-
-    void GameOverReceived(int signifier, string s, TicTacToeBoard t, MatchData matchData)
+    private void RematchButtonChanges(int number)
     {
-        if(signifier == ServerToClientSignifiers.PreventRematch) 
+        if (number == 1)
         {
-            ReMatchButton.GetComponent<Button>().interactable = false;
+            rematch_button.GetComponent<Button>().interactable = false;
+            rematch_button.GetComponent<Text>().text = "No Rematch";
         }
-        if (signifier == ServerToClientSignifiers.LoginComplete)
+        else if ( number == 2) 
         {
-            ReMatchButton.GetComponent<Button>().interactable = true;
-        }
+            rematch_button.GetComponent<Button>().interactable = true;
+            rematch_button.GetComponent<Text>().text = "Rematch";
+        }  
     }
 
-    public void GamerOverTextChange ()
+    #endregion
+
+    #region InterfaceCode
+
+    private void  RematchButtonIsPreessed()
     {
-        if (Tic_Tac_Toe.GetComponent<GameLogic>().our_win_status == GameLogic.win_status.Loser)
-        {
-            GameOverTitle.text = "Game Over \n You lost";
-        }
-        else if (Tic_Tac_Toe.GetComponent<GameLogic>().our_win_status == GameLogic.win_status.winner)
-        {
-            GameOverTitle.text = "Game Over \n You winner";
-        }
-        else if (Tic_Tac_Toe.GetComponent<GameLogic>().our_win_status == GameLogic.win_status.draw)
-        {
-            GameOverTitle.text = "Game Over \n No winners";
-        }
+        network.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.RematchOfTicTacToe + ",");
     }
 
-    public void ReMatchButtonIsPreessed()
+    private void QuitButtonIsPreessed()
     {
-        NetWorkObject.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.RematchOfTicTacToe + ",");
+        network.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.ExitTacTacToe+ ",");
     }
 
-    public void QuitButtonIsPreessed()
+    public void GamerOverMessageText()
     {
-        NetWorkObject.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.ExitTacTacToe+ ",");
+        if (game_logic.GetComponent<GameLogic>().our_win_status == GameLogic.win_status.Loser)
+        {
+            game_over_title_text.GetComponent<Text>().text = "Game Over \n You lost";
+        }
+        else if (game_logic.GetComponent<GameLogic>().our_win_status == GameLogic.win_status.winner)
+        {
+            game_over_title_text.GetComponent<Text>().text = "Game Over \n You winner";
+        }
+        else if (game_logic.GetComponent<GameLogic>().our_win_status == GameLogic.win_status.draw)
+        {
+            game_over_title_text.GetComponent<Text>().text = "Game Over \n No winners";
+        }
     }
 
-
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    #endregion
 }
