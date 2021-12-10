@@ -67,12 +67,12 @@ public class GameOver : MonoBehaviour
         if (number == 1)
         {
             rematch_button.GetComponent<Button>().interactable = false;
-            rematch_button.GetComponent<Text>().text = "No Rematch";
+            rematch_button.GetComponentInChildren<Text>().text = "No Rematch";
         }
         else if ( number == 2) 
         {
             rematch_button.GetComponent<Button>().interactable = true;
-            rematch_button.GetComponent<Text>().text = "Rematch";
+            rematch_button.GetComponentInChildren<Text>().text = "Rematch";
         }  
     }
 

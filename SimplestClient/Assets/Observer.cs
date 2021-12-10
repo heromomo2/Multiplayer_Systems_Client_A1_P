@@ -5,24 +5,29 @@ using UnityEngine.UI;
 
 public class Observer : MonoBehaviour
 {
+    [Header(" others")]
     #region GameObjects
     public NetworkedClient message_receiver_from_Server = null;
     GameObject network, system_manger_object;
     #endregion
 
+    [Header("Searcher")]
     #region Searcher Gameobject/variables
+    public GameObject observer_search_leave_button;
     public GameObject observer_search;
-    public InputField observer_search_inputfield;
-    public Text observer_search_text;
-    public Button observer_search_button;
+    public GameObject observer_search_inputfield;
+    public GameObject observer_search_result_text;
+    public GameObject observer_search_button;
     string user_name_search_for = "";
     #endregion
 
+    [Header("Watcher")]
     #region Watcher Gameobject/variables
+    public GameObject observer_Watcher_logot_button;
     public GameObject observer_watcher;
     public List<Text> grid_spaces_observer_watcher;
     public TicTacToeBoard board_observer_watcher = null;
-    public Text observer_watcher_player_text, observer_watcher_opponent_text = null;
+    public GameObject observer_watcher_player_text, observer_watcher_opponent_text = null;
     string user_name_other = "";
     #endregion
 
@@ -36,6 +41,24 @@ public class Observer : MonoBehaviour
                 system_manger_object = go;
             else if (go.name == "Network")
                 network = go;
+            else if (go.name == "Observer_Leave_Button")
+                observer_search_leave_button = go;
+            else if (go.name == "Observer_Search_UI")
+                observer_search = go;
+            else if (go.name == "Observer_Search_InputField")
+                observer_search_inputfield = go;
+            else if (go.name == "Observer_Search_Button")
+                observer_search_button = go;
+            else if (go.name == "Observer_Search_Result_Text")
+                observer_search_result_text = go;
+            else if (go.name == "Observer_Watcher_LogOut_Button")
+                observer_Watcher_logot_button = go;
+            else if (go.name == "Observer_Watcher_UI")
+                observer_watcher = go;
+            else if (go.name == "Observer_watcher_Player_Text ")
+                observer_watcher_player_text = go;
+            else if (go.name == "Observer_watcher_Opponent_Text")
+                observer_watcher_opponent_text = go;
         }
         
         // initializing 
@@ -69,6 +92,10 @@ public class Observer : MonoBehaviour
             }
         }
 
+        observer_Watcher_logot_button.GetComponent<Button>().onClick.AddListener(ObserverWatcherLogoutButtonIsPressed);
+        observer_search_leave_button.GetComponent<Button>().onClick.AddListener(ObserverSearchLeaveButtonIsPressed);
+        observer_search_button.GetComponent<Button>().onClick.AddListener(ObserverSearchButtonIsPressed);
+
     }
     #region ReceivingDataFromServer/Involved
     /// <summary>
@@ -93,15 +120,15 @@ public class Observer : MonoBehaviour
             case ServerToClientSignifiers.SearchGameRoomsByUserNameComplete:
                 // found the gameroom
                 user_name_other = s;
-                DisplayPlayerSearchResult(0, observer_search_text);
+                DisplayPlayerSearchResult(0, observer_search_result_text.GetComponent<Text>());
                 break;
             case ServerToClientSignifiers.SearchGameRoomsByUserNameFailed:
                 // didn't find the game room
-                DisplayPlayerSearchResult( 1, observer_search_text);
+                DisplayPlayerSearchResult( 1, observer_search_result_text.GetComponent<Text>());
                 break;
             case ServerToClientSignifiers.SearchGameRoomsByUserNameSizeFailed:
                 // found the gameroom and it's filled
-                DisplayPlayerSearchResult( 2, observer_search_text);
+                DisplayPlayerSearchResult( 2, observer_search_result_text.GetComponent<Text>());
                 break;
             case ServerToClientSignifiers.ObserverGetsMove:
                 // get  the game state from the sever
@@ -116,16 +143,16 @@ public class Observer : MonoBehaviour
 
     public void SetObservrSearch()
     {
-        observer_search_inputfield.text = "";
-        observer_search_button.interactable = true;
-        observer_search_text.text = "Please type a User name to view a GameRoom.";
+        observer_search_inputfield.GetComponent<InputField>().text = "";
+        observer_search_button.GetComponent<Button>().interactable = true;
+        observer_search_result_text.GetComponent<Text>().text = "Please type a User name to view a GameRoom.";
     }
 
-    public void Observer_Search_ButtonIsPressed()
+    public void ObserverSearchButtonIsPressed()
     {
-        if (observer_search_inputfield.text != "" && observer_search_inputfield.text != null)
+        if (observer_search_inputfield.GetComponent<InputField>().text != "" && observer_search_inputfield.GetComponent<InputField>().text != null)
         {
-            user_name_search_for = observer_search_inputfield.text;
+            user_name_search_for = observer_search_inputfield.GetComponent<InputField>().text;
             network.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.SearchGameRoomsByUserName + "," + user_name_search_for);
         }
     }
@@ -135,7 +162,7 @@ public class Observer : MonoBehaviour
         if (IsGameRoomFound == 0)
         {
             t.text = user_name_search_for + " was found in a game.";
-            observer_search_button.interactable = false;
+            observer_search_button.GetComponent<Button>().interactable = false;
         }
         else if (IsGameRoomFound == 1)
         {
@@ -147,6 +174,12 @@ public class Observer : MonoBehaviour
         }
 
     }
+
+
+    void ObserverSearchLeaveButtonIsPressed() 
+    {
+        system_manger_object.GetComponent<SystemManager>().OpenMenu();
+    }
     #endregion
 
     #region WatcherFunctions
@@ -154,9 +187,9 @@ public class Observer : MonoBehaviour
     public void SetObservrWatcher()
     {
         DisplayBoard(new TicTacToeBoard(0, 0, 0, 0, 0, 0, 0, 0, 0, 0));
-        DisplayPlayerTurn(41, observer_watcher_player_text, observer_watcher_opponent_text);
+        DisplayPlayerTurn(41, observer_watcher_player_text.GetComponent<Text>(), observer_watcher_opponent_text.GetComponent<Text>());
     }
-    public void Observer_Watcher_Logout_ButtonIsPressed()
+    public void ObserverWatcherLogoutButtonIsPressed()
     {
         network.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.StopObserving + ",");
     }
@@ -205,8 +238,10 @@ public class Observer : MonoBehaviour
                 grid_spaces_observer_watcher[i].text = "O";
             }
         }
-        DisplayPlayerTurn(board.whos_move_, observer_watcher_player_text, observer_watcher_opponent_text);
+        DisplayPlayerTurn(board.whos_move_, observer_watcher_player_text.GetComponent<Text>(), observer_watcher_opponent_text.GetComponent<Text>());
     }
+
+
     #endregion
 
 

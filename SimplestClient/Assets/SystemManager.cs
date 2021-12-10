@@ -17,14 +17,19 @@ public class SystemManager : MonoBehaviour
     }
     #endregion
 
-    #region GameObjects
+    #region SystemManagerGameObjects
     private NetworkedClient message_receiver_from_server = null;
     GameObject login, public_chat, network,menu,record_request, waiting_in_queue, game_logic,game_over,replayer,observer, game_room_chat_room, observer_search, observer_watcher;
-    #endregion 
 
+    #endregion
+
+    #region MainMenuGameObjects
+    GameObject main_menu_public_chat_room_button, main_menu_game_room_button_chat_room_button, main_menu_leave_button, main_menu_observer_button, main_menu_replayer_button;
+    #endregion
     // Start is called before the first frame update
     void Start()
     {
+        // gettting all our gameobjects
         GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
         foreach (GameObject go in allObjects)
         {
@@ -54,9 +59,21 @@ public class SystemManager : MonoBehaviour
                 observer_search = go;
             else if (go.name == "Observer_Watcher_UI")
                 observer_watcher = go;
+            else if (go.name == "Enter_Public_Chat_Button")
+                main_menu_public_chat_room_button = go;
+            else if (go.name == "Enter_GameRoom_Button")
+                main_menu_game_room_button_chat_room_button = go;
+            else if (go.name == "Menu_LogOut_Button")
+                main_menu_leave_button = go;
+            else if (go.name == "Enter_ObserverRoom_Button")
+                main_menu_observer_button = go;
+            else if (go.name == "Enter_ReplayRoom_Button")
+                main_menu_replayer_button = go;
         }
+    
 
 
+        // set up our connection to NewtworkObject
         message_receiver_from_server = network.GetComponent<NetworkedClient>();
 
         if (message_receiver_from_server != null)
@@ -66,7 +83,18 @@ public class SystemManager : MonoBehaviour
         }
 
 
+
+        // set up the Main menu buttons
+       main_menu_game_room_button_chat_room_button.GetComponent<Button>().onClick.AddListener(GameRoomButtonIsPressed);
+       main_menu_observer_button.GetComponent<Button>().onClick.AddListener(ObserverButtonIsPressed);
+       main_menu_public_chat_room_button.GetComponent<Button>().onClick.AddListener(PublicChatRoomButtonIsPressed);
+       main_menu_leave_button.GetComponent<Button>().onClick.AddListener(LeaveButtonIsPressed);
+       main_menu_replayer_button.GetComponent<Button>().onClick.AddListener(ReplayerButtonIsPressed);
+
+        // set  our gamestate to login screen when we boot up
+
         ChangeState(GameStates.LoginMenu);
+
     }
 
 
@@ -125,8 +153,14 @@ public class SystemManager : MonoBehaviour
     
     }
 
+    private void OpenObserverWatcer()
+    {
+        ChangeState(GameStates.Observer_Watcher);
+        observer.GetComponent<Observer>().SetObservrWatcher();
+    }
     #endregion
 
+    #region FunctionsBeCalledOutClass
     public void OpenGameOver()
     {
         game_over.GetComponent<GameOver>().GamerOverMessageText();
@@ -139,14 +173,8 @@ public class SystemManager : MonoBehaviour
     }
    
    
-
-    private void OpenObserverWatcer()
-    {
-        ChangeState(GameStates.Observer_Watcher);
-        observer.GetComponent<Observer>().SetObservrWatcher();
-    }
     
-    public void Logout()
+    public void LogOutPublicChatRoom()
     {
         string logoutMsg = ClientToServerSignifiers.NotifyPublicChatOfLogout + ",";
 
@@ -155,8 +183,7 @@ public class SystemManager : MonoBehaviour
 
     }
 
-
-
+    #endregion
 
 
     #region MainMenu
@@ -181,12 +208,12 @@ public class SystemManager : MonoBehaviour
         ChangeState(GameStates.Replayer);
         network.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.AskForAllRecoredNames + "," + GetUserName);
     }
-    public void OpenLogin()
+    public void LeaveButtonIsPressed()
     {
         ChangeState(GameStates.LoginMenu);
     }
 
-    public void Observer()
+    public void ObserverButtonIsPressed()
     {
         ChangeState(GameStates.Observer_Search);
         observer.GetComponent<Observer>().SetObservrSearch();

@@ -141,7 +141,7 @@ GameObject:
   - component: {fileID: 35619813}
   - component: {fileID: 35619815}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Observer_Search_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -277,7 +277,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &40764564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -480,7 +480,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &60825593
 Transform:
   m_ObjectHideFlags: 0
@@ -509,14 +509,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   message_receiver_from_Server: {fileID: 838079730}
+  observer_search_leave_button: {fileID: 0}
   observer_search: {fileID: 745482662}
-  observer_search_inputfield: {fileID: 1033969045}
-  observer_search_text: {fileID: 315027864}
-  observer_search_button: {fileID: 35619815}
+  observer_search_inputfield: {fileID: 0}
+  observer_search_result_text: {fileID: 0}
+  observer_search_button: {fileID: 0}
+  observer_Watcher_logot_button: {fileID: 0}
   observer_watcher: {fileID: 1860253106}
   grid_spaces_observer_watcher: []
-  observer_watcher_player_text: {fileID: 1076287884}
-  observer_watcher_opponent_text: {fileID: 538210348}
+  observer_watcher_player_text: {fileID: 0}
+  observer_watcher_opponent_text: {fileID: 0}
 --- !u!224 &71551789 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5692828978226411053, guid: c9c04b686ed1da344a48c868690d9abc, type: 3}
@@ -1067,7 +1069,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1406,9 +1408,9 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: -17}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &168623887
 MonoBehaviour:
@@ -1976,7 +1978,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &289329350
 Transform:
   m_ObjectHideFlags: 0
@@ -2093,7 +2095,7 @@ GameObject:
   - component: {fileID: 315027865}
   - component: {fileID: 315027864}
   m_Layer: 5
-  m_Name: Observer_TitleText
+  m_Name: Observer_Search_TitleText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3141,7 +3143,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -4061,7 +4063,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 840785473}
         m_TargetAssemblyTypeName: SystemManager, Assembly-CSharp
-        m_MethodName: Logout
+        m_MethodName: LogOutPublicChatRoom
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4142,7 +4144,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -4200,7 +4202,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &437665278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5645,7 +5647,7 @@ GameObject:
   - component: {fileID: 538210349}
   - component: {fileID: 538210348}
   m_Layer: 5
-  m_Name: Observer_Opponent_Text
+  m_Name: Observer_watcher_Opponent_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6373,7 +6375,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 100, y: 0}
   m_SizeDelta: {x: -100, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &656933357
@@ -8831,7 +8833,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &831577992
 Transform:
   m_ObjectHideFlags: 0
@@ -8878,7 +8880,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &838079730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9008,7 +9010,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &840785472
 Transform:
   m_ObjectHideFlags: 0
@@ -9250,19 +9252,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 882359796}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 840785473}
-        m_TargetAssemblyTypeName: SystemManager, Assembly-CSharp
-        m_MethodName: OpenMenu
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &882359796
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9892,7 +9882,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -10627,7 +10617,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4730958980748753440, guid: 47641aede042c404495b635b8e1a822e, type: 3}
       propertyPath: m_SizeDelta.y
-      value: -34
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6741180217682964440, guid: 47641aede042c404495b635b8e1a822e, type: 3}
       propertyPath: m_Enabled
@@ -10771,9 +10761,9 @@ RectTransform:
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: -17}
+  m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1004710556
 MonoBehaviour:
@@ -11216,7 +11206,7 @@ GameObject:
   - component: {fileID: 1033969043}
   - component: {fileID: 1033969045}
   m_Layer: 5
-  m_Name: InputField
+  m_Name: Observer_Search_InputField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11516,7 +11506,7 @@ GameObject:
   - component: {fileID: 1076287885}
   - component: {fileID: 1076287884}
   m_Layer: 5
-  m_Name: 'Observer_Player_Text '
+  m_Name: 'Observer_watcher_Player_Text '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12309,9 +12299,9 @@ RectTransform:
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: -17}
+  m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1161955713
 MonoBehaviour:
@@ -12417,7 +12407,7 @@ GameObject:
   - component: {fileID: 1178263843}
   - component: {fileID: 1178263844}
   m_Layer: 5
-  m_Name: Observer_TitleText (1)
+  m_Name: Observer_Search_Result_Text
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12536,7 +12526,7 @@ GameObject:
   - component: {fileID: 1194649397}
   - component: {fileID: 1194649396}
   m_Layer: 5
-  m_Name: Enter_Chat_Button
+  m_Name: Enter_Public_Chat_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13090,7 +13080,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1282100807
 Transform:
   m_ObjectHideFlags: 0
@@ -13120,10 +13110,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9b57d091716f324ea98c5f660a9757d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabTextObject: {fileID: 7614645689826883821, guid: b2246296775c0da4186949736c0637af, type: 3}
-  prefebButtonObject: {fileID: 1375099235938238235, guid: 47641aede042c404495b635b8e1a822e, type: 3}
-  ListPrefabButtons: []
-  ListPrefabTextObject: []
+  prefab_text_object: {fileID: 7614645689826883821, guid: b2246296775c0da4186949736c0637af, type: 3}
+  prefeb_button_object: {fileID: 1375099235938238235, guid: 47641aede042c404495b635b8e1a822e, type: 3}
+  prefab_buttons: []
+  prefab_text_objects: []
 --- !u!1 &1299337803
 GameObject:
   m_ObjectHideFlags: 0
@@ -13698,7 +13688,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1335945203
 Transform:
   m_ObjectHideFlags: 0
@@ -14737,9 +14727,9 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: -17}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1448514709
 MonoBehaviour:
@@ -14985,7 +14975,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: ChatRoom
+  m_Text: PublicChatRoom
 --- !u!222 &1457942755
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -15350,7 +15340,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1471461768
 Transform:
   m_ObjectHideFlags: 0
@@ -15827,9 +15817,9 @@ RectTransform:
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: -17}
+  m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1547171609
 MonoBehaviour:
@@ -16206,7 +16196,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -200, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1586271588
 MonoBehaviour:
@@ -16737,7 +16727,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -18091,7 +18081,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4730958980748753440, guid: 47641aede042c404495b635b8e1a822e, type: 3}
       propertyPath: m_SizeDelta.y
-      value: -34
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6741180217682964440, guid: 47641aede042c404495b635b8e1a822e, type: 3}
       propertyPath: m_Enabled
@@ -19557,7 +19547,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -143, y: 31}
-  m_SizeDelta: {x: 160, y: 16}
+  m_SizeDelta: {x: 160, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1846262925
 MonoBehaviour:
@@ -19814,7 +19804,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1871023759
 Transform:
   m_ObjectHideFlags: 0
@@ -19883,9 +19873,9 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: -17}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1874383887
 MonoBehaviour:
@@ -20539,7 +20529,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -22409,7 +22399,7 @@ GameObject:
   - component: {fileID: 2128295741}
   - component: {fileID: 2128295740}
   m_Layer: 5
-  m_Name: Observer_LogOut_Button
+  m_Name: Observer_Watcher_LogOut_Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -22478,19 +22468,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2128295741}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 60825594}
-        m_TargetAssemblyTypeName: Observer, Assembly-CSharp
-        m_MethodName: Observer_Watcher_Logout_ButtonIsPressed
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &2128295741
 MonoBehaviour:
   m_ObjectHideFlags: 0
