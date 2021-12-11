@@ -5,174 +5,105 @@ using UnityEngine.UI;
 
 public class GameRoomChatRoom : MonoBehaviour
 {
-    private NetworkedClient m_MessageReceiverFromServer = null;
+    #region GameObject
 
-    private string m_plyersInChat;
+    private NetworkedClient message_receiver_from_Server = null;
 
-    GameObject GRC_postButton, GRC_usermessageInput, networkObject, GRCM_Content, SystemManager, GRC_SendText,GRC_Player_Toggle, GRC_DropDownMenu,
-        GRC_Observer_Toggle, GRC_Everyone_Toggle;
-    public GameObject prefabTextObject = null;
 
-    
+    GameObject game_room_chat_room_post_button, game_room_chat_room_user_message_input, network, game_room_chat_room_message_content, system_manager, game_room_chat_room_send_text, game_room_chat_room_player_toggle, game_room_chat_room_drop_down_menu,
+        game_room_chat_room_observer_toggle, game_room_chat_room_everyone_toggle;
+    public GameObject prefab_text_object = null;
 
-    //public static List<GameObject> ListPrefabButtons = new List<GameObject>();
+
     [SerializeField]  public  List<GameObject> ListPrefabTextObject = new List<GameObject>();
-   // bool IsPrivateMsg = false;
-   // private string PmUsername;
+   
+    #endregion 
+
+
+
     void Start()
     {
         GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
         foreach (GameObject go in allObjects)
         {
             if (go.name == "GameRoomChat_InputField")
-                GRC_usermessageInput = go;
+                game_room_chat_room_user_message_input = go;
             else if (go.name == "GameRoomChat_Button")
-                GRC_postButton = go;
+                game_room_chat_room_post_button = go;
             else if (go.name == "Network")
-                networkObject = go;
+                network = go;
             else if (go.name == "GameRoomChat_Msg_Content")
-                GRCM_Content = go;
+                game_room_chat_room_message_content = go;
             else if (go.name == "GameRoomChat_SendText")
-                GRC_SendText = go;
+                game_room_chat_room_send_text = go;
             else if (go.name == "SystemManagerObject")
-                SystemManager = go;
+                system_manager = go;
             else if (go.name == "SystemManagerObject")
-                SystemManager = go;
+                system_manager = go;
             else if (go.name == "GameRoomChat_Observers_Toggle")
-                GRC_Observer_Toggle = go;
+                game_room_chat_room_observer_toggle = go;
             else if (go.name == "GameRoomChat_Player_Toggle")
-                GRC_Player_Toggle = go;
+                game_room_chat_room_player_toggle = go;
             else if (go.name == "GameRoomChat_Global_Toggle")
-                GRC_Everyone_Toggle = go;
+                game_room_chat_room_everyone_toggle = go;
             else if (go.name == "GameRoomChat_Dropdown")
-                GRC_DropDownMenu = go;
+                game_room_chat_room_drop_down_menu = go;
         }
-        GRC_postButton.GetComponent<Button>().onClick.AddListener(GRC_PostButtonOnPressed);
+        game_room_chat_room_post_button.GetComponent<Button>().onClick.AddListener(GameRoomChatRoomPostButtonOnPressed);
 
-        GRC_Everyone_Toggle.GetComponent<Toggle>().onValueChanged.AddListener(GlobleToggleChanged);
-        GRC_Player_Toggle.GetComponent<Toggle>().onValueChanged.AddListener(PlayerToggleChanged);
-        GRC_Observer_Toggle.GetComponent<Toggle>().onValueChanged.AddListener(ObserverToggleChanged);
+        game_room_chat_room_everyone_toggle.GetComponent<Toggle>().onValueChanged.AddListener(GlobleToggleChanged);
+        game_room_chat_room_player_toggle.GetComponent<Toggle>().onValueChanged.AddListener(PlayerToggleChanged);
+        game_room_chat_room_observer_toggle.GetComponent<Toggle>().onValueChanged.AddListener(ObserverToggleChanged);
 
 
 
-        m_MessageReceiverFromServer = networkObject.GetComponent<NetworkedClient>();
+        message_receiver_from_Server = network.GetComponent<NetworkedClient>();
 
-        if (m_MessageReceiverFromServer != null)
+        if (message_receiver_from_Server != null)
         {
-            m_MessageReceiverFromServer.OnMessageReceivedFromServer += MessageToChat;
+            message_receiver_from_Server.OnMessageReceivedFromServer += GameRoomChatReceivedFromTheServer;
         }
-        GRC_DropDownMenu.GetComponent<Dropdown>().onValueChanged.AddListener(GRC_DropDownPrefixMsg);
+        game_room_chat_room_drop_down_menu.GetComponent<Dropdown>().onValueChanged.AddListener(GameRoomChatRoomDropDownPrefixMsg);
     }
 
 
 
-    public void GlobleToggleChanged(bool newValue)
-    {
-       
-        GRC_Player_Toggle.GetComponent<Toggle>().isOn = false;
-        GRC_Observer_Toggle.GetComponent<Toggle>().isOn = false;
-        GRC_SendText.GetComponent<Text>().text = "Sending Message To: Globle";
+    
+    
+    
 
-        if(GRC_Everyone_Toggle.GetComponent<Toggle>().isOn == false && GRC_Observer_Toggle.GetComponent<Toggle>().isOn == false 
-            && GRC_Player_Toggle.GetComponent<Toggle>().isOn == false)
-        {
-            GRC_SendText.GetComponent<Text>().text = "Sending Message To: NoOne";
-        }
-    }
-    public void PlayerToggleChanged(bool newValue)
-    {
-      
-        GRC_Everyone_Toggle.GetComponent<Toggle>().isOn = false;
-        GRC_Observer_Toggle.GetComponent<Toggle>().isOn = false;
-        GRC_SendText.GetComponent<Text>().text = "Sending Message To: Players";
-
-        if (GRC_Everyone_Toggle.GetComponent<Toggle>().isOn == false && GRC_Observer_Toggle.GetComponent<Toggle>().isOn == false
-            && GRC_Player_Toggle.GetComponent<Toggle>().isOn == false)
-        {
-            GRC_SendText.GetComponent<Text>().text = "Sending Message To: NoOne";
-        }
-    }
-    public void ObserverToggleChanged(bool newValue)
-    {
-       
-        GRC_Player_Toggle.GetComponent<Toggle>().isOn = false;
-        GRC_Everyone_Toggle.GetComponent<Toggle>().isOn = false;
-        GRC_SendText.GetComponent<Text>().text = "Sending Message To: Observers";
-
-        if (GRC_Everyone_Toggle.GetComponent<Toggle>().isOn == false && GRC_Observer_Toggle.GetComponent<Toggle>().isOn == false
-            && GRC_Player_Toggle.GetComponent<Toggle>().isOn == false)
-        {
-            GRC_SendText.GetComponent<Text>().text = "Sending Message To: NoOne";
-        }
-    }
-
-
-    private void OnDestroy()
-    {
-
-        if (m_MessageReceiverFromServer != null)
-        {
-            m_MessageReceiverFromServer.OnMessageReceivedFromServer -= MessageToChat;
-        }
-
-    }
-
-    public void GRC_PostButtonOnPressed()
-    {
-        string n = SystemManager.GetComponent<SystemManager>().GetUserName;
-        string ourChatText = GRC_usermessageInput.GetComponent<InputField>().text;
-
-
-       
-        if (GRC_Player_Toggle.GetComponent<Toggle>().isOn)
-        {
-            string ourMsg = ClientToServerSignifiers.SendOnlyPlayerGameRoomChatMSG + ", OnlyPlayers <" + n + "> : " + ourChatText;
-            networkObject.GetComponent<NetworkedClient>().SendMessageToHost(ourMsg);
-        }
-        
-        else if (GRC_Observer_Toggle.GetComponent<Toggle>().isOn)
-        {
-            string ourMsg = ClientToServerSignifiers.SendOnlyObserverGameRoomChatMSG + ", OnlyObservers <" + n + "> : " + ourChatText;
-            networkObject.GetComponent<NetworkedClient>().SendMessageToHost(ourMsg);
-
-        }
-
-        else if (GRC_Everyone_Toggle.GetComponent<Toggle>().isOn)
-        {
-            string ourMsg = ClientToServerSignifiers.SendGameRoomGlobalChatMSG + ", Globe < " + n + " >  : " + ourChatText;
-            networkObject.GetComponent<NetworkedClient>().SendMessageToHost(ourMsg);
-        }
-
-        //string ourMsg = ClientToServerSignifiers.SendGameRoomChatMSG + ",Globe " + n + ": " + ourChatText;
-        //networkObject.GetComponent<NetworkedClient>().SendMessageToHost(ourMsg);
-
-    }
-
-    public void MessageToChat(int signifier, string s, TicTacToeBoard tt, MatchData matchData)
+    #region MessageFromTheServer
+    public void GameRoomChatReceivedFromTheServer(int signifier, string s, TicTacToeBoard tt, MatchData match_data)
     {
         if (signifier == ServerToClientSignifiers.ReceiveGameRoomChatMSG)
         {
-            GameObject newObj;
-            newObj = (GameObject)Instantiate(prefabTextObject, GRCM_Content.transform);
-            newObj.GetComponent<Text>().text = s;
-            ListPrefabTextObject.Add(newObj);
+
+            CreateMessageToDisplayOnGameRoomChat(s);
         }
         if (signifier == ServerToClientSignifiers.LoginComplete)
         {
-            // restart
-            ClearAllGameRoomChatlMessage();
-            GRC_usermessageInput.GetComponent<InputField>().text = "";
-            GlobleToggleChanged(true);
+            ResetGameRoomChat();
         }
     }
 
-    public void SetChatToGlobalMessage()
+
+    private void ResetGameRoomChat()
     {
-        //IsPrivateMsg = false;
-        GRC_SendText.GetComponent<Text>().text = "Sending Message To: ";
+        // restart
+        ClearAllGameRoomChatMessage();
+        game_room_chat_room_user_message_input.GetComponent<InputField>().text = "";
+        GlobleToggleChanged(true);
     }
 
-    public void ClearAllGameRoomChatlMessage()
+    private void CreateMessageToDisplayOnGameRoomChat(string msg) 
+    {
+        GameObject newObj;
+        newObj = (GameObject)Instantiate(prefab_text_object, game_room_chat_room_message_content.transform);
+        newObj.GetComponent<Text>().text = msg;
+        ListPrefabTextObject.Add(newObj);
+    }
+
+    private  void ClearAllGameRoomChatMessage()
     {
         if (ListPrefabTextObject != null && ListPrefabTextObject.Count != 0)
         {
@@ -182,62 +113,155 @@ public class GameRoomChatRoom : MonoBehaviour
                 Destroy(t);
             }
 
-            // Debug.Log("ListPrefabTextObject isn't empty!!");
+           
             ListPrefabTextObject.Clear();
         }
-        
     }
 
-    void ClearSomeGameRoomChatlMessage()
+    private void OnDestroy()
     {
-        if (ListPrefabTextObject != null && ListPrefabTextObject.Count != 0)
+
+        if (message_receiver_from_Server != null)
         {
-           
-            for( int i = 0; ListPrefabTextObject.Count> 50; i++)
-            {
-                Destroy(ListPrefabTextObject[i]);
-                ListPrefabTextObject.RemoveAt(i);
-            }
-            // Debug.Log("ListPrefabTextObject isn't empty!!");
+            message_receiver_from_Server.OnMessageReceivedFromServer -= GameRoomChatReceivedFromTheServer;
         }
+
     }
 
-    private void Update()
-    {
-        ClearSomeGameRoomChatlMessage();
-    }
+    #endregion
 
 
-    public void GRC_DropDownPrefixMsg(int val)
+
+   
+
+
+
+    #region Interface
+
+
+    public void GameRoomChatRoomDropDownPrefixMsg(int val)
     {
         switch (val)
         {
             case 0:
                 break;
             case 1:
-                GRC_usermessageInput.GetComponent<InputField>().text = "(ง︡'-'︠)ง Anyone up a for game of Tic tac Toe.(ง︡'-'︠)ง";
+                game_room_chat_room_user_message_input.GetComponent<InputField>().text = "(ง︡'-'︠)ง Anyone up a for game of Tic tac Toe.(ง︡'-'︠)ง";
                 break;
             case 2:
-                GRC_usermessageInput.GetComponent<InputField>().text = "（っ＾▿＾）howdy people in the chat.（っ＾▿＾）";
+                game_room_chat_room_user_message_input.GetComponent<InputField>().text = "（っ＾▿＾）howdy people in the chat.（っ＾▿＾）";
                 break;
             case 3:
-                GRC_usermessageInput.GetComponent<InputField>().text = "ʕ•́ᴥ•̀ʔっ I'll be Away for my keyboard for a bit ʕ•́ᴥ•̀ʔっ";
+                game_room_chat_room_user_message_input.GetComponent<InputField>().text = "ʕ•́ᴥ•̀ʔっ I'll be Away for my keyboard for a bit ʕ•́ᴥ•̀ʔっ";
                 break;
             case 4:
-                GRC_usermessageInput.GetComponent<InputField>().text = "I'm login out. ┻━┻ ︵ヽ(`▭´)ﾉ︵﻿ ┻━┻";
+                game_room_chat_room_user_message_input.GetComponent<InputField>().text = "I'm login out. ┻━┻ ︵ヽ(`▭´)ﾉ︵﻿ ┻━┻";
                 break;
             case 5:
-                GRC_usermessageInput.GetComponent<InputField>().text = "Hot! hot! I'm on a Winning Streak!.(҂◡̀_◡́)ᕤ ";
+                game_room_chat_room_user_message_input.GetComponent<InputField>().text = "Hot! hot! I'm on a Winning Streak!.(҂◡̀_◡́)ᕤ ";
                 break;
             case 6:
-                GRC_usermessageInput.GetComponent<InputField>().text = "I just need a win. This losing streak is lasting too long ((╥﹏╥))";
+                game_room_chat_room_user_message_input.GetComponent<InputField>().text = "I just need a win. This losing streak is lasting too long ((╥﹏╥))";
                 break;
             case 7:
-                GRC_usermessageInput.GetComponent<InputField>().text = "(ɔ◔‿◔)ɔ ♥ GiT-GUD (͠◉_◉)";
+                game_room_chat_room_user_message_input.GetComponent<InputField>().text = "(ɔ◔‿◔)ɔ ♥ GiT-GUD (͠◉_◉)";
                 break;
             case 8:
-                GRC_usermessageInput.GetComponent<InputField>().text = "( ◡́.◡̀)(^◡^ ) Well Played! You are a Worthy Opponent!!";
+                game_room_chat_room_user_message_input.GetComponent<InputField>().text = "( ◡́.◡̀)(^◡^ ) Well Played! You are a Worthy Opponent!!";
                 break;
         }
+    }
+    public void GameRoomChatRoomPostButtonOnPressed()
+    {
+        string n = system_manager.GetComponent<SystemManager>().GetUserName;
+        string ourChatText = game_room_chat_room_user_message_input.GetComponent<InputField>().text;
+
+
+
+        if (game_room_chat_room_player_toggle.GetComponent<Toggle>().isOn)
+        {
+            string ourMsg = ClientToServerSignifiers.SendOnlyPlayerGameRoomChatMSG + ", OnlyPlayers <" + n + "> : " + ourChatText;
+            network.GetComponent<NetworkedClient>().SendMessageToHost(ourMsg);
+        }
+
+        else if (game_room_chat_room_observer_toggle.GetComponent<Toggle>().isOn)
+        {
+            string ourMsg = ClientToServerSignifiers.SendOnlyObserverGameRoomChatMSG + ", OnlyObservers <" + n + "> : " + ourChatText;
+            network.GetComponent<NetworkedClient>().SendMessageToHost(ourMsg);
+
+        }
+
+        else if (game_room_chat_room_everyone_toggle.GetComponent<Toggle>().isOn)
+        {
+            string ourMsg = ClientToServerSignifiers.SendGameRoomGlobalChatMSG + ", Globe < " + n + " >  : " + ourChatText;
+            network.GetComponent<NetworkedClient>().SendMessageToHost(ourMsg);
+        }
+
+        
+
+    }
+
+    public void GlobleToggleChanged(bool newValue)
+    {
+
+        game_room_chat_room_player_toggle.GetComponent<Toggle>().isOn = false;
+        game_room_chat_room_observer_toggle.GetComponent<Toggle>().isOn = false;
+        game_room_chat_room_send_text.GetComponent<Text>().text = "Sending Message To: Globle";
+
+        if (game_room_chat_room_everyone_toggle.GetComponent<Toggle>().isOn == false && game_room_chat_room_observer_toggle.GetComponent<Toggle>().isOn == false
+            && game_room_chat_room_player_toggle.GetComponent<Toggle>().isOn == false)
+        {
+            game_room_chat_room_send_text.GetComponent<Text>().text = "Sending Message To: NoOne";
+        }
+    }
+
+    public void ObserverToggleChanged(bool newValue)
+    {
+
+        game_room_chat_room_player_toggle.GetComponent<Toggle>().isOn = false;
+        game_room_chat_room_everyone_toggle.GetComponent<Toggle>().isOn = false;
+        game_room_chat_room_send_text.GetComponent<Text>().text = "Sending Message To: Observers";
+
+        if (game_room_chat_room_everyone_toggle.GetComponent<Toggle>().isOn == false && game_room_chat_room_observer_toggle.GetComponent<Toggle>().isOn == false
+            && game_room_chat_room_player_toggle.GetComponent<Toggle>().isOn == false)
+        {
+            game_room_chat_room_send_text.GetComponent<Text>().text = "Sending Message To: NoOne";
+        }
+    }
+
+
+    public void PlayerToggleChanged(bool newValue)
+    {
+
+        game_room_chat_room_everyone_toggle.GetComponent<Toggle>().isOn = false;
+        game_room_chat_room_observer_toggle.GetComponent<Toggle>().isOn = false;
+        game_room_chat_room_send_text.GetComponent<Text>().text = "Sending Message To: Players";
+
+        if (game_room_chat_room_everyone_toggle.GetComponent<Toggle>().isOn == false && game_room_chat_room_observer_toggle.GetComponent<Toggle>().isOn == false
+            && game_room_chat_room_player_toggle.GetComponent<Toggle>().isOn == false)
+        {
+            game_room_chat_room_send_text.GetComponent<Text>().text = "Sending Message To: NoOne";
+        }
+    }
+
+    void ClearOldGameRoomChatMessage()
+    {
+        if (ListPrefabTextObject != null && ListPrefabTextObject.Count != 0)
+        {
+
+            for (int i = 0; ListPrefabTextObject.Count > 50; i++)
+            {
+                Destroy(ListPrefabTextObject[i]);
+                ListPrefabTextObject.RemoveAt(i);
+            }
+           
+        }
+    }
+    #endregion 
+
+
+    private void Update()
+    {
+        ClearOldGameRoomChatMessage();
     }
 }

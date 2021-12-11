@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public class PMButton : MonoBehaviour
+public class PrivateMessageButton : MonoBehaviour
 {
     #region GameObjects
 
@@ -25,15 +25,11 @@ public class PMButton : MonoBehaviour
         this.gameObject.GetComponent<Button>().onClick.AddListener(PriavateMessageButtonOnClick);
     }
 
+    
 
     public void PriavateMessageButtonOnClick()
     {
-        chat_ui.GetComponent<PublicChatRoom>().SetChatToPrivateMessage(player_name);
+        chat_ui.GetComponent<PublicChatRoom>().SetChatMessageToPrivate(player_name);
     }
-
-    //void OnDestroy()
-    //{
-    //    //Chat_UI.GetComponent<ChatBox>().SetChatToGlobalMessage();
-    //}
 
 }

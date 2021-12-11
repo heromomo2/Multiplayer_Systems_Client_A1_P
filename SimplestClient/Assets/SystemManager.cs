@@ -93,23 +93,15 @@ public class SystemManager : MonoBehaviour
 
         // set  our gamestate to login screen when we boot up
 
-        ChangeState(GameStates.LoginMenu);
+        ChangeGameState(GameStates.LoginMenu);
 
     }
 
 
-    private void OnDestroy()
-    { 
-        if (message_receiver_from_server != null)
-        {
-            
-            message_receiver_from_server.OnMessageReceivedFromServer -= SystemManagerReceived;
-        }
-    
-    }
-
+  
 
     #region ReceiviedFromTheServer
+
 
     void SystemManagerReceived (int signifier, string s, TicTacToeBoard t, MatchData matchData) 
     {
@@ -117,29 +109,29 @@ public class SystemManager : MonoBehaviour
         {
             case ServerToClientSignifiers.LoginComplete:
                 login.GetComponentInChildren<Login>().ResetLogin();
-                ChangeState(GameStates.MainMenu);
+                ChangeGameState(GameStates.MainMenu);
                 break;
             case ServerToClientSignifiers.OpponentPlayed:
                 Debug.LogWarning("Your Opponet Just played");
                 break;
             case ServerToClientSignifiers.GameStart:
-                ChangeState(GameStates.TicTacToe);
+                ChangeGameState(GameStates.TicTacToe);
                 break;
             case ServerToClientSignifiers.RematchOfTicTacToeComplete:
-                ChangeState(GameStates.TicTacToe);
+                ChangeGameState(GameStates.TicTacToe);
                 break;
             case ServerToClientSignifiers.ExitTacTacToeComplete:
-                ChangeState(GameStates.LoginMenu);
+                ChangeGameState(GameStates.LoginMenu);
                 login.GetComponentInChildren<Login>().ResetLogin();
                 game_logic.GetComponent<GameLogic>().ResetBoards();
                 break;
             case ServerToClientSignifiers.PlayerDisconnectFromGameRoom:
-                ChangeState(GameStates.LoginMenu);
+                ChangeGameState(GameStates.LoginMenu);
                 login.GetComponentInChildren<Login>().ResetLogin();
                 game_logic.GetComponent<GameLogic>().ResetBoards();
                 break;
             case ServerToClientSignifiers.StopObservingComplete:
-                ChangeState(GameStates.LoginMenu);
+                ChangeGameState(GameStates.LoginMenu);
                 login.GetComponentInChildren<Login>().ResetLogin();
                 game_logic.GetComponent<GameLogic>().ResetBoards();
                 break;
@@ -155,21 +147,36 @@ public class SystemManager : MonoBehaviour
 
     private void OpenObserverWatcer()
     {
-        ChangeState(GameStates.Observer_Watcher);
+        ChangeGameState(GameStates.Observer_Watcher);
         observer.GetComponent<Observer>().SetObservrWatcher();
     }
+
+
+    private void OnDestroy()
+    {
+        if (message_receiver_from_server != null)
+        {
+
+            message_receiver_from_server.OnMessageReceivedFromServer -= SystemManagerReceived;
+        }
+
+    }
+
     #endregion
 
+
+
     #region FunctionsBeCalledOutClass
+
     public void OpenGameOver()
     {
         game_over.GetComponent<GameOver>().GamerOverMessageText();
-        ChangeState(GameStates.GameOver);
+        ChangeGameState(GameStates.GameOver);
     }
 
     public void OpenMenu()
     {
-        ChangeState(GameStates.MainMenu);
+        ChangeGameState(GameStates.MainMenu);
     }
    
    
@@ -179,7 +186,7 @@ public class SystemManager : MonoBehaviour
         string logoutMsg = ClientToServerSignifiers.NotifyPublicChatOfLogout + ",";
 
         network.GetComponent<NetworkedClient>().SendMessageToHost(logoutMsg);
-        ChangeState(GameStates.LoginMenu);
+        ChangeGameState(GameStates.LoginMenu);
 
     }
 
@@ -187,35 +194,39 @@ public class SystemManager : MonoBehaviour
 
 
     #region MainMenu
-    public void PublicChatRoomButtonIsPressed()
+
+    /// <summary>
+    /// - all the buttons on the MainMenu interface
+    /// </summary>
+    private void PublicChatRoomButtonIsPressed()
     {
         // open gameroom Ui and send a msg to server
 
-        ChangeState(GameStates.chatroom);
+        ChangeGameState(GameStates.chatroom);
         string OurEnterTheChatMsg = ClientToServerSignifiers.EnterThePublicChatRoom + "," + GetUserName;
         network.GetComponent<NetworkedClient>().SendMessageToHost(OurEnterTheChatMsg);
     }
 
-    public void GameRoomButtonIsPressed()
+    private void GameRoomButtonIsPressed()
     {
 
-        ChangeState(GameStates.WaitingInQueueforOtherPlayer);
+        ChangeGameState(GameStates.WaitingInQueueforOtherPlayer);
         network.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.JoinQueueForGameRoom + "," + user_name);
     }
 
-    public void ReplayerButtonIsPressed()
+    private void ReplayerButtonIsPressed()
     {
-        ChangeState(GameStates.Replayer);
+        ChangeGameState(GameStates.Replayer);
         network.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.AskForAllRecoredNames + "," + GetUserName);
     }
-    public void LeaveButtonIsPressed()
+    private void LeaveButtonIsPressed()
     {
-        ChangeState(GameStates.LoginMenu);
+        ChangeGameState(GameStates.LoginMenu);
     }
 
-    public void ObserverButtonIsPressed()
+    private void ObserverButtonIsPressed()
     {
-        ChangeState(GameStates.Observer_Search);
+        ChangeGameState(GameStates.Observer_Search);
         observer.GetComponent<Observer>().SetObservrSearch();
     }
 
@@ -223,7 +234,14 @@ public class SystemManager : MonoBehaviour
 
 
     #region GameStateMahice
-    void ChangeState(int newState) 
+
+    /// <summary>
+    ///  ChangeGameState
+    ///  - this fuction changes the gamestate
+    ///  - it's Active and Deactive Interface
+    /// </summary>
+    /// 
+    void ChangeGameState(int newState) 
     {
         switch (newState) 
         {
@@ -358,7 +376,8 @@ public class SystemManager : MonoBehaviour
     }
 
 
-    // Our Gamest
+    // Our GameStates
+    // list
     static public class GameStates
     {
         public const int LoginMenu = 1;

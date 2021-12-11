@@ -125,7 +125,6 @@ public class RecordRequest : MonoBehaviour
             information_text.GetComponent<Text>().text = "Invaild record Name.";
             information_text.GetComponent<Text>().color = Color.red;
         }
-    }
-    // Update is called once per frame
+    } 
     
 }

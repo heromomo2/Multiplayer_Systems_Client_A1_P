@@ -10,13 +10,13 @@ public class PublicChatRoom : MonoBehaviour
     public GameObject prefab_text_object = null, prefeb_button_object;
     public List<GameObject> prefab_buttons = new List<GameObject>();
     public List<GameObject> prefab_text_objects = new List<GameObject>();
-    GameObject post_button, user_message_input, CU_Content, network, CM_Content, system_manager, send_text;
+    GameObject post_button, user_message_input, public_chat_user_content, network, Public_chat_message_content, system_manager, send_to_text, global_button, public_chat_logout_button, public_chat_drop_down_menu;
     #endregion
 
     #region Variables
-    private string m_plyersInChat;
-    bool IsPrivateMsg = false;
-    private string PmUsername;
+    
+    bool is_private_message = false;
+    private string private_message_user_name;
     #endregion
 
 
@@ -31,41 +31,45 @@ public class PublicChatRoom : MonoBehaviour
             else if (go.name == "Chat_Button")
                 post_button = go;
             else if (go.name == "Chat_Users_Content")
-                CU_Content = go;
+                public_chat_user_content = go;
             else if (go.name == "Network")
                 network = go;
             else if (go.name == "Chat_Msg_Content")
-                CM_Content = go;
+                Public_chat_message_content = go;
             else if (go.name == "Chat_SendText")
-                send_text = go;
+                send_to_text = go;
             else if (go.name == "SystemManagerObject")
                 system_manager = go;
+            else if (go.name == "Chat_GlobalButton")
+                global_button = go;
+            else if (go.name == "Chat_LogOut_Button")
+                public_chat_logout_button = go;
+            else if (go.name == "Chat_Dropdown")
+                public_chat_drop_down_menu = go;
         }
+
+
         post_button.GetComponent<Button>().onClick.AddListener(PostButtonOnPressed);
 
+        global_button.GetComponent<Button>().onClick.AddListener(SetChatMessageToGlobal);
+
+        public_chat_logout_button.GetComponent<Button>().onClick.AddListener(PublicChatRoomLogout);
 
         message_receiver_from_server = network.GetComponent<NetworkedClient>();
+
 
         if (message_receiver_from_server != null)
         {
             message_receiver_from_server.OnMessageReceivedFromServer += PublicChatRoomReceivedFromServer;
         }
+        public_chat_drop_down_menu.GetComponent<Dropdown>().onValueChanged.AddListener(PublicChatDropDownPrefixMsg);
     }
 
 
-    private void OnDestroy()
-    {
-
-        if (message_receiver_from_server != null)
-        {           
-            message_receiver_from_server.OnMessageReceivedFromServer -= PublicChatRoomReceivedFromServer;
-        }
-
-    }
+   
 
 
-    #region Initialzing
-    #endregion
+    
 
     #region ReceviedMessageFromTheServer/Involved
 
@@ -77,12 +81,12 @@ public class PublicChatRoom : MonoBehaviour
         
         if (signifier == ServerToClientSignifiers.ReceiveListOFPlayerInChat)
         {
-            //AddListOfPlayerToChat(s);
+            
             CreateObjectsForPublicChatroom(false, false, s);
         }
         else if (signifier == ServerToClientSignifiers.ReceiveClearListOFPlayerInChat)
         {
-            ClearListOfPlayerToChat();
+            ClearPlayersListIntChatroom();
 
         }
         else if (signifier == ServerToClientSignifiers.LogOutComplete)
@@ -98,15 +102,9 @@ public class PublicChatRoom : MonoBehaviour
             CreateObjectsForPublicChatroom(true, false, s);
         }
     }
-    //public void AddListOfPlayerToChat( string player_name)
-    //{
-    //   GameObject newObj;
-    //   newObj = (GameObject)Instantiate(prefeb_button_object, CU_Content.transform);
-    //   newObj.GetComponent<PMButton>().SetName = player_name;
-    //   newObj.GetComponentInChildren<Text>().text = player_name;
-    //   prefab_buttons.Add(newObj);   
-    //}
-    void ClearSomeChatroomChatlMessage()
+    
+    // just clear older messages from the chatroom
+    void ClearOldChatlMessages()
     {
         if (prefab_text_objects != null && prefab_text_objects.Count != 0)
         {
@@ -116,67 +114,38 @@ public class PublicChatRoom : MonoBehaviour
                 Destroy(prefab_text_objects[i]);
                 prefab_text_objects.RemoveAt(i);
             }
-            // Debug.Log("ListPrefabTextObject isn't empty!!");
+           
         }
     }
 
-    //public void GlobalMessageToChat(int signifier, string s, TicTacToeBoard tt, MatchData matchData)
-    //{
-    //    if (signifier == ServerToClientSignifiers.ChatView)
-    //    {
-    //        GameObject newObj;
-    //        newObj = (GameObject)Instantiate(prefab_text_object, CM_Content.transform);
-    //        newObj.GetComponent<Text>().text = s;
-    //        prefab_text_objects.Add(newObj);
-    //    }
-    //    else if (signifier == ServerToClientSignifiers.LogOutComplete)
-    //    {
-    //        if (prefab_text_objects != null && prefab_text_objects.Count != 0)
-    //        {
+    
 
-    //            foreach (GameObject t in prefab_text_objects)
-    //            {
-    //                Destroy(t);
-    //            }
-
-    //            Debug.Log("ListPrefabTextObject isn't empty!!");
-    //            prefab_text_objects.Clear();
-    //        }
-    //    }
-    //    if (signifier == ServerToClientSignifiers.ReceivePrivateChatMsg)
-    //    {
-    //        GameObject newObj;
-    //        newObj = (GameObject)Instantiate(prefab_text_object, CM_Content.transform);
-    //        newObj.GetComponent<Text>().color = Color.red;
-    //        newObj.GetComponent<Text>().text = s;
-    //        prefab_text_objects.Add(newObj);
-    //    }
-
-    //}
-
-
-    public void ClearListOfPlayerToChat()
+    public void ClearPlayersListIntChatroom()
     {
-
         DestroyAllObjectsForPublicChatroom(true);
-
-       
     }
 
+    /// <summary>
+    /// CreateObjectsForPublicChatroom
+    /// </summary>
+    /// create object and adds to a list of object(button or text)
+    /// - if private message it's the color to red
+    /// - if globol message just see it in chat
+    /// - create button for private message.
     void CreateObjectsForPublicChatroom(bool is_text_object, bool is_private_message, string msg)
     {
         GameObject newObj;
         if (is_text_object == true && is_private_message == false)
         {
             // global chat
-            newObj = (GameObject)Instantiate(prefab_text_object, CM_Content.transform);
+            newObj = (GameObject)Instantiate(prefab_text_object, Public_chat_message_content.transform);
             newObj.GetComponent<Text>().text = msg;
             prefab_text_objects.Add(newObj);
         }
         else if (is_text_object ==  true && is_private_message == true)
         {
           // private  chat msg
-            newObj = (GameObject)Instantiate(prefab_text_object, CM_Content.transform);
+            newObj = (GameObject)Instantiate(prefab_text_object, Public_chat_message_content.transform);
             newObj.GetComponent<Text>().color = Color.red;
             newObj.GetComponent<Text>().text = msg;
             prefab_text_objects.Add(newObj);
@@ -184,14 +153,20 @@ public class PublicChatRoom : MonoBehaviour
         else if (is_text_object == false && is_private_message == false) 
         {
             /// buttons 
-            newObj = (GameObject)Instantiate(prefeb_button_object, CU_Content.transform);
-            newObj.GetComponent<PMButton>().SetName = msg;
+            newObj = (GameObject)Instantiate(prefeb_button_object, public_chat_user_content.transform);
+            newObj.GetComponent<PrivateMessageButton>().SetName = msg;
             newObj.GetComponentInChildren<Text>().text = msg;
             prefab_buttons.Add(newObj);
         }
 
     }
 
+    /// <summary>
+    /// DestroyAllObjectsForPublicChatroom
+    /// - clear list of buttons
+    /// - clear list of text object
+    /// </summary>
+    /// <param name="is_button"></param>
     public void DestroyAllObjectsForPublicChatroom(bool is_button)
     {
 
@@ -226,10 +201,19 @@ public class PublicChatRoom : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+
+        if (message_receiver_from_server != null)
+        {
+            message_receiver_from_server.OnMessageReceivedFromServer -= PublicChatRoomReceivedFromServer;
+        }
+
+    }
     #endregion
 
     #region InterfaceCode
-    public void DropDownPrefixMsg(int val)
+    public void PublicChatDropDownPrefixMsg(int val)
     {
         switch (val)
         {
@@ -262,34 +246,44 @@ public class PublicChatRoom : MonoBehaviour
         }
     }
 
-    public void SetChatToPrivateMessage(string s)
+    //this get called the buttons we create in list of buttons
+    // get the player user name  want to send a pm
+    // display we senting a pm to and to who
+    public void SetChatMessageToPrivate(string s)
     {
-        PmUsername = s;
-        IsPrivateMsg = true;
-        send_text.GetComponent<Text>().text = "Sending Message To: " + s;
+        private_message_user_name = s;
+        is_private_message = true;
+        send_to_text.GetComponent<Text>().text = "Sending Message To: " + s;
     }
 
-    public void SetChatToGlobalMessage()
+   
+    private void SetChatMessageToGlobal()
     {
-        IsPrivateMsg = false;
-        send_text.GetComponent<Text>().text = "Sending Message To: Globle";
+        is_private_message = false;
+        send_to_text.GetComponent<Text>().text = "Sending Message To: Globle";
     }
 
-    public void PostButtonOnPressed()
+    private  void PostButtonOnPressed()
     {
         string n = system_manager.GetComponent<SystemManager>().GetUserName;
         string ourChatText = user_message_input.GetComponent<InputField>().text;
-        if (IsPrivateMsg == false)
+        if (is_private_message == false)
         {
             string ourMsg = ClientToServerSignifiers.NotifyPublicChatChatOfGlobalMsg + ",Globe " + n + ": " + ourChatText;
             network.GetComponent<NetworkedClient>().SendMessageToHost(ourMsg);
         }
         else
         {
-            string ourMsg = ClientToServerSignifiers.NotifyPublicChatWitchAPrivateMsg + ",PM " + n + ": " + ourChatText + "," + PmUsername;
+            string ourMsg = ClientToServerSignifiers.NotifyPublicChatWitchAPrivateMsg + ",PM " + n + ": " + ourChatText + "," + private_message_user_name;
             network.GetComponent<NetworkedClient>().SendMessageToHost(ourMsg);
         }
     }
+
+    private void PublicChatRoomLogout() 
+    {
+        system_manager.GetComponent<SystemManager>().LogOutPublicChatRoom();
+    }
+
     #endregion
 
 
@@ -298,7 +292,7 @@ public class PublicChatRoom : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ClearSomeChatroomChatlMessage();
+        ClearOldChatlMessages();
     }
 
 }

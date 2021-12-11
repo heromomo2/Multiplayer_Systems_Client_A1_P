@@ -290,7 +290,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3b30f10ca4eb504285d2717872d4355, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefabTextObject: {fileID: 7614645689826883821, guid: b2246296775c0da4186949736c0637af, type: 3}
+  prefab_text_object: {fileID: 7614645689826883821, guid: b2246296775c0da4186949736c0637af, type: 3}
   ListPrefabTextObject: []
 --- !u!4 &40764565
 Transform:
@@ -4060,19 +4060,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 433032584}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 840785473}
-        m_TargetAssemblyTypeName: SystemManager, Assembly-CSharp
-        m_MethodName: LogOutPublicChatRoom
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &433032584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6375,7 +6363,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 100, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -100, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &656933357
@@ -11945,19 +11933,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1098062978}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1282100808}
-        m_TargetAssemblyTypeName: ChatBox, Assembly-CSharp
-        m_MethodName: SetChatToGlobalMessage
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1098062978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15176,7 +15152,7 @@ GameObject:
   - component: {fileID: 1469662955}
   - component: {fileID: 1469662954}
   m_Layer: 5
-  m_Name: Dropdown
+  m_Name: Chat_Dropdown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15273,19 +15249,7 @@ MonoBehaviour:
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1282100808}
-        m_TargetAssemblyTypeName: ChatBox, Assembly-CSharp
-        m_MethodName: DropDownPrefixMsg
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_AlphaFadeSpeed: 0.15
 --- !u!114 &1469662955
 MonoBehaviour:
