@@ -285,6 +285,8 @@ public class ServerToClientSignifiers
     public const int DoneSendAllThisRecoredMatchData = 35;
 
     public const int NoRecordsNamefound = 36;
+
+    //public const int NotifyObserverInitialBoard = 37;
 }
 
 

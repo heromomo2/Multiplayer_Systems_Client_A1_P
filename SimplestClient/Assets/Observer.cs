@@ -134,6 +134,7 @@ public class Observer : MonoBehaviour
                 // get  the game state from the sever
                 DisplayBoard(tic_tac_toe_board);
                 break;
+            
         }
     }
     #endregion

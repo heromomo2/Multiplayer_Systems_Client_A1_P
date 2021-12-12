@@ -1,20 +1,20 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
-    - ChatBox
-    - ChatRoom2
+    - GameLogic
     - GameOver
+    - GameRoomChatRoom
     - GridSpace
-    - LogInScript
+    - Login
     - NetworkedClient
     - Observer
-    - PMButton
     - PopulateGrid
+    - PrivateMessageButton
+    - PublicChatRoom
     - RecordMaker
     - RecordRequest
     - ReplayerWatcher
     - SystemManager
-    - TicTacToe
     Unity.2D.Animation.Editor.dll:
     - UnityEditor.U2D.Animation.BoneGizmo
     Unity.2D.IK.Editor.dll:
@@ -267,7 +267,7 @@ ScriptsOnlyBuild:
     className: PlaymodeTestsController
   - hash:
       serializedVersion: 2
-      Hash: 3343c6f2564cf6ff2e5a0d64d208149b
+      Hash: 83743b96242e009e02c4b4ad994f0a49
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Observer
@@ -288,7 +288,7 @@ ScriptsOnlyBuild:
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
-    className: LogInScript
+    className: Login
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
@@ -315,7 +315,7 @@ ScriptsOnlyBuild:
     className: CanvasScaler
   - hash:
       serializedVersion: 2
-      Hash: b6fa201ea388d22d951cacb1e5e1faf1
+      Hash: 829c11390cced452ee15cd3313075f19
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ReplayerWatcher
@@ -351,10 +351,10 @@ ScriptsOnlyBuild:
     className: TimelineAsset
   - hash:
       serializedVersion: 2
-      Hash: 9e523d79597e77242c9a3335aeaad84d
+      Hash: ca0d33639ae40052a7f9a6eff416526f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
-    className: ChatRoom2
+    className: GameRoomChatRoom
   - hash:
       serializedVersion: 2
       Hash: 760787567e1b60d64a3e421ab83ee14a
@@ -363,16 +363,16 @@ ScriptsOnlyBuild:
     className: TextMeshProUGUI
   - hash:
       serializedVersion: 2
-      Hash: 8ae16bb63f1630081dadb917a43bb36f
+      Hash: 7fa27a72f8e6306dd36819ab28bc6c06
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
-    className: ChatBox
+    className: PublicChatRoom
   - hash:
       serializedVersion: 2
-      Hash: 46f17360e9452c3ce83de701e0368404
+      Hash: d36dc5e09d250e547099c35953b16d5e
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
-    className: TicTacToe
+    className: GameLogic
   - hash:
       serializedVersion: 2
       Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
@@ -417,7 +417,7 @@ ScriptsOnlyBuild:
     className: TestResultRendererCallback
   - hash:
       serializedVersion: 2
-      Hash: b387152cb0dc784686b7d6f5d721a39d
+      Hash: 7780d64571aa1cd325d3f790271cdf1f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: RecordRequest
@@ -519,7 +519,7 @@ ScriptsOnlyBuild:
     className: BaseInput
   - hash:
       serializedVersion: 2
-      Hash: bce711039b57ac132ec9ff586ac84079
+      Hash: d2784028b4054d0bfc6fb2de65f89fe5
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GameOver
@@ -747,10 +747,10 @@ ScriptsOnlyBuild:
     className: TouchInputModule
   - hash:
       serializedVersion: 2
-      Hash: c1e8dd04ff0df068a9cdbce3dc6bd13e
+      Hash: 102409e5ea6aa6174e4a068c02b55083
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
-    className: PMButton
+    className: PrivateMessageButton
   - hash:
       serializedVersion: 2
       Hash: 762a30c8d779b11af16ed9ce1f2d32fa
@@ -760,4 +760,4 @@ ScriptsOnlyBuild:
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: C:/Users/Owner/Desktop/build 2/SimplestClient.exe
+  playerPath: C:/Users/Owner/Desktop/bild/SimplestClient.exe

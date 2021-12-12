@@ -60,7 +60,7 @@ public class GameLogic : MonoBehaviour
         buttons = new List <Button>();
         PlaceButtonsInList();
         GiveButtonsPosition();
-        //current_player_board_symbol = player_one_board_symbol;
+       
        
     }
 
@@ -125,17 +125,17 @@ public class GameLogic : MonoBehaviour
                 InitialzingOurPlayer(int.Parse(s));
                 break;
             case ServerToClientSignifiers.OpponentPlayed:
+                whos_move_for_spectaste = 42;
                 OpponentPressAButton(int.Parse(s)); 
                 is_waiting_turn = false;
                 ActiveButtonsThatUnmarkSpaces(do_we_have_a_winner);
-                DisplayWhoTurnToUser(1);
-                whos_move_for_spectaste = 42;
+                DisplayWhoTurnToUser(1);               
                 break;
             case ServerToClientSignifiers.WaitForOppentMoved:
+                whos_move_for_spectaste = 43;
                 DeactiveButtons();
                 DisplayWhoTurnToUser(2);
                 is_waiting_turn = true;
-                whos_move_for_spectaste = 43;
                 break;
             case ServerToClientSignifiers.RematchOfTicTacToeComplete:
                 ResetBoards();
