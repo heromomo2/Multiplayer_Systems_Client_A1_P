@@ -170,14 +170,6 @@ public class GameLogic : MonoBehaviour
 
 
 
-        // this is only true when we are being  spectated
-        // we are sending our observer the game state
-        // this gets call everytime you and your opponent make a move
-        if (is_being_observed) 
-        {
-            network.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.SendObserverData+ "," + virtual_board[0 ].ToString() + ","+ virtual_board[1].ToString() + "," + virtual_board[2].ToString() + "," + virtual_board[3].ToString() + "," + virtual_board[4].ToString() + "," + virtual_board[5].ToString() + "," + virtual_board[6].ToString() + "," + virtual_board[7].ToString() + "," + virtual_board[8].ToString() + "," +  whos_move_for_spectaste.ToString());
-        }
-
 
         // our win condition
        // it's also how we know we have complete a game
@@ -203,8 +195,16 @@ public class GameLogic : MonoBehaviour
         {
             network.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.TicTacTacDoAMove + "," + button_position.ToString());
         }
-         
-        
+
+
+        // this is only true when we are being  spectated
+        // we are sending our observer the game state
+        // this gets call everytime you and your opponent make a move
+        if (is_being_observed)
+        {
+            network.GetComponent<NetworkedClient>().SendMessageToHost(ClientToServerSignifiers.SendObserverData + "," + virtual_board[0].ToString() + "," + virtual_board[1].ToString() + "," + virtual_board[2].ToString() + "," + virtual_board[3].ToString() + "," + virtual_board[4].ToString() + "," + virtual_board[5].ToString() + "," + virtual_board[6].ToString() + "," + virtual_board[7].ToString() + "," + virtual_board[8].ToString() + "," + whos_move_for_spectaste.ToString());
+        }
+
     }
     #endregion
 
